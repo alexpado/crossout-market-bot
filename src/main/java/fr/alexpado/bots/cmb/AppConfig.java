@@ -1,7 +1,6 @@
 package fr.alexpado.bots.cmb;
 
-import fr.alexpado.bots.cmb.crossout.repositories.TranslationRepository;
-import fr.alexpado.bots.cmb.crossout.repositories.WatcherRepository;
+import fr.alexpado.bots.cmb.crossout.repositories.*;
 import fr.alexpado.bots.cmb.discord.DiscordBot;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,15 @@ public class AppConfig {
 
     @Autowired
     public TranslationRepository translationRepository;
+
+    @Autowired
+    public DiscordGuildRepository discordGuildRepository;
+
+    @Autowired
+    public DiscordUserRepository discordUserRepository;
+
+    @Autowired
+    public GuildOptionRepository guildOptionRepository;
 
     @Value("${http.identity.group}")
     private String identityGroup;

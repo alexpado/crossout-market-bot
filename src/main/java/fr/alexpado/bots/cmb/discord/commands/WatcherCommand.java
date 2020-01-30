@@ -1,13 +1,17 @@
 package fr.alexpado.bots.cmb.discord.commands;
 
 import fr.alexpado.bots.cmb.crossout.models.Watcher;
+import fr.alexpado.bots.cmb.crossout.models.discord.DiscordUser;
 import fr.alexpado.bots.cmb.crossout.repositories.WatcherRepository;
 import fr.alexpado.bots.cmb.discord.BotCommand;
+import fr.alexpado.bots.cmb.libs.TKey;
 import fr.alexpado.bots.cmb.libs.jdamodules.JDAModule;
 import fr.alexpado.bots.cmb.libs.jdamodules.events.CommandEvent;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class WatcherCommand extends BotCommand {
@@ -20,22 +24,26 @@ public class WatcherCommand extends BotCommand {
     }
 
     @Override
-    public void runCommand(CommandEvent event) {
-        this.sendWaiting(event, message -> {
-            List<Watcher> watchers = repository.getFromUser(event.getAuthor().getIdLong());
+    public void execute(CommandEvent event, Message message) {
+        DiscordUser user = this.getDiscordUser(event);
+        List<Watcher> watchers = repository.getFromUser(user);
 
-            if (watchers.size() == 0) {
-                this.sendError(message, "You don't have any watchers.");
-            } else {
-                new EmbedPage<Watcher>(message, watchers, 10) {
-                    @Override
-                    public EmbedBuilder getEmbed() {
-                        EmbedBuilder builder = new EmbedBuilder();
-                        builder.setTitle("Watchers : ");
-                        return builder;
-                    }
-                };
-            }
-        });
+        if (watchers.size() == 0) {
+            this.sendError(message, this.getTranslation(TKey.WATCHER_EMPTY));
+        } else {
+            new EmbedPage<Watcher>(message, watchers, 10) {
+                @Override
+                public EmbedBuilder getEmbed() {
+                    EmbedBuilder builder = new EmbedBuilder();
+                    builder.setTitle(WatcherCommand.this.getTranslation(TKey.WATCHER_LIST));
+                    return builder;
+                }
+            };
+        }
+    }
+
+    @Override
+    public List<String> getLanguageKeys() {
+        return Arrays.asList(TKey.WATCHER_EMPTY, TKey.WATCHER_LIST);
     }
 }

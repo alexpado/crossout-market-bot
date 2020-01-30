@@ -158,7 +158,7 @@ public abstract class JDACommandExecutor {
      * @param consumer
      */
     protected final void sendWaiting(CommandEvent event, Consumer<Message> consumer) {
-        event.getChannel().sendMessage(new EmbedBuilder().setDescription("Loading...").build()).queue(consumer);
+        event.getChannel().sendMessage(new EmbedBuilder().setDescription(":thinking: ...").build()).queue(consumer);
     }
 
 

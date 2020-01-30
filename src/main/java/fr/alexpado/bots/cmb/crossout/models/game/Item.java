@@ -1,7 +1,8 @@
 package fr.alexpado.bots.cmb.crossout.models.game;
 
 import fr.alexpado.bots.cmb.discord.DiscordBot;
-import fr.alexpado.bots.cmb.interfaces.JSONModel;
+import fr.alexpado.bots.cmb.interfaces.TranslatableJSONModel;
+import fr.alexpado.bots.cmb.libs.TKey;
 import fr.alexpado.bots.cmb.tools.Utilities;
 import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -11,12 +12,11 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.time.Instant;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
+import java.util.List;
+import java.util.*;
 
 @Getter
-public class Item extends JSONModel {
+public class Item extends TranslatableJSONModel {
 
     private int id;
     private String name;
@@ -89,14 +89,14 @@ public class Item extends JSONModel {
         EmbedBuilder builder = this.getRawEmbed(jda);
 
         if (!this.removed) {
-            String currentSellPrice = Utilities.money(this.sellPrice, "Coins");
-            String currentBuyPrice = Utilities.money(this.buyPrice, "Coins");
+            String currentSellPrice = Utilities.money(this.sellPrice, this.getTranslation(TKey.CURRENCY));
+            String currentBuyPrice = Utilities.money(this.buyPrice, this.getTranslation(TKey.CURRENCY));
 
             String diffSellPrice = Utilities.money(this.sellPrice - sellPrice, "");
             String diffBuyPrice = Utilities.money(this.buyPrice - buyPrice, "");
 
-            builder.addField("Buy it for", String.format("%s ( %s )", currentSellPrice, diffSellPrice), true);
-            builder.addField("Sell it for", String.format("%s ( %s )", currentBuyPrice, diffBuyPrice), true);
+            builder.addField(this.getTranslation(TKey.ITEM_BUY), String.format("%s ( %s )", currentSellPrice, diffSellPrice), true);
+            builder.addField(this.getTranslation(TKey.ITEM_SELL), String.format("%s ( %s )", currentBuyPrice, diffBuyPrice), true);
         }
 
         return builder;
@@ -106,12 +106,12 @@ public class Item extends JSONModel {
         EmbedBuilder builder = this.getRawEmbed(jda);
 
         if (!this.removed) {
-            builder.addField("Buy it for", Utilities.money(this.sellPrice, "Coins"), true);
-            builder.addField("Sell it for", Utilities.money(this.buyPrice, "Coins"), true);
+            builder.addField(this.getTranslation(TKey.ITEM_BUY), Utilities.money(this.sellPrice, this.getTranslation(TKey.CURRENCY)), true);
+            builder.addField(this.getTranslation(TKey.ITEM_SELL), Utilities.money(this.buyPrice, this.getTranslation(TKey.CURRENCY)), true);
 
             if (this.craftable) {
-                builder.addField("Buy Craft items for", Utilities.money(this.craftingSellSum, "Coins"), true);
-                builder.addField("Sell Craft items for", Utilities.money(this.craftingBuySum, "Coins"), true);
+                builder.addField(this.getTranslation(TKey.ITEM_CRAFT_BUY), Utilities.money(this.craftingSellSum, this.getTranslation(TKey.CURRENCY)), true);
+                builder.addField(this.getTranslation(TKey.ITEM_CRAFT_SELL), Utilities.money(this.craftingBuySum, this.getTranslation(TKey.CURRENCY)), true);
             }
         }
 
@@ -121,7 +121,7 @@ public class Item extends JSONModel {
     private EmbedBuilder getRawEmbed(JDA jda) {
         EmbedBuilder builder = new EmbedBuilder();
 
-        builder.setAuthor("Click here to invite the bot.", DiscordBot.INVITE, jda.getSelfUser().getAvatarUrl());
+        builder.setAuthor(this.getTranslation(TKey.DISCORD_INVITE), DiscordBot.INVITE, jda.getSelfUser().getAvatarUrl());
         builder.setTitle(this.name, String.format("https://crossoutdb.com/item/%s?ref=crossoutmarketbot", this.id));
         builder.setDescription(this.description);
 
@@ -129,7 +129,7 @@ public class Item extends JSONModel {
         builder.setImage(String.format("http://bots.alexpado.fr:8181/chart/%s/%s/chart.png", this.id, this.lastUpdate));
 
         if (this.removed) {
-            builder.addField("Removed", "This item is no longer available.", true);
+            builder.addField(this.getTranslation(TKey.ITEM_REMOVED_LABEL), this.getTranslation(TKey.ITEM_REMOVED_DESC), true);
         }
 
         if (this.rarity == null) {

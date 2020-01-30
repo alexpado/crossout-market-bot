@@ -1,9 +1,8 @@
 package fr.alexpado.bots.cmb.crossout.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import fr.alexpado.bots.cmb.crossout.models.discord.DiscordUser;
+
+import javax.persistence.*;
 
 @Entity
 public class Watcher {
@@ -11,7 +10,10 @@ public class Watcher {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private long userId;
+
+    @OneToOne
+    private DiscordUser user;
+
     private int itemId;
     private String itemName;
     private int sellPrice;

@@ -1,6 +1,5 @@
 package fr.alexpado.bots.cmb.discord;
 
-import fr.alexpado.bots.cmb.discord.commands.DebugCommand;
 import fr.alexpado.bots.cmb.discord.commands.ItemCommand;
 import fr.alexpado.bots.cmb.discord.commands.PackCommand;
 import fr.alexpado.bots.cmb.discord.commands.WatcherCommand;
@@ -24,6 +23,6 @@ public class CrossoutModule extends JDAModule {
 
     @Override
     public List<JDACommandExecutor> getCommandExecutors() {
-        return Arrays.asList(new ItemCommand(this), new PackCommand(this), new WatcherCommand(this), new DebugCommand(this));
+        return Arrays.asList(new ItemCommand(this), new PackCommand(this), new WatcherCommand(this));
     }
 }

@@ -1,4 +1,4 @@
-package fr.alexpado.bots.cmb.crossout.models;
+package fr.alexpado.bots.cmb.crossout.models.game;
 
 import fr.alexpado.bots.cmb.discord.DiscordBot;
 import fr.alexpado.bots.cmb.interfaces.JSONModel;

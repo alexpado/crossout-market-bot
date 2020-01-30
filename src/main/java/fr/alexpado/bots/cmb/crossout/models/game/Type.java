@@ -1,4 +1,4 @@
-package fr.alexpado.bots.cmb.crossout.models;
+package fr.alexpado.bots.cmb.crossout.models.game;
 
 import fr.alexpado.bots.cmb.interfaces.JSONModel;
 import lombok.Getter;
@@ -8,23 +8,23 @@ import org.json.JSONObject;
 import java.util.Optional;
 
 @Getter
-public class Category extends JSONModel {
+public class Type extends JSONModel {
 
     private int id;
     private String name;
 
-    public Category(JSONObject dataSource) throws Exception {
+    public Type(JSONObject dataSource) throws Exception {
         super(dataSource);
     }
 
-    public Category(int id, String name) {
+    public Type(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public static Optional<Category> from(JSONObject dataSource) {
+    public static Optional<Type> from(JSONObject dataSource) {
         try {
-            return Optional.of(new Category(dataSource));
+            return Optional.of(new Type(dataSource));
         } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();

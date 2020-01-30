@@ -1,6 +1,6 @@
 package fr.alexpado.bots.cmb.crossout.api;
 
-import fr.alexpado.bots.cmb.crossout.models.Rarity;
+import fr.alexpado.bots.cmb.crossout.models.game.Rarity;
 import fr.alexpado.bots.cmb.interfaces.APIRepository;
 import fr.alexpado.bots.cmb.libs.HttpRequest;
 import org.json.JSONArray;

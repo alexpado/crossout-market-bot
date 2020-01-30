@@ -1,7 +1,7 @@
 package fr.alexpado.bots.cmb.discord.commands;
 
 import fr.alexpado.bots.cmb.crossout.api.PackEnpoint;
-import fr.alexpado.bots.cmb.crossout.models.Pack;
+import fr.alexpado.bots.cmb.crossout.models.game.Pack;
 import fr.alexpado.bots.cmb.discord.BotCommand;
 import fr.alexpado.bots.cmb.libs.jdamodules.JDAModule;
 import fr.alexpado.bots.cmb.libs.jdamodules.events.CommandEvent;

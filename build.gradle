@@ -20,17 +20,25 @@ configurations {
 
 repositories {
 	mavenCentral()
+	jcenter()
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+
+	compile group: 'org.json', name: 'json', version: '20190722'
+	compile 'net.dv8tion:JDA:4.1.0_97'
+	// https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+	compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.5.3'
+	compile group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
 }
 
 test {

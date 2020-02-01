@@ -1,6 +1,6 @@
 package fr.alexpado.bots.cmb;
 
-import fr.alexpado.bots.cmb.discord.DiscordBot;
+import fr.alexpado.bots.cmb.bot.DiscordBot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

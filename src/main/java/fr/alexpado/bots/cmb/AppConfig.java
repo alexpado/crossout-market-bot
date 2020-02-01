@@ -1,7 +1,10 @@
 package fr.alexpado.bots.cmb;
 
-import fr.alexpado.bots.cmb.crossout.repositories.*;
-import fr.alexpado.bots.cmb.discord.DiscordBot;
+import fr.alexpado.bots.cmb.bot.DiscordBot;
+import fr.alexpado.bots.cmb.repositories.DiscordGuildRepository;
+import fr.alexpado.bots.cmb.repositories.DiscordUserRepository;
+import fr.alexpado.bots.cmb.repositories.TranslationRepository;
+import fr.alexpado.bots.cmb.repositories.WatcherRepository;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,9 +26,6 @@ public class AppConfig {
 
     @Autowired
     public DiscordUserRepository discordUserRepository;
-
-    @Autowired
-    public GuildOptionRepository guildOptionRepository;
 
     @Value("${http.identity.group}")
     private String identityGroup;

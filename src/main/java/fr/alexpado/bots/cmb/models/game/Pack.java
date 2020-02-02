@@ -2,7 +2,7 @@ package fr.alexpado.bots.cmb.models.game;
 
 import fr.alexpado.bots.cmb.bot.DiscordBot;
 import fr.alexpado.bots.cmb.interfaces.TranslatableJSONModel;
-import fr.alexpado.bots.cmb.libs.TKey;
+import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.tools.Utilities;
 import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -57,11 +57,11 @@ public class Pack extends TranslatableJSONModel {
     public EmbedBuilder getAsEmbed(JDA jda) {
         EmbedBuilder builder = new EmbedBuilder();
 
-        builder.setAuthor(this.getTranslation(TKey.DISCORD_INVITE), DiscordBot.INVITE, jda.getSelfUser().getAvatarUrl());
+        builder.setAuthor(this.getTranslation(Translation.DISCORD_INVITE), DiscordBot.INVITE, jda.getSelfUser().getAvatarUrl());
         builder.setTitle(this.name, String.format("https://crossoutdb.com/packs?ref=crossoutmarketbot#pack=%s", this.getKey()));
 
-        builder.addField(this.getTranslation(TKey.ITEM_SELL), Utilities.money(this.buySum, ""), true);
-        builder.addField(this.getTranslation(TKey.ITEM_BUY), Utilities.money(this.buySum, ""), true);
+        builder.addField(this.getTranslation(Translation.ITEM_SELL), Utilities.money(this.buySum, ""), true);
+        builder.addField(this.getTranslation(Translation.ITEM_BUY), Utilities.money(this.buySum, ""), true);
 
         builder.setImage(this.getPackPicture());
         builder.setColor(Color.WHITE);

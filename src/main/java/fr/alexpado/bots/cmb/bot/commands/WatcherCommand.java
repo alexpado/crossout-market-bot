@@ -1,10 +1,10 @@
 package fr.alexpado.bots.cmb.bot.commands;
 
+import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.models.Watcher;
 import fr.alexpado.bots.cmb.models.discord.DiscordUser;
 import fr.alexpado.bots.cmb.repositories.WatcherRepository;
 import fr.alexpado.bots.cmb.bot.BotCommand;
-import fr.alexpado.bots.cmb.libs.TKey;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
@@ -29,13 +29,13 @@ public class WatcherCommand extends BotCommand {
         List<Watcher> watchers = repository.getFromUser(user);
 
         if (watchers.size() == 0) {
-            this.sendError(message, this.getTranslation(TKey.WATCHER_EMPTY));
+            this.sendError(message, this.getTranslation(Translation.WATCHER_EMPTY));
         } else {
             new EmbedPage<Watcher>(message, watchers, 10) {
                 @Override
                 public EmbedBuilder getEmbed() {
                     EmbedBuilder builder = new EmbedBuilder();
-                    builder.setTitle(WatcherCommand.this.getTranslation(TKey.WATCHER_LIST));
+                    builder.setTitle(WatcherCommand.this.getTranslation(Translation.WATCHER_LIST));
                     return builder;
                 }
             };
@@ -44,6 +44,6 @@ public class WatcherCommand extends BotCommand {
 
     @Override
     public List<String> getLanguageKeys() {
-        return Arrays.asList(TKey.WATCHER_EMPTY, TKey.WATCHER_LIST);
+        return Arrays.asList(Translation.WATCHER_EMPTY, Translation.WATCHER_LIST);
     }
 }

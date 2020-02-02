@@ -1,9 +1,9 @@
 package fr.alexpado.bots.cmb.bot.commands;
 
 import fr.alexpado.bots.cmb.api.PackEnpoint;
+import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.models.game.Pack;
 import fr.alexpado.bots.cmb.bot.BotCommand;
-import fr.alexpado.bots.cmb.libs.TKey;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
@@ -40,7 +40,7 @@ public class PackCommand extends BotCommand {
         }
 
         if (effectivePacks.size() == 0) {
-            this.sendError(message, this.getTranslation(TKey.PACK_NOT_FOUND));
+            this.sendError(message, this.getTranslation(Translation.PACK_NOT_FOUND));
         } else if (effectivePacks.size() == 1) {
             Pack pack = effectivePacks.get(0);
             pack.setTranslations(this.getTranslations());
@@ -50,7 +50,7 @@ public class PackCommand extends BotCommand {
                 @Override
                 public EmbedBuilder getEmbed() {
                     EmbedBuilder builder = new EmbedBuilder();
-                    builder.setTitle(PackCommand.this.getTranslation(TKey.PACK_LIST));
+                    builder.setTitle(PackCommand.this.getTranslation(Translation.PACK_LIST));
                     return builder;
                 }
             };
@@ -59,6 +59,6 @@ public class PackCommand extends BotCommand {
 
     @Override
     public List<String> getLanguageKeys() {
-        return Arrays.asList(TKey.PACK_NOT_FOUND, TKey.PACK_LIST, TKey.ITEM_SELL, TKey.ITEM_BUY, TKey.DISCORD_INVITE);
+        return Arrays.asList(Translation.PACK_NOT_FOUND, Translation.PACK_LIST, Translation.ITEM_SELL, Translation.ITEM_BUY, Translation.DISCORD_INVITE);
     }
 }

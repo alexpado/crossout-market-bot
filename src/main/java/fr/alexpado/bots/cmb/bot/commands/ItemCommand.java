@@ -1,9 +1,9 @@
 package fr.alexpado.bots.cmb.bot.commands;
 
 import fr.alexpado.bots.cmb.api.ItemEndpoint;
+import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.models.game.Item;
 import fr.alexpado.bots.cmb.bot.BotCommand;
-import fr.alexpado.bots.cmb.libs.TKey;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
@@ -41,7 +41,7 @@ public class ItemCommand extends BotCommand {
         List<Item> items = endpoint.search(params);
 
         if (items.size() == 0) {
-            this.sendError(message, this.getTranslation(TKey.ITEM_NOT_FOUND));
+            this.sendError(message, this.getTranslation(Translation.ITEM_NOT_FOUND));
         } else if (items.size() == 1) {
             Item item = items.get(0);
             item.setTranslations(this.getTranslations());
@@ -51,7 +51,7 @@ public class ItemCommand extends BotCommand {
                 @Override
                 public EmbedBuilder getEmbed() {
                     EmbedBuilder builder = new EmbedBuilder();
-                    builder.setTitle(ItemCommand.this.getTranslation(TKey.ITEM_LIST));
+                    builder.setTitle(ItemCommand.this.getTranslation(Translation.ITEM_LIST));
                     return builder;
                 }
             };
@@ -60,7 +60,7 @@ public class ItemCommand extends BotCommand {
 
     @Override
     public List<String> getLanguageKeys() {
-        return Arrays.asList(TKey.ITEM_NOT_FOUND, TKey.ITEM_LIST, TKey.ITEM_REMOVED_LABEL, TKey.ITEM_REMOVED_DESC, TKey.DISCORD_INVITE, TKey.ITEM_BUY, TKey.ITEM_SELL, TKey.ITEM_CRAFT_BUY, TKey.ITEM_CRAFT_SELL, TKey.CURRENCY);
+        return Arrays.asList(Translation.ITEM_NOT_FOUND, Translation.ITEM_LIST, Translation.ITEM_REMOVED_LABEL, Translation.ITEM_REMOVED_DESC, Translation.DISCORD_INVITE, Translation.ITEM_BUY, Translation.ITEM_SELL, Translation.ITEM_CRAFT_BUY, Translation.ITEM_CRAFT_SELL, Translation.CURRENCY);
     }
 
 }

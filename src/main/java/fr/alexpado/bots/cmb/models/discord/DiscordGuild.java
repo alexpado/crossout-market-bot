@@ -24,6 +24,7 @@ public class DiscordGuild {
         discordGuild.setIconUrl(guild.getIconUrl());
         discordGuild.setUser(DiscordUser.fromJDAUser(Objects.requireNonNull(guild.getOwner()).getUser()));
         discordGuild.setLanguage(DiscordBot.getInstance().getConfig().getDefaultLocale());
+        discordGuild.setItemGraphInterval(DiscordBot.getInstance().getConfig().getGraphInterval());
 
         return discordGuild;
     }
@@ -40,5 +41,7 @@ public class DiscordGuild {
 
     @Column(length = 3)
     private String language;
+
+    private long itemGraphInterval;
 
 }

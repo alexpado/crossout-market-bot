@@ -48,6 +48,9 @@ public class AppConfig {
     @Value("${i18n.default}")
     private String defaultLocale;
 
+    @Value("${bot.item.graph.duration}")
+    private Long graphInterval;
+
     @Bean
     public AppConfig configurationProvider() {
         return new AppConfig();

@@ -1,16 +1,17 @@
 package fr.alexpado.bots.cmb.bot;
 
 import fr.alexpado.bots.cmb.AppConfig;
+import fr.alexpado.bots.cmb.libs.jda.JDAModule;
+import fr.alexpado.bots.cmb.libs.jda.commands.JDACommandExecutor;
+import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.models.discord.DiscordGuild;
 import fr.alexpado.bots.cmb.models.discord.DiscordUser;
 import fr.alexpado.bots.cmb.repositories.DiscordGuildRepository;
 import fr.alexpado.bots.cmb.repositories.DiscordUserRepository;
 import fr.alexpado.bots.cmb.repositories.TranslationRepository;
-import fr.alexpado.bots.cmb.libs.jda.JDAModule;
-import fr.alexpado.bots.cmb.libs.jda.commands.JDACommandExecutor;
-import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.throwables.TranslationException;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 
@@ -48,6 +49,7 @@ public abstract class BotCommand extends JDACommandExecutor {
                 this.execute(event, message);
             } catch (TranslationException e) {
                 this.sendError(message, "Unable to load translations : " + e.getMessage());
+                e.printStackTrace();
             }
         });
     }
@@ -100,6 +102,24 @@ public abstract class BotCommand extends JDACommandExecutor {
         }
         return discordUser;
     }
+
+    public DiscordGuild getDiscordGuild(CommandEvent event) {
+        return this.getDiscordGuild(event.getGuild());
+    }
+
+    public DiscordGuild getDiscordGuild(Guild guild) {
+        DiscordGuildRepository dgr = this.getConfig().discordGuildRepository;
+        Optional<DiscordGuild> optionalDiscordGuild = dgr.findById(guild.getIdLong());
+        DiscordGuild discordGuild;
+        if (!optionalDiscordGuild.isPresent()) {
+            discordGuild = DiscordGuild.fromJDAGuild(guild);
+            dgr.save(discordGuild);
+        } else {
+            discordGuild = optionalDiscordGuild.get();
+        }
+        return discordGuild;
+    }
+
 
     @Override
     public final String getDescription() {

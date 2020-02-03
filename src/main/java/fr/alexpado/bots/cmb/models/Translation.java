@@ -29,6 +29,12 @@ public class Translation {
     public static final String PACK_LIST = "command.pack.list";
     public static final String WATCHER_LIST = "command.watchlist.list";
     public static final String WATCHER_EMPTY = "command.watchlist.empty";
+    public static final String WATCHER_TYPE_NORMAL = "general.watchers.normal";
+    public static final String WATCHER_TYPE_SELL_UNDER = "general.watchers.sell.under";
+    public static final String WATCHER_TYPE_SELL_OVER = "general.watchers.sell.over";
+    public static final String WATCHER_TYPE_BUY_UNDER = "general.watchers.buy.under";
+    public static final String WATCHER_TYPE_BUY_OVER = "general.watchers.buy.over";
+    public static final String WATCHER_TYPE_ADVANCED = "general.watchers.other";
 
     @Id
     @Column(length = 100)

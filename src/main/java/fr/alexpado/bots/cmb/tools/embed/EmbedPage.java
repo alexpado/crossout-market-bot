@@ -10,14 +10,16 @@ import java.util.List;
 public abstract class EmbedPage<T> extends ReactionListener {
 
     private ArrayList<String> items = new ArrayList<>();
+    private List<T> origin;
     private int currentPage = 1;
     private int totalPage = 1;
     private int count = 10;
 
     protected EmbedPage(Message message, List<T> items, int timeout) {
         super(message, timeout);
+        this.origin = items;
 
-        items.forEach(o -> this.items.add(o.toString()));
+        items.forEach(o -> this.items.add(asString(o)));
         this.currentPage = 1;
 
         float a = (float) items.size() / 10f;
@@ -53,9 +55,18 @@ public abstract class EmbedPage<T> extends ReactionListener {
         }
     }
 
+    protected void reloadList() {
+        this.items.clear();
+        this.origin.forEach(o -> this.items.add(asString(o)));
+    }
+
+    public String asString(T obj) {
+        return obj.toString();
+    }
+
     public abstract EmbedBuilder getEmbed();
 
-    private void refreshEmbed() {
+    protected void refreshEmbed() {
         this.resetTimer();
         this.getMessage().editMessage(this.getEmbed().setDescription(getPageText()).setFooter("Page " + currentPage + "/" + totalPage, null).build()).queue();
     }

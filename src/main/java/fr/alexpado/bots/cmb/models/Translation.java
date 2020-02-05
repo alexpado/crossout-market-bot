@@ -49,8 +49,8 @@ public class Translation {
     public static final String WATCHER_NOT_FOUND = "general.watcher.notFound";
     public static final String WATCHER_FORBIDDEN = "general.watcher.forbidden";
     public static final String WATCHER_UPDATED = "command.watch.updated";
-
     public static final String WATCHER_ITEM_REMOVED = "general.watchers.item.removed";
+    public static final String WATCHER_REMOVED = "general.watchers.removed";
 
     @Id
     @Column(length = 100)

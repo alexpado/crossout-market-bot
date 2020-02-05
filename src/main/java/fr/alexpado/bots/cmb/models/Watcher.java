@@ -4,10 +4,13 @@ import fr.alexpado.bots.cmb.bot.DiscordBot;
 import fr.alexpado.bots.cmb.enums.WatcherTypes;
 import fr.alexpado.bots.cmb.interfaces.TranslatableObject;
 import fr.alexpado.bots.cmb.models.discord.DiscordUser;
+import fr.alexpado.bots.cmb.models.game.Item;
 import fr.alexpado.bots.cmb.repositories.TranslationRepository;
 import fr.alexpado.bots.cmb.throwables.TranslationException;
 import fr.alexpado.bots.cmb.tools.TimeConverter;
 import fr.alexpado.bots.cmb.tools.Utilities;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 
 import javax.persistence.*;
@@ -16,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @Entity
+@Setter
+@Getter
 public class Watcher implements TranslatableObject {
 
     @Id
@@ -29,13 +34,13 @@ public class Watcher implements TranslatableObject {
 
     private String itemName;
 
-    private int sellPrice;
+    private float sellPrice;
 
-    private int buyPrice;
+    private float buyPrice;
 
     private int watcherType;
 
-    private int price;
+    private float price;
 
     private long repeatEvery = 300000;
 
@@ -81,5 +86,13 @@ public class Watcher implements TranslatableObject {
     @Override
     public String toString() {
         return String.format("[%s] %s", this.id, this.itemName);
+    }
+
+
+    public void loadItem(Item item) {
+        this.setItemId(item.getId());
+        this.setItemName(item.getName());
+        this.setSellPrice(item.getSellPrice()/100.0f);
+        this.setBuyPrice(item.getBuyPrice()/100.0f);
     }
 }

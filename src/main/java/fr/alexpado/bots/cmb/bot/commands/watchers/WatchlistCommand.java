@@ -1,4 +1,4 @@
-package fr.alexpado.bots.cmb.bot.commands;
+package fr.alexpado.bots.cmb.bot.commands.watchers;
 
 import fr.alexpado.bots.cmb.bot.BotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
@@ -15,11 +15,11 @@ import net.dv8tion.jda.api.entities.Message;
 import java.util.Arrays;
 import java.util.List;
 
-public class WatcherCommand extends BotCommand {
+public class WatchlistCommand extends BotCommand {
 
     private WatcherRepository repository;
 
-    public WatcherCommand(JDAModule module) {
+    public WatchlistCommand(JDAModule module) {
         super(module, "watchlist");
         this.repository = this.getConfig().watcherRepository;
     }
@@ -38,7 +38,7 @@ public class WatcherCommand extends BotCommand {
                 @Override
                 public EmbedBuilder getEmbed() {
                     EmbedBuilder builder = new EmbedBuilder();
-                    builder.setTitle(WatcherCommand.this.getTranslation(Translation.WATCHER_LIST));
+                    builder.setTitle(WatchlistCommand.this.getTranslation(Translation.WATCHER_LIST));
                     return builder;
                 }
             };

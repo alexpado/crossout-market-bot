@@ -36,6 +36,13 @@ public class Translation {
     public static final String WATCHER_TYPE_BUY_OVER = "general.watchers.buy.over";
     public static final String WATCHER_TYPE_ADVANCED = "general.watchers.other";
 
+    public static final String WATCHER_WRONG_TYPE = "command.watch.wrong.type";
+    public static final String WATCHER_WRONG_VALUE = "command.watch.wrong.value";
+    public static final String WATCHER_WRONG_PRICE = "command.watch.wrong.price";
+    public static final String WATCHER_WRONG_FOR = "command.watch.wrong.for";
+    public static final String WATCHER_MULTIPLE_ITEM = "command.watch.multiple";
+    public static final String WATCHER_ADDED = "command.watch.added";
+
     @Id
     @Column(length = 100)
     private String translationKey;

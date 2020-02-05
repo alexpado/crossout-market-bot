@@ -9,6 +9,10 @@ public class Utilities {
         return String.format("%,.2f %s", amount / 100.0f, currency);
     }
 
+    public static String money(float amount, String currency) {
+        return String.format("%,.2f %s", amount, currency);
+    }
+
     public static String removeHTML(String text) {
         Source htmlSource = new Source(text);
         Renderer htmlRend = new Renderer(htmlSource);

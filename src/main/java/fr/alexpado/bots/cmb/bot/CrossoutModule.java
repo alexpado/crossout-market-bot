@@ -2,7 +2,8 @@ package fr.alexpado.bots.cmb.bot;
 
 import fr.alexpado.bots.cmb.bot.commands.ItemCommand;
 import fr.alexpado.bots.cmb.bot.commands.PackCommand;
-import fr.alexpado.bots.cmb.bot.commands.WatcherCommand;
+import fr.alexpado.bots.cmb.bot.commands.watchers.WatchCommand;
+import fr.alexpado.bots.cmb.bot.commands.watchers.WatchlistCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDABot;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.commands.JDACommandExecutor;
@@ -23,6 +24,11 @@ public class CrossoutModule extends JDAModule {
 
     @Override
     public List<JDACommandExecutor> getCommandExecutors() {
-        return Arrays.asList(new ItemCommand(this), new PackCommand(this), new WatcherCommand(this));
+        return Arrays.asList(
+                new ItemCommand(this),
+                new PackCommand(this),
+                new WatchlistCommand(this),
+                new WatchCommand(this)
+        );
     }
 }

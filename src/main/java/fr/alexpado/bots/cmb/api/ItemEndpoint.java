@@ -1,8 +1,8 @@
 package fr.alexpado.bots.cmb.api;
 
-import fr.alexpado.bots.cmb.models.game.Item;
 import fr.alexpado.bots.cmb.interfaces.APIRepository;
 import fr.alexpado.bots.cmb.libs.HttpRequest;
+import fr.alexpado.bots.cmb.models.game.Item;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,7 +32,7 @@ public class ItemEndpoint extends APIRepository<Item> {
     @Override
     public Optional<Item> getOne(int id) {
         try {
-            HttpRequest request = new HttpRequest(String.format("%s/item/%s", this.getApiRoot(), id));
+            HttpRequest request = new HttpRequest(String.format("%s/item/%s?removedItems=true&metaItems=true", this.getApiRoot(), id));
             JSONArray array = request.readJsonArray();
             if (array.length() == 1) {
                 return Item.from(array.getJSONObject(0));

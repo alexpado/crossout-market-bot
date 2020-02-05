@@ -55,7 +55,7 @@ public class Watcher implements TranslatableObject {
         WatcherTypes type = WatcherTypes.getFromId(this.watcherType);
         TranslationRepository tr = DiscordBot.getInstance().getTranslationRepository();
 
-        String time = new TimeConverter(this.repeatEvery).toString();
+        String time = new TimeConverter(this.repeatEvery / 1000).toString();
 
         List<String> neededTranslation = Arrays.asList(Translation.CURRENCY, Translation.WATCHER_TYPE_ADVANCED, type.getTranslation());
         List<Translation> translations = tr.getNeededFromLanguage(neededTranslation, lang);
@@ -92,7 +92,7 @@ public class Watcher implements TranslatableObject {
     public void loadItem(Item item) {
         this.setItemId(item.getId());
         this.setItemName(item.getName());
-        this.setSellPrice(item.getSellPrice()/100.0f);
-        this.setBuyPrice(item.getBuyPrice()/100.0f);
+        this.setSellPrice(item.getSellPrice() / 100.0f);
+        this.setBuyPrice(item.getBuyPrice() / 100.0f);
     }
 }

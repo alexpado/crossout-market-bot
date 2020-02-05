@@ -16,6 +16,9 @@ import javax.persistence.IdClass;
 public class Translation {
 
     public static final String DISCORD_INVITE = "general.bot.invite";
+
+    public static final String GENERAL_ERROR = "general.error";
+
     public static final String ITEM_LIST = "command.item.list";
     public static final String ITEM_NOT_FOUND = "command.item.notFound";
     public static final String ITEM_REMOVED_LABEL = "general.item.removed.label";
@@ -42,6 +45,12 @@ public class Translation {
     public static final String WATCHER_WRONG_FOR = "command.watch.wrong.for";
     public static final String WATCHER_MULTIPLE_ITEM = "command.watch.multiple";
     public static final String WATCHER_ADDED = "command.watch.added";
+
+    public static final String WATCHER_NOT_FOUND = "general.watcher.notFound";
+    public static final String WATCHER_FORBIDDEN = "general.watcher.forbidden";
+    public static final String WATCHER_UPDATED = "command.watch.updated";
+
+    public static final String WATCHER_ITEM_REMOVED = "general.watchers.item.removed";
 
     @Id
     @Column(length = 100)

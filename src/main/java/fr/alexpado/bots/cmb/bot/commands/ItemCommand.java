@@ -4,16 +4,15 @@ import fr.alexpado.bots.cmb.api.ItemEndpoint;
 import fr.alexpado.bots.cmb.interfaces.BotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
+import fr.alexpado.bots.cmb.models.FakeItem;
 import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.models.game.Item;
+import fr.alexpado.bots.cmb.repositories.FakeItemRepository;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ItemCommand extends BotCommand {
 
@@ -41,7 +40,17 @@ public class ItemCommand extends BotCommand {
         List<Item> items = endpoint.search(params);
 
         if (items.size() == 0) {
-            this.sendError(message, this.getTranslation(Translation.ITEMS_NOTFOUND));
+
+            String query = "%" + itemName.toLowerCase() + "%";
+
+            FakeItemRepository repository = this.getConfig().getFakeItemRepository();
+            Optional<FakeItem> fakeItemOptional = repository.findEasterEgg(query);
+
+            if (fakeItemOptional.isPresent()) {
+                message.editMessage(fakeItemOptional.get().getAsEmbed(event.getJDA(), this.getTranslation(Translation.GENERAL_INVITE)).build()).queue();
+            } else {
+                this.sendError(message, this.getTranslation(Translation.ITEMS_NOTFOUND));
+            }
         } else if (items.size() == 1) {
             Item item = items.get(0);
             item.setTranslations(this.getTranslations());

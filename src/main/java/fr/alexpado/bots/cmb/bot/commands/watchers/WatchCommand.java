@@ -43,7 +43,7 @@ public class WatchCommand extends AbstractWatcherCommand {
             this.sendError(message, this.getTranslation(Translation.WATCHERS_WRONG_FOR));
             return;
         } else {
-            itemName = String.join(" ", event.getArgs().subList(1, event.getArgs().size()));
+            itemName = String.join(" ", event.getArgs().subList(0, event.getArgs().size()));
         }
 
         ItemEndpoint itemEndpoint = new ItemEndpoint(this.getConfig().getApiHost());

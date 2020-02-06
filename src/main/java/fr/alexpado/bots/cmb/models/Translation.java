@@ -23,7 +23,6 @@ public class Translation {
     public static final String ITEMS_MULTIPLE = "items.multiple";
     public static final String ITEMS_NOTFOUND = "items.notfound";
     public static final String ITEMS_REMOVED = "items.removed";
-    public static final String ITEMS_REMOVED_DESC = "items.removed.desc";
     public static final String ITEMS_UNAVAILABLE = "items.unavailable";
 
     public static final String MARKET_BUY = "market.buy";

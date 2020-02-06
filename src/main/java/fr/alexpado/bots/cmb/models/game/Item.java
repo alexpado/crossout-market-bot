@@ -131,7 +131,7 @@ public class Item extends TranslatableJSONModel {
         builder.setImage(String.format("http://bots.alexpado.fr:8181/chart/%s/%s/chart.png", this.id, this.lastUpdate));
 
         if (this.removed) {
-            builder.addField(this.getTranslation(Translation.ITEMS_REMOVED), this.getTranslation(Translation.ITEMS_REMOVED_DESC), true);
+            builder.addField(this.getTranslation(Translation.ITEMS_REMOVED), this.getTranslation(Translation.ITEMS_UNAVAILABLE), true);
         }
 
         if (this.rarity == null) {

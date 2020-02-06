@@ -12,7 +12,9 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.time.Instant;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Optional;
 
 @Getter
 public class Item extends TranslatableJSONModel {
@@ -107,10 +109,11 @@ public class Item extends TranslatableJSONModel {
         if (!this.removed) {
             builder.addField(this.getTranslation(Translation.ITEM_BUY), Utilities.money(this.sellPrice, this.getTranslation(Translation.CURRENCY)), true);
             builder.addField(this.getTranslation(Translation.ITEM_SELL), Utilities.money(this.buyPrice, this.getTranslation(Translation.CURRENCY)), true);
-
             if (this.craftable) {
+                builder.addField("", "", true);
                 builder.addField(this.getTranslation(Translation.ITEM_CRAFT_BUY), Utilities.money(this.craftingSellSum, this.getTranslation(Translation.CURRENCY)), true);
                 builder.addField(this.getTranslation(Translation.ITEM_CRAFT_SELL), Utilities.money(this.craftingBuySum, this.getTranslation(Translation.CURRENCY)), true);
+                builder.addField("", "", true);
             }
         }
 

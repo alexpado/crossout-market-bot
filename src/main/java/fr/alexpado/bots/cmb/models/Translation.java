@@ -54,6 +54,9 @@ public class Translation {
 
     public static final String PACK_PRICE = "command.pack.prices";
 
+    public static final String WATCHER_PAUSED = "command.pausewatchers.pause";
+    public static final String WATCHER_RESUMED = "command.pausewatchers.resume";
+
     @Id
     @Column(length = 100)
     private String translationKey;

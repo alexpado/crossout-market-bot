@@ -14,15 +14,17 @@ import javax.persistence.Id;
 @Setter
 public class DiscordUser {
 
-    @Column(length = 3)
-    private String language;
-
     @Id
     private long id;
 
     private String name;
 
     private String avatarUrl;
+
+    @Column(length = 3)
+    private String language;
+
+    private boolean watcherPaused;
 
     public static DiscordUser fromJDAUser(User user) {
 
@@ -32,6 +34,7 @@ public class DiscordUser {
         discordUser.setName(user.getName());
         discordUser.setAvatarUrl(user.getEffectiveAvatarUrl());
         discordUser.setLanguage(DiscordBot.getInstance().getConfig().getDefaultLocale());
+        discordUser.setWatcherPaused(false);
 
         return discordUser;
     }

@@ -1,6 +1,5 @@
-package fr.alexpado.bots.cmb.bot.commands.watchers;
+package fr.alexpado.bots.cmb.interfaces;
 
-import fr.alexpado.bots.cmb.bot.BotCommand;
 import fr.alexpado.bots.cmb.enums.WatcherTypes;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;

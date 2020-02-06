@@ -1,11 +1,11 @@
 package fr.alexpado.bots.cmb.bot.commands;
 
 import fr.alexpado.bots.cmb.api.ItemEndpoint;
-import fr.alexpado.bots.cmb.models.Translation;
-import fr.alexpado.bots.cmb.models.game.Item;
-import fr.alexpado.bots.cmb.bot.BotCommand;
+import fr.alexpado.bots.cmb.interfaces.BotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
+import fr.alexpado.bots.cmb.models.Translation;
+import fr.alexpado.bots.cmb.models.game.Item;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;

@@ -1,6 +1,7 @@
-package fr.alexpado.bots.cmb.bot;
+package fr.alexpado.bots.cmb.interfaces;
 
 import fr.alexpado.bots.cmb.AppConfig;
+import fr.alexpado.bots.cmb.bot.DiscordBot;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.commands.JDACommandExecutor;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;

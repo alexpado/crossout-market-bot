@@ -1,7 +1,7 @@
 package fr.alexpado.bots.cmb.bot.commands;
 
 import fr.alexpado.bots.cmb.api.PackEnpoint;
-import fr.alexpado.bots.cmb.bot.BotCommand;
+import fr.alexpado.bots.cmb.interfaces.BotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.models.Translation;

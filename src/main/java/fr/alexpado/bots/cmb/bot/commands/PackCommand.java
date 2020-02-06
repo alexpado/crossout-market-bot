@@ -1,11 +1,11 @@
 package fr.alexpado.bots.cmb.bot.commands;
 
 import fr.alexpado.bots.cmb.api.PackEnpoint;
-import fr.alexpado.bots.cmb.models.Translation;
-import fr.alexpado.bots.cmb.models.game.Pack;
 import fr.alexpado.bots.cmb.bot.BotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
+import fr.alexpado.bots.cmb.models.Translation;
+import fr.alexpado.bots.cmb.models.game.Pack;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -59,6 +59,6 @@ public class PackCommand extends BotCommand {
 
     @Override
     public List<String> getLanguageKeys() {
-        return Arrays.asList(Translation.PACK_NOT_FOUND, Translation.PACK_LIST, Translation.ITEM_SELL, Translation.ITEM_BUY, Translation.DISCORD_INVITE);
+        return Arrays.asList(Translation.CURRENCY, Translation.PACK_NOT_FOUND, Translation.PACK_LIST, Translation.ITEM_SELL, Translation.ITEM_BUY, Translation.DISCORD_INVITE, Translation.PACK_PRICE);
     }
 }

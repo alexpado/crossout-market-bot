@@ -52,6 +52,8 @@ public class Translation {
     public static final String WATCHER_ITEM_REMOVED = "general.watchers.item.removed";
     public static final String WATCHER_REMOVED = "general.watchers.removed";
 
+    public static final String PACK_PRICE = "command.pack.prices";
+
     @Id
     @Column(length = 100)
     private String translationKey;

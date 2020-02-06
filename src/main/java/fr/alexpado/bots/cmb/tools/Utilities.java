@@ -19,4 +19,8 @@ public class Utilities {
         return htmlRend.toString().replace("\n", "").replace("\r", "").replace(".", ". ");
     }
 
+    public static String average(int value, int divider, String unit) {
+        return String.format("%,.2f %s", (float) value / (float) divider, unit);
+    }
+
 }

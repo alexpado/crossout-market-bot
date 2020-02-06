@@ -64,7 +64,7 @@ public class ItemCommand extends BotCommand {
                 Translation.ITEMS_NOTFOUND,
                 Translation.ITEMS_LIST,
                 Translation.ITEMS_REMOVED,
-                Translation.ITEMS_REMOVED_DESC,
+                Translation.ITEMS_UNAVAILABLE,
                 Translation.GENERAL_INVITE,
                 Translation.MARKET_BUY,
                 Translation.MARKET_SELL,

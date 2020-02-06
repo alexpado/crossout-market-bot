@@ -57,7 +57,7 @@ public class Watcher implements TranslatableObject {
 
         String time = new TimeConverter(this.repeatEvery / 1000).toString();
 
-        List<String> neededTranslation = Arrays.asList(Translation.CURRENCY, Translation.WATCHER_TYPE_ADVANCED, type.getTranslation());
+        List<String> neededTranslation = Arrays.asList(Translation.GENERAL_CURRENCY, Translation.WATCHERS_OTHER, type.getTranslation());
         List<Translation> translations = tr.getNeededFromLanguage(neededTranslation, lang);
 
         if (neededTranslation.size() != translations.size()) {
@@ -74,10 +74,10 @@ public class Watcher implements TranslatableObject {
             case BUY_OVER:
             case BUY_UNDER:
                 String advancedContent = String.format(translationMap.get(type.getTranslation()), Utilities.money(this.price, ""));
-                String watcherTextContent = String.format(translationMap.get(Translation.WATCHER_TYPE_ADVANCED), this.itemName, advancedContent, time);
+                String watcherTextContent = String.format(translationMap.get(Translation.WATCHERS_OTHER), this.itemName, advancedContent, time);
                 return String.format("[%s] %s", this.id, watcherTextContent);
             case NORMAL:
-                return String.format("[%s] %s", this.id, String.format(translationMap.get(Translation.WATCHER_TYPE_NORMAL), this.itemName, time));
+                return String.format("[%s] %s", this.id, String.format(translationMap.get(type.getTranslation()), this.itemName, time));
         }
 
         return String.format("[%s] %s", this.id, this.itemName);

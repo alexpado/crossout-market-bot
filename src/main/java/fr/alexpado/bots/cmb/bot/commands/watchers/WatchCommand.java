@@ -7,9 +7,9 @@ import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.models.Watcher;
 import fr.alexpado.bots.cmb.models.game.Item;
+import fr.alexpado.bots.cmb.tools.Utilities;
 import net.dv8tion.jda.api.entities.Message;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,14 +21,11 @@ public class WatchCommand extends AbstractWatcherCommand {
 
     @Override
     public List<String> getLanguageKeys() {
-        return Arrays.asList(
-                Translation.WATCHER_WRONG_TYPE,
-                Translation.WATCHER_WRONG_VALUE,
-                Translation.WATCHER_WRONG_PRICE,
-                Translation.WATCHER_ADDED,
-                Translation.ITEM_NOT_FOUND,
-                Translation.WATCHER_WRONG_FOR,
-                Translation.WATCHER_MULTIPLE_ITEM
+        return Utilities.mergeList(super.getLanguageKeys(),
+                Translation.WATCHERS_WRONG_FOR,
+                Translation.ITEMS_NOTFOUND,
+                Translation.ITEMS_MULTIPLE,
+                Translation.WATCHERS_NEW
         );
     }
 
@@ -43,7 +40,7 @@ public class WatchCommand extends AbstractWatcherCommand {
         if (forIndex != -1) {
             itemName = String.join(" ", event.getArgs().subList(forIndex + 1, event.getArgs().size()));
         } else if (whenIndex != -1 || everyIndex != -1) {
-            this.sendError(message, this.getTranslation(Translation.WATCHER_WRONG_FOR));
+            this.sendError(message, this.getTranslation(Translation.WATCHERS_WRONG_FOR));
             return;
         } else {
             itemName = String.join(" ", event.getArgs().subList(1, event.getArgs().size()));
@@ -56,10 +53,10 @@ public class WatchCommand extends AbstractWatcherCommand {
         List<Item> items = itemEndpoint.search(map);
 
         if (items.size() == 0) {
-            this.sendError(message, this.getTranslation(Translation.ITEM_NOT_FOUND));
+            this.sendError(message, this.getTranslation(Translation.ITEMS_NOTFOUND));
             return;
         } else if (items.size() > 1) {
-            this.sendError(message, this.getTranslation(Translation.WATCHER_MULTIPLE_ITEM));
+            this.sendError(message, this.getTranslation(Translation.ITEMS_MULTIPLE));
             return;
         }
 
@@ -67,8 +64,8 @@ public class WatchCommand extends AbstractWatcherCommand {
         Watcher watcher = new Watcher();
         watcher.loadItem(item);
 
-        if (this.updateWatcher(event, watcher, item, message, false)) {
-            this.sendInfo(message, this.getTranslation(Translation.WATCHER_ADDED));
+        if (this.updateWatcher(event, watcher, message, false)) {
+            this.sendInfo(message, this.getTranslation(Translation.WATCHERS_NEW));
         }
     }
 }

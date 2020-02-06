@@ -40,7 +40,7 @@ public class PackCommand extends BotCommand {
         }
 
         if (effectivePacks.size() == 0) {
-            this.sendError(message, this.getTranslation(Translation.PACK_NOT_FOUND));
+            this.sendError(message, this.getTranslation(Translation.PACKS_NOTFOUND));
         } else if (effectivePacks.size() == 1) {
             Pack pack = effectivePacks.get(0);
             pack.setTranslations(this.getTranslations());
@@ -50,7 +50,7 @@ public class PackCommand extends BotCommand {
                 @Override
                 public EmbedBuilder getEmbed() {
                     EmbedBuilder builder = new EmbedBuilder();
-                    builder.setTitle(PackCommand.this.getTranslation(Translation.PACK_LIST));
+                    builder.setTitle(PackCommand.this.getTranslation(Translation.PACKS_LIST));
                     return builder;
                 }
             };
@@ -59,6 +59,14 @@ public class PackCommand extends BotCommand {
 
     @Override
     public List<String> getLanguageKeys() {
-        return Arrays.asList(Translation.CURRENCY, Translation.PACK_NOT_FOUND, Translation.PACK_LIST, Translation.ITEM_SELL, Translation.ITEM_BUY, Translation.DISCORD_INVITE, Translation.PACK_PRICE);
+        return Arrays.asList(
+                Translation.GENERAL_CURRENCY,
+                Translation.PACKS_NOTFOUND,
+                Translation.PACKS_LIST,
+                Translation.MARKET_SELL,
+                Translation.MARKET_BUY,
+                Translation.GENERAL_INVITE,
+                Translation.PACKS_PRICE
+        );
     }
 }

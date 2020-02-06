@@ -41,7 +41,7 @@ public class ItemCommand extends BotCommand {
         List<Item> items = endpoint.search(params);
 
         if (items.size() == 0) {
-            this.sendError(message, this.getTranslation(Translation.ITEM_NOT_FOUND));
+            this.sendError(message, this.getTranslation(Translation.ITEMS_NOTFOUND));
         } else if (items.size() == 1) {
             Item item = items.get(0);
             item.setTranslations(this.getTranslations());
@@ -51,7 +51,7 @@ public class ItemCommand extends BotCommand {
                 @Override
                 public EmbedBuilder getEmbed() {
                     EmbedBuilder builder = new EmbedBuilder();
-                    builder.setTitle(ItemCommand.this.getTranslation(Translation.ITEM_LIST));
+                    builder.setTitle(ItemCommand.this.getTranslation(Translation.ITEMS_LIST));
                     return builder;
                 }
             };
@@ -60,7 +60,18 @@ public class ItemCommand extends BotCommand {
 
     @Override
     public List<String> getLanguageKeys() {
-        return Arrays.asList(Translation.ITEM_NOT_FOUND, Translation.ITEM_LIST, Translation.ITEM_REMOVED_LABEL, Translation.ITEM_REMOVED_DESC, Translation.DISCORD_INVITE, Translation.ITEM_BUY, Translation.ITEM_SELL, Translation.ITEM_CRAFT_BUY, Translation.ITEM_CRAFT_SELL, Translation.CURRENCY);
+        return Arrays.asList(
+                Translation.ITEMS_NOTFOUND,
+                Translation.ITEMS_LIST,
+                Translation.ITEMS_REMOVED,
+                Translation.ITEMS_REMOVED_DESC,
+                Translation.GENERAL_INVITE,
+                Translation.MARKET_BUY,
+                Translation.MARKET_SELL,
+                Translation.MARKET_CRAFTS_BUY,
+                Translation.MARKET_CRAFTS_SELL,
+                Translation.GENERAL_CURRENCY
+        );
     }
 
 }

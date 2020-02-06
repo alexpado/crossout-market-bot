@@ -19,7 +19,7 @@ public class PauseWatchersCommand extends BotCommand {
 
     @Override
     public List<String> getLanguageKeys() {
-        return Arrays.asList(Translation.WATCHER_PAUSED, Translation.WATCHER_RESUMED);
+        return Arrays.asList(Translation.WATCHERS_PAUSED, Translation.WATCHERS_RESUMED);
     }
 
     @Override
@@ -32,10 +32,10 @@ public class PauseWatchersCommand extends BotCommand {
 
         if (user.isWatcherPaused()) {
             user.setWatcherPaused(false);
-            key = Translation.WATCHER_RESUMED;
+            key = Translation.WATCHERS_RESUMED;
         } else {
             user.setWatcherPaused(true);
-            key = Translation.WATCHER_PAUSED;
+            key = Translation.WATCHERS_PAUSED;
         }
 
         dur.save(user);

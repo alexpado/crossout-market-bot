@@ -15,47 +15,46 @@ import javax.persistence.IdClass;
 @Setter
 public class Translation {
 
-    public static final String DISCORD_INVITE = "general.bot.invite";
-
+    public static final String GENERAL_CURRENCY = "general.currency";
     public static final String GENERAL_ERROR = "general.error";
+    public static final String GENERAL_INVITE = "general.invite";
 
-    public static final String ITEM_LIST = "command.item.list";
-    public static final String ITEM_NOT_FOUND = "command.item.notFound";
-    public static final String ITEM_REMOVED_LABEL = "general.item.removed.label";
-    public static final String ITEM_REMOVED_DESC = "general.item.removed.desc";
-    public static final String ITEM_BUY = "general.item.buy";
-    public static final String ITEM_SELL = "general.item.sell";
-    public static final String ITEM_CRAFT_BUY = "general.item.craft.buy";
-    public static final String ITEM_CRAFT_SELL = "general.item.craft.sell";
-    public static final String CURRENCY = "general.currency";
-    public static final String PACK_NOT_FOUND = "command.pack.notFound";
-    public static final String PACK_LIST = "command.pack.list";
-    public static final String WATCHER_LIST = "command.watchlist.list";
-    public static final String WATCHER_EMPTY = "command.watchlist.empty";
-    public static final String WATCHER_TYPE_NORMAL = "general.watchers.normal";
-    public static final String WATCHER_TYPE_SELL_UNDER = "general.watchers.sell.under";
-    public static final String WATCHER_TYPE_SELL_OVER = "general.watchers.sell.over";
-    public static final String WATCHER_TYPE_BUY_UNDER = "general.watchers.buy.under";
-    public static final String WATCHER_TYPE_BUY_OVER = "general.watchers.buy.over";
-    public static final String WATCHER_TYPE_ADVANCED = "general.watchers.other";
+    public static final String ITEMS_LIST = "items.list";
+    public static final String ITEMS_MULTIPLE = "items.multiple";
+    public static final String ITEMS_NOTFOUND = "items.notfound";
+    public static final String ITEMS_REMOVED = "items.removed";
+    public static final String ITEMS_REMOVED_DESC = "items.removed.desc";
+    public static final String ITEMS_UNAVAILABLE = "items.unavailable";
 
-    public static final String WATCHER_WRONG_TYPE = "command.watch.wrong.type";
-    public static final String WATCHER_WRONG_VALUE = "command.watch.wrong.value";
-    public static final String WATCHER_WRONG_PRICE = "command.watch.wrong.price";
-    public static final String WATCHER_WRONG_FOR = "command.watch.wrong.for";
-    public static final String WATCHER_MULTIPLE_ITEM = "command.watch.multiple";
-    public static final String WATCHER_ADDED = "command.watch.added";
+    public static final String MARKET_BUY = "market.buy";
+    public static final String MARKET_CRAFTS_BUY = "market.crafts.buy";
+    public static final String MARKET_SELL = "market.sell";
+    public static final String MARKET_CRAFTS_SELL = "market.crafts.sell";
 
-    public static final String WATCHER_NOT_FOUND = "general.watcher.notFound";
-    public static final String WATCHER_FORBIDDEN = "general.watcher.forbidden";
-    public static final String WATCHER_UPDATED = "command.watch.updated";
-    public static final String WATCHER_ITEM_REMOVED = "general.watchers.item.removed";
-    public static final String WATCHER_REMOVED = "general.watchers.removed";
+    public static final String PACKS_LIST = "packs.list";
+    public static final String PACKS_NOTFOUND = "packs.notfound";
+    public static final String PACKS_PRICE = "packs.price";
 
-    public static final String PACK_PRICE = "command.pack.prices";
-
-    public static final String WATCHER_PAUSED = "command.pausewatchers.pause";
-    public static final String WATCHER_RESUMED = "command.pausewatchers.resume";
+    public static final String WATCHERS_FORBIDDEN = "watchers.forbidden";
+    public static final String WATCHERS_LIST = "watchers.list";
+    public static final String WATCHERS_NEW = "watchers.new";
+    public static final String WATCHERS_NONE = "watchers.none";
+    public static final String WATCHERS_NOTFOUND = "watchers.notfound";
+    public static final String WATCHERS_PAUSED = "watchers.paused";
+    public static final String WATCHERS_REMOVED = "watchers.removed";
+    public static final String WATCHERS_RESUMED = "watchers.resumed";
+    public static final String WATCHERS_BUY_OVER = "watchers.type.buy.over";
+    public static final String WATCHERS_BUY_UNDER = "watchers.type.buy.under";
+    public static final String WATCHERS_NORMAL = "watchers.type.normal";
+    public static final String WATCHERS_OTHER = "watchers.type.other";
+    public static final String WATCHERS_SELL_OVER = "watchers.type.sell.over";
+    public static final String WATCHERS_SELL_UNDER = "watchers.type.sell.under";
+    public static final String WATCHERS_UNWATCH = "watchers.unwatch";
+    public static final String WATCHERS_UPDATED = "watchers.updated";
+    public static final String WATCHERS_WRONG_FOR = "watchers.wrong.for";
+    public static final String WATCHERS_WRONG_PRICE = "watchers.wrong.price";
+    public static final String WATCHERS_WRONG_TYPE = "watchers.wrong.type";
+    public static final String WATCHERS_WRONG_VALUE = "watchers.wrong.value";
 
     @Id
     @Column(length = 100)

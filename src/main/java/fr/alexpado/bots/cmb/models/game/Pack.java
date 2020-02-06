@@ -90,23 +90,23 @@ public class Pack extends TranslatableJSONModel {
     public EmbedBuilder getAsEmbed(JDA jda) {
         EmbedBuilder builder = new EmbedBuilder();
 
-        builder.setAuthor(this.getTranslation(Translation.DISCORD_INVITE), DiscordBot.INVITE, jda.getSelfUser().getAvatarUrl());
+        builder.setAuthor(this.getTranslation(Translation.GENERAL_INVITE), DiscordBot.INVITE, jda.getSelfUser().getAvatarUrl());
         builder.setTitle(this.name, String.format("https://crossoutdb.com/packs?ref=crossoutmarketbot#pack=%s", this.getKey()));
 
-        builder.addField(this.getTranslation(Translation.ITEM_SELL), Utilities.money(this.buySum, ""), true);
-        builder.addField(this.getTranslation(Translation.ITEM_BUY), Utilities.money(this.sellSum, ""), true);
+        builder.addField(this.getTranslation(Translation.MARKET_SELL), Utilities.money(this.buySum, ""), true);
+        builder.addField(this.getTranslation(Translation.MARKET_BUY), Utilities.money(this.sellSum, ""), true);
 
         builder.addField("", "", true);
 
         if (this.usdPrice != 0) {
-            builder.addField(this.getTranslation(Translation.PACK_PRICE), String.format("%s\n%s\n%s\n%s",
+            builder.addField(this.getTranslation(Translation.PACKS_PRICE), String.format("%s\n%s\n%s\n%s",
                     this.getPriceLine(this.usdPrice, "USD"),
                     this.getPriceLine(this.eurPrice, "EUR"),
                     this.getPriceLine(this.gbpPrice, "GBP"),
                     this.getPriceLine(this.rubPrice, "RUB")
             ), true);
 
-            builder.addField(this.getTranslation(Translation.PACK_PRICE), String.format("%s\n%s\n%s\n%s",
+            builder.addField(this.getTranslation(Translation.PACKS_PRICE), String.format("%s\n%s\n%s\n%s",
                     "10 Coins/USD",
                     "10 Coins/USD",
                     "10 Coins/USD",

@@ -1,28 +1,29 @@
 package fr.alexpado.bots.cmb.bot.commands;
 
 import fr.alexpado.bots.cmb.api.ItemEndpoint;
-import fr.alexpado.bots.cmb.interfaces.BotCommand;
+import fr.alexpado.bots.cmb.interfaces.command.TranslatableBotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.models.FakeItem;
 import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.models.game.Item;
 import fr.alexpado.bots.cmb.repositories.FakeItemRepository;
+import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.*;
 
-public class ItemCommand extends BotCommand {
+public class ItemCommand extends TranslatableBotCommand {
 
     public ItemCommand(JDAModule module) {
         super(module, "item");
     }
 
     @Override
-    public void execute(CommandEvent event, Message message) {
-        ItemEndpoint endpoint = new ItemEndpoint(this.getConfig().getApiHost());
+    public void execute(CommandEvent event, Message message) throws MissingTranslationException {
+        ItemEndpoint endpoint = new ItemEndpoint(this.getConfig());
         Map<String, String> params = new HashMap<>();
 
         if (event.getArgs().contains("-r")) {
@@ -53,9 +54,21 @@ public class ItemCommand extends BotCommand {
             }
         } else if (items.size() == 1) {
             Item item = items.get(0);
-            item.setTranslations(this.getTranslations());
+            item.fetchTranslations(this.getDiscordGuild().getLanguage());
             message.editMessage(item.getAsEmbed(event.getJDA()).build()).queue();
         } else {
+
+            // Try to find a perfect match.
+            for (Item item : items) {
+                if (item.getName().equalsIgnoreCase(itemName)) {
+                    // Perfect match !
+                    item.fetchTranslations(this.getDiscordGuild().getLanguage());
+                    message.editMessage(item.getAsEmbed(event.getJDA()).build()).queue();
+                    return;
+                }
+            }
+
+            // Show the navigation menu.
             new EmbedPage<Item>(message, items, 20) {
                 @Override
                 public EmbedBuilder getEmbed() {
@@ -68,18 +81,12 @@ public class ItemCommand extends BotCommand {
     }
 
     @Override
-    public List<String> getLanguageKeys() {
+    public List<String> getRequiredTranslation() {
         return Arrays.asList(
                 Translation.ITEMS_NOTFOUND,
                 Translation.ITEMS_LIST,
-                Translation.ITEMS_REMOVED,
                 Translation.ITEMS_UNAVAILABLE,
-                Translation.GENERAL_INVITE,
-                Translation.MARKET_BUY,
-                Translation.MARKET_SELL,
-                Translation.MARKET_CRAFTS_BUY,
-                Translation.MARKET_CRAFTS_SELL,
-                Translation.GENERAL_CURRENCY
+                Translation.GENERAL_INVITE
         );
     }
 

@@ -1,8 +1,8 @@
 package fr.alexpado.bots.cmb.api;
 
-import fr.alexpado.bots.cmb.models.game.Category;
-import fr.alexpado.bots.cmb.interfaces.APIRepository;
+import fr.alexpado.bots.cmb.interfaces.APIEndpoint;
 import fr.alexpado.bots.cmb.libs.HttpRequest;
+import fr.alexpado.bots.cmb.models.game.Category;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CategoryEndpoint extends APIRepository<Category> {
+public class CategoryEndpoint extends APIEndpoint<Category, Integer> {
 
     public CategoryEndpoint(String apiRoot) {
         super(apiRoot);
     }
 
     @Override
-    public Optional<Category> getOne(int id) {
+    public Optional<Category> getOne(Integer id) {
         List<Category> categories = this.getAll();
         for (Category type : categories) {
             if (type.getId() == id) {
@@ -33,7 +33,7 @@ public class CategoryEndpoint extends APIRepository<Category> {
         List<Category> categoryList = new ArrayList<>();
 
         try {
-            HttpRequest request = new HttpRequest(String.format("%s/categories", this.getApiRoot()));
+            HttpRequest request = new HttpRequest(String.format("%s/categories", this.getHost()));
             JSONArray array = request.readJsonArray();
 
             for (int i = 0; i < array.length(); i++) {

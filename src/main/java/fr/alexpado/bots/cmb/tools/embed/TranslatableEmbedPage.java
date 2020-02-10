@@ -1,11 +1,12 @@
 package fr.alexpado.bots.cmb.tools.embed;
 
-import fr.alexpado.bots.cmb.interfaces.TranslatableObject;
+import fr.alexpado.bots.cmb.interfaces.translatable.Translatable;
+import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.List;
 
-public abstract class TranslatableEmbedPage<T extends TranslatableObject> extends EmbedPage<T> {
+public abstract class TranslatableEmbedPage<T extends Translatable> extends EmbedPage<T> {
 
     private String lang;
 
@@ -22,6 +23,12 @@ public abstract class TranslatableEmbedPage<T extends TranslatableObject> extend
 
     @Override
     public String asString(T obj) {
-        return obj.toString(this.lang);
+        try {
+            obj.fetchTranslations(this.lang);
+            return obj.toString();
+        } catch (MissingTranslationException e) {
+            e.printStackTrace();
+        }
+        return "{:MTE:}";
     }
 }

@@ -51,6 +51,7 @@ public class Translation {
     public static final String WATCHERS_UNWATCH = "watchers.unwatch";
     public static final String WATCHERS_UPDATED = "watchers.updated";
     public static final String WATCHERS_WRONG_FOR = "watchers.wrong.for";
+    public static final String WATCHERS_WRONG_ID = "watchers.wrong.id";
     public static final String WATCHERS_WRONG_PRICE = "watchers.wrong.price";
     public static final String WATCHERS_WRONG_TYPE = "watchers.wrong.type";
     public static final String WATCHERS_WRONG_VALUE = "watchers.wrong.value";

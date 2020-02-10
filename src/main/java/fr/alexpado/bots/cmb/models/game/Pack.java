@@ -1,7 +1,8 @@
 package fr.alexpado.bots.cmb.models.game;
 
+import fr.alexpado.bots.cmb.AppConfig;
 import fr.alexpado.bots.cmb.bot.DiscordBot;
-import fr.alexpado.bots.cmb.interfaces.TranslatableJSONModel;
+import fr.alexpado.bots.cmb.interfaces.translatable.TranslatableJSONModel;
 import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.tools.Utilities;
 import lombok.Getter;
@@ -12,6 +13,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Getter
@@ -28,13 +31,14 @@ public class Pack extends TranslatableJSONModel {
     private int gbpPrice = 0;
     private int rubPrice = 0;
 
-    public Pack(JSONObject source) {
+    public Pack(AppConfig config, JSONObject source) {
+        super(config);
         this.reload(source);
     }
 
-    public static Optional<Pack> from(JSONObject dataSource) {
+    public static Optional<Pack> from(AppConfig config, JSONObject dataSource) {
         try {
-            return Optional.of(new Pack(dataSource));
+            return Optional.of(new Pack(config, dataSource));
         } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();
@@ -87,6 +91,16 @@ public class Pack extends TranslatableJSONModel {
         return String.format("https://crossoutdb.com/img/premiumpackages/%s.jpg", this.getKey());
     }
 
+    @Override
+    public List<String> getRequiredTranslation() {
+        return Arrays.asList(
+                Translation.GENERAL_INVITE,
+                Translation.MARKET_BUY,
+                Translation.MARKET_SELL,
+                Translation.PACKS_PRICE
+        );
+    }
+
     public EmbedBuilder getAsEmbed(JDA jda) {
         EmbedBuilder builder = new EmbedBuilder();
 
@@ -106,7 +120,7 @@ public class Pack extends TranslatableJSONModel {
                     this.getPriceLine(this.rubPrice, "RUB")
             ), true);
 
-            builder.addField(this.getTranslation(Translation.PACKS_PRICE), String.format("%s\n%s\n%s\n%s",
+            builder.addField("", String.format("%s\n%s\n%s\n%s",
                     "10 Coins/USD",
                     "10 Coins/USD",
                     "10 Coins/USD",

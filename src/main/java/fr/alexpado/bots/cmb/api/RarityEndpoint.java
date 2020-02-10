@@ -1,8 +1,8 @@
 package fr.alexpado.bots.cmb.api;
 
-import fr.alexpado.bots.cmb.models.game.Rarity;
-import fr.alexpado.bots.cmb.interfaces.APIRepository;
+import fr.alexpado.bots.cmb.interfaces.APIEndpoint;
 import fr.alexpado.bots.cmb.libs.HttpRequest;
+import fr.alexpado.bots.cmb.models.game.Rarity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 
-public class RarityEndpoint extends APIRepository<Rarity> {
+public class RarityEndpoint extends APIEndpoint<Rarity, Integer> {
 
     private Map<Integer, Color> colorMap = new HashMap<>();
 
@@ -25,7 +25,7 @@ public class RarityEndpoint extends APIRepository<Rarity> {
     }
 
     @Override
-    public Optional<Rarity> getOne(int id) {
+    public Optional<Rarity> getOne(Integer id) {
         List<Rarity> rarities = this.getAll();
         for (Rarity rarity : rarities) {
             if (rarity.getId() == id) {
@@ -40,7 +40,7 @@ public class RarityEndpoint extends APIRepository<Rarity> {
         List<Rarity> rarityList = new ArrayList<>();
 
         try {
-            HttpRequest request = new HttpRequest(String.format("%s/rarities", this.getApiRoot()));
+            HttpRequest request = new HttpRequest(String.format("%s/rarities", this.getHost()));
             JSONArray array = request.readJsonArray();
 
             for (int i = 0; i < array.length(); i++) {

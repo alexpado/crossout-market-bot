@@ -1,11 +1,12 @@
 package fr.alexpado.bots.cmb.bot.commands;
 
 import fr.alexpado.bots.cmb.api.PackEnpoint;
-import fr.alexpado.bots.cmb.interfaces.BotCommand;
+import fr.alexpado.bots.cmb.interfaces.command.TranslatableBotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.models.game.Pack;
+import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -14,15 +15,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PackCommand extends BotCommand {
+public class PackCommand extends TranslatableBotCommand {
 
     public PackCommand(JDAModule module) {
         super(module, "pack");
     }
 
     @Override
-    public void execute(CommandEvent event, Message message) {
-        PackEnpoint endpoint = new PackEnpoint(this.getConfig().getApiHost());
+    public List<String> getRequiredTranslation() {
+        return Arrays.asList(
+                Translation.PACKS_NOTFOUND,
+                Translation.PACKS_LIST
+        );
+    }
+
+    @Override
+    public void execute(CommandEvent event, Message message) throws MissingTranslationException {
+        PackEnpoint endpoint = new PackEnpoint(this.getConfig());
         List<Pack> packs = endpoint.getAll();
         List<Pack> effectivePacks = new ArrayList<>();
 
@@ -30,7 +39,7 @@ public class PackCommand extends BotCommand {
 
         for (Pack pack : packs) {
             if (pack.getName().equalsIgnoreCase(packName)) {
-                pack.setTranslations(this.getTranslations());
+                pack.fetchTranslations(this.getDiscordGuild().getLanguage());
                 message.editMessage(pack.getAsEmbed(event.getJDA()).build()).queue();
                 return;
             }
@@ -43,7 +52,7 @@ public class PackCommand extends BotCommand {
             this.sendError(message, this.getTranslation(Translation.PACKS_NOTFOUND));
         } else if (effectivePacks.size() == 1) {
             Pack pack = effectivePacks.get(0);
-            pack.setTranslations(this.getTranslations());
+            pack.fetchTranslations(this.getDiscordGuild().getLanguage());
             message.editMessage(pack.getAsEmbed(event.getJDA()).build()).queue();
         } else {
             new EmbedPage<Pack>(message, effectivePacks, 20) {
@@ -57,16 +66,4 @@ public class PackCommand extends BotCommand {
         }
     }
 
-    @Override
-    public List<String> getLanguageKeys() {
-        return Arrays.asList(
-                Translation.GENERAL_CURRENCY,
-                Translation.PACKS_NOTFOUND,
-                Translation.PACKS_LIST,
-                Translation.MARKET_SELL,
-                Translation.MARKET_BUY,
-                Translation.GENERAL_INVITE,
-                Translation.PACKS_PRICE
-        );
-    }
 }

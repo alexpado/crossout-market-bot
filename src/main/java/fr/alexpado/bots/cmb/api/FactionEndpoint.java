@@ -1,8 +1,8 @@
 package fr.alexpado.bots.cmb.api;
 
-import fr.alexpado.bots.cmb.models.game.Faction;
-import fr.alexpado.bots.cmb.interfaces.APIRepository;
+import fr.alexpado.bots.cmb.interfaces.APIEndpoint;
 import fr.alexpado.bots.cmb.libs.HttpRequest;
+import fr.alexpado.bots.cmb.models.game.Faction;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class FactionEndpoint extends APIRepository<Faction> {
+public class FactionEndpoint extends APIEndpoint<Faction, Integer> {
 
     public FactionEndpoint(String apiRoot) {
         super(apiRoot);
     }
 
     @Override
-    public Optional<Faction> getOne(int id) {
+    public Optional<Faction> getOne(Integer id) {
         List<Faction> factions = this.getAll();
         for (Faction rarity : factions) {
             if (rarity.getId() == id) {
@@ -33,7 +33,7 @@ public class FactionEndpoint extends APIRepository<Faction> {
         List<Faction> factionList = new ArrayList<>();
 
         try {
-            HttpRequest request = new HttpRequest(String.format("%s/factions", this.getApiRoot()));
+            HttpRequest request = new HttpRequest(String.format("%s/factions", this.getHost()));
             JSONArray array = request.readJsonArray();
 
             for (int i = 0; i < array.length(); i++) {

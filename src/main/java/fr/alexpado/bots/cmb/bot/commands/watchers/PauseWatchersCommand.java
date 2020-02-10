@@ -1,33 +1,35 @@
 package fr.alexpado.bots.cmb.bot.commands.watchers;
 
-import fr.alexpado.bots.cmb.interfaces.BotCommand;
+import fr.alexpado.bots.cmb.interfaces.command.WatcherCommandGroup;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.models.discord.DiscordUser;
-import fr.alexpado.bots.cmb.repositories.DiscordUserRepository;
 import net.dv8tion.jda.api.entities.Message;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PauseWatchersCommand extends BotCommand {
+public class PauseWatchersCommand extends WatcherCommandGroup {
 
     public PauseWatchersCommand(JDAModule module) {
         super(module, "pausewatchers");
     }
 
     @Override
-    public List<String> getLanguageKeys() {
-        return Arrays.asList(Translation.WATCHERS_PAUSED, Translation.WATCHERS_RESUMED);
+    public List<String> getRequiredTranslation() {
+        List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
+        requiredTranslations.addAll(Arrays.asList(
+                Translation.WATCHERS_PAUSED,
+                Translation.WATCHERS_RESUMED
+        ));
+        return requiredTranslations;
     }
 
     @Override
     public void execute(CommandEvent event, Message message) {
-
-        DiscordUserRepository dur = this.getBot().getConfig().discordUserRepository;
-        DiscordUser user = this.getDiscordUser(event);
-
+        DiscordUser user = this.getDiscordUser();
         String key;
 
         if (user.isWatcherPaused()) {
@@ -38,7 +40,7 @@ public class PauseWatchersCommand extends BotCommand {
             key = Translation.WATCHERS_PAUSED;
         }
 
-        dur.save(user);
+        this.getConfig().getDiscordUserRepository().save(user);
         this.sendInfo(message, this.getTranslation(key));
     }
 }

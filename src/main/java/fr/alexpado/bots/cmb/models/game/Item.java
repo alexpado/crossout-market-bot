@@ -1,7 +1,9 @@
 package fr.alexpado.bots.cmb.models.game;
 
+import fr.alexpado.bots.cmb.AppConfig;
 import fr.alexpado.bots.cmb.bot.DiscordBot;
-import fr.alexpado.bots.cmb.interfaces.TranslatableJSONModel;
+import fr.alexpado.bots.cmb.enums.WatcherType;
+import fr.alexpado.bots.cmb.interfaces.translatable.TranslatableJSONModel;
 import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.tools.Utilities;
 import lombok.Getter;
@@ -12,9 +14,8 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.time.Instant;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
+import java.util.List;
+import java.util.*;
 
 @Getter
 public class Item extends TranslatableJSONModel {
@@ -34,17 +35,37 @@ public class Item extends TranslatableJSONModel {
     private Rarity rarity;
     private Type type;
 
-    public Item(JSONObject dataSource) throws Exception {
-        super(dataSource);
+    public Item(AppConfig config, JSONObject dataSource) throws Exception {
+        super(config, dataSource);
     }
 
-    public static Optional<Item> from(JSONObject dataSource) {
+    public static Optional<Item> from(AppConfig config, JSONObject dataSource) {
         try {
-            return Optional.of(new Item(dataSource));
+            return Optional.of(new Item(config, dataSource));
         } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<String> getRequiredTranslation() {
+        return Arrays.asList(
+                Translation.GENERAL_INVITE,
+                Translation.GENERAL_CURRENCY,
+                Translation.MARKET_BUY,
+                Translation.MARKET_CRAFTS_BUY,
+                Translation.MARKET_SELL,
+                Translation.MARKET_CRAFTS_SELL,
+                WatcherType.NORMAL.getTranslation(),
+                WatcherType.BUY_OVER.getTranslation(),
+                WatcherType.BUY_UNDER.getTranslation(),
+                WatcherType.SELL_OVER.getTranslation(),
+                WatcherType.SELL_UNDER.getTranslation(),
+                Translation.WATCHERS_OTHER,
+                Translation.ITEMS_REMOVED,
+                Translation.ITEMS_UNAVAILABLE
+        );
     }
 
     @Override

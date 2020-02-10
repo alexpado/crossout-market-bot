@@ -1,6 +1,6 @@
 package fr.alexpado.bots.cmb.interfaces;
 
-import fr.alexpado.bots.cmb.enums.WatcherTypes;
+import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.models.Translation;
@@ -82,19 +82,19 @@ public abstract class AbstractWatcherCommand extends BotCommand {
             }
 
             if (whenPriceType.equalsIgnoreCase("buy") && whenPriceValue.equalsIgnoreCase("under")) {
-                watcher.setWatcherType(WatcherTypes.BUY_UNDER.getId());
+                watcher.setWatcherType(WatcherType.BUY_UNDER.getId());
             } else if (whenPriceType.equalsIgnoreCase("buy") && whenPriceValue.equalsIgnoreCase("over")) {
-                watcher.setWatcherType(WatcherTypes.BUY_OVER.getId());
+                watcher.setWatcherType(WatcherType.BUY_OVER.getId());
             } else if (whenPriceType.equalsIgnoreCase("sell") && whenPriceValue.equalsIgnoreCase("under")) {
-                watcher.setWatcherType(WatcherTypes.SELL_UNDER.getId());
+                watcher.setWatcherType(WatcherType.SELL_UNDER.getId());
             } else if (whenPriceType.equalsIgnoreCase("sell") && whenPriceValue.equalsIgnoreCase("over")) {
-                watcher.setWatcherType(WatcherTypes.SELL_OVER.getId());
+                watcher.setWatcherType(WatcherType.SELL_OVER.getId());
             }
 
             watcher.setPrice(price);
         } else {
             if (!update || alwaysIndex != -1) {
-                watcher.setWatcherType(WatcherTypes.NORMAL.getId());
+                watcher.setWatcherType(WatcherType.NORMAL.getId());
             }
         }
 

@@ -27,7 +27,6 @@ public class Utilities {
         return String.format("%,.2f %s", (float) value / (float) divider, unit);
     }
 
-
     public static List<String> mergeList(List<String> array, String... elements) {
         List<String> result = new ArrayList<>();
         result.addAll(array);

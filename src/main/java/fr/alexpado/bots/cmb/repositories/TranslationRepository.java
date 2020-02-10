@@ -16,4 +16,7 @@ public interface TranslationRepository extends CrudRepository<Translation, Trans
     List<Translation> getNeededFromLanguage(@Param("keys") Collection<String> keys, @Param("lang") String language);
 
     Optional<Translation> getTranslationByLanguageAndTranslationKey(String language, String translationKey);
+
+    @Query("SELECT DISTINCT t.language FROM Translation t")
+    List<String> supportedLanguages();
 }

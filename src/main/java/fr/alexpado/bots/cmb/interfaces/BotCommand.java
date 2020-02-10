@@ -16,10 +16,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class BotCommand extends JDACommandExecutor {
 
@@ -39,7 +36,7 @@ public abstract class BotCommand extends JDACommandExecutor {
             Optional<DiscordGuild> optionalDiscordGuild = dgr.findById(event.getGuild().getIdLong());
             DiscordGuild guild;
             if (!optionalDiscordGuild.isPresent()) {
-                guild = DiscordGuild.fromJDAGuild(event.getGuild());
+                guild = DiscordGuild.fromJDAGuild(event.getGuild(), this.getDiscordUser(Objects.requireNonNull(event.getGuild().getOwner()).getUser()));
                 dur.save(guild.getUser());
                 dgr.save(guild);
             } else {
@@ -113,7 +110,7 @@ public abstract class BotCommand extends JDACommandExecutor {
         Optional<DiscordGuild> optionalDiscordGuild = dgr.findById(guild.getIdLong());
         DiscordGuild discordGuild;
         if (!optionalDiscordGuild.isPresent()) {
-            discordGuild = DiscordGuild.fromJDAGuild(guild);
+            discordGuild = DiscordGuild.fromJDAGuild(guild, this.getDiscordUser(Objects.requireNonNull(guild.getOwner()).getUser()));
             dgr.save(discordGuild);
         } else {
             discordGuild = optionalDiscordGuild.get();

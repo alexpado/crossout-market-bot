@@ -44,7 +44,7 @@ public class WatchCommand extends WatcherCommandGroup {
         }
 
         ItemEndpoint itemEndpoint = new ItemEndpoint(this.getConfig());
-        List<Item> items = itemEndpoint.searchByName(optionalItemName.get());
+        List<Item> items = itemEndpoint.searchByName(optionalItemName.get(), this.getDiscordUser().getLanguage());
 
         Item item = null;
 

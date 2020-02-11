@@ -25,6 +25,9 @@ public class AppConfig {
     public DiscordUserRepository discordUserRepository;
 
     @Autowired
+    public DiscordChannelRepository discordChannelRepository;
+
+    @Autowired
     public FakeItemRepository fakeItemRepository;
 
     @Value("${http.identity.group}")

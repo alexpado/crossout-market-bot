@@ -39,7 +39,7 @@ public class PackCommand extends TranslatableBotCommand {
 
         for (Pack pack : packs) {
             if (pack.getName().equalsIgnoreCase(packName)) {
-                pack.fetchTranslations(this.getDiscordGuild().getLanguage());
+                pack.fetchTranslations(this.getEffectiveLanguage());
                 message.editMessage(pack.getAsEmbed(event.getJDA()).build()).queue();
                 return;
             }
@@ -52,7 +52,7 @@ public class PackCommand extends TranslatableBotCommand {
             this.sendError(message, this.getTranslation(Translation.PACKS_NOTFOUND));
         } else if (effectivePacks.size() == 1) {
             Pack pack = effectivePacks.get(0);
-            pack.fetchTranslations(this.getDiscordGuild().getLanguage());
+            pack.fetchTranslations(this.getEffectiveLanguage());
             message.editMessage(pack.getAsEmbed(event.getJDA()).build()).queue();
         } else {
             new EmbedPage<Pack>(message, effectivePacks, 20) {

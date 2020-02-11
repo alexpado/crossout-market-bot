@@ -1,6 +1,6 @@
 package fr.alexpado.bots.cmb.models.discord;
 
-import fr.alexpado.bots.cmb.bot.DiscordBot;
+import fr.alexpado.bots.cmb.AppConfig;
 import fr.alexpado.bots.cmb.repositories.DiscordGuildRepository;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import java.util.Objects;
 import java.util.Optional;
 
 @Entity
@@ -17,24 +18,26 @@ import java.util.Optional;
 @Setter
 public class DiscordGuild {
 
-    public static DiscordGuild fromJDAGuild(Guild guild, DiscordUser owner) {
+    public static DiscordGuild fromJDAGuild(AppConfig config, Guild guild, DiscordUser owner) {
         DiscordGuild discordGuild = new DiscordGuild();
 
         discordGuild.setId(guild.getIdLong());
         discordGuild.setName(guild.getName());
         discordGuild.setIconUrl(guild.getIconUrl());
         discordGuild.setUser(owner);
-        discordGuild.setLanguage(DiscordBot.getInstance().getConfig().getDefaultLocale());
-        discordGuild.setItemGraphInterval(DiscordBot.getInstance().getConfig().getGraphInterval());
+        discordGuild.setLanguage(config.getDefaultLocale());
+        discordGuild.setItemGraphInterval(config.getGraphInterval());
 
         return discordGuild;
     }
 
-    public static DiscordGuild fromRefresh(DiscordGuildRepository repository, Guild guild, DiscordUser owner) {
+    public static DiscordGuild fromRefresh(AppConfig config, Guild guild) {
+        DiscordGuildRepository repository = config.getDiscordGuildRepository();
+        DiscordUser owner = DiscordUser.fromRefresh(config, Objects.requireNonNull(guild.getOwner()).getUser());
         Optional<DiscordGuild> optionalDiscordUser = repository.findById(guild.getIdLong());
         DiscordGuild discordGuild;
         if (!optionalDiscordUser.isPresent()) {
-            discordGuild = DiscordGuild.fromJDAGuild(guild, owner);
+            discordGuild = DiscordGuild.fromJDAGuild(config, guild, owner);
         } else {
             discordGuild = optionalDiscordUser.get();
             discordGuild.setName(guild.getName());

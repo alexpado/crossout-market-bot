@@ -38,6 +38,7 @@ public class ItemCommand extends TranslatableBotCommand {
 
         String itemName = String.join(" ", event.getArgs());
         params.put("query", itemName);
+        params.put("language", this.getEffectiveLanguage());
         List<Item> items = endpoint.search(params);
 
         if (items.size() == 0) {
@@ -54,7 +55,7 @@ public class ItemCommand extends TranslatableBotCommand {
             }
         } else if (items.size() == 1) {
             Item item = items.get(0);
-            item.fetchTranslations(this.getDiscordGuild().getLanguage());
+            item.fetchTranslations(this.getEffectiveLanguage());
             message.editMessage(item.getAsEmbed(event.getJDA()).build()).queue();
         } else {
 
@@ -62,7 +63,7 @@ public class ItemCommand extends TranslatableBotCommand {
             for (Item item : items) {
                 if (item.getName().equalsIgnoreCase(itemName)) {
                     // Perfect match !
-                    item.fetchTranslations(this.getDiscordGuild().getLanguage());
+                    item.fetchTranslations(this.getEffectiveLanguage());
                     message.editMessage(item.getAsEmbed(event.getJDA()).build()).queue();
                     return;
                 }

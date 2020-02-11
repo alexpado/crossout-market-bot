@@ -2,6 +2,7 @@ package fr.alexpado.bots.cmb.bot;
 
 import fr.alexpado.bots.cmb.bot.commands.HelpCommand;
 import fr.alexpado.bots.cmb.bot.commands.ItemCommand;
+import fr.alexpado.bots.cmb.bot.commands.LanguageCommand;
 import fr.alexpado.bots.cmb.bot.commands.PackCommand;
 import fr.alexpado.bots.cmb.bot.commands.watchers.*;
 import fr.alexpado.bots.cmb.libs.jda.JDABot;
@@ -32,7 +33,8 @@ public class CrossoutModule extends JDAModule {
                 new WatcherSettingsCommand(this),
                 new UnwatchCommand(this),
                 new PauseWatchersCommand(this),
-                new HelpCommand(this)
+                new HelpCommand(this),
+                new LanguageCommand(this)
         );
     }
 }

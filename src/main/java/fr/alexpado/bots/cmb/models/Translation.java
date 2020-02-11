@@ -18,6 +18,7 @@ public class Translation {
     public static final String GENERAL_CURRENCY = "general.currency";
     public static final String GENERAL_ERROR = "general.error";
     public static final String GENERAL_INVITE = "general.invite";
+    public static final String GENERAL_BAD_SYNTAX = "general.syntax";
 
     public static final String ITEMS_LIST = "items.list";
     public static final String ITEMS_MULTIPLE = "items.multiple";
@@ -33,6 +34,12 @@ public class Translation {
     public static final String PACKS_LIST = "packs.list";
     public static final String PACKS_NOTFOUND = "packs.notfound";
     public static final String PACKS_PRICE = "packs.price";
+
+    public static final String LANGUAGES_LIST = "languages.list";
+    public static final String LANGUAGES_NOTSUPPORTED = "languages.notsupported";
+    public static final String LANGUAGES_GUILD_UPDATED = "languages.updated.guild";
+    public static final String LANGUAGES_CHANNEL_UPDATED = "languages.updated.channel";
+    public static final String LANGUAGES_USER_UPDATED = "languages.updated.user";
 
     public static final String WATCHERS_FORBIDDEN = "watchers.forbidden";
     public static final String WATCHERS_LIST = "watchers.list";

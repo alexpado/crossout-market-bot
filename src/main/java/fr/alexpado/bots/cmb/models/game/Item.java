@@ -22,6 +22,7 @@ public class Item extends TranslatableJSONModel {
 
     private int id;
     private String name;
+    private String availableName;
     private String description;
     private boolean removed;
     private boolean craftable;
@@ -73,6 +74,7 @@ public class Item extends TranslatableJSONModel {
         try {
             this.id = dataSource.getInt("id");
             this.name = dataSource.getString("name");
+            this.availableName = dataSource.getString("availableName");
 
             if (dataSource.get("description") == JSONObject.NULL) {
                 this.description = "";
@@ -126,6 +128,7 @@ public class Item extends TranslatableJSONModel {
 
     public EmbedBuilder getAsEmbed(JDA jda) {
         EmbedBuilder builder = this.getRawEmbed(jda);
+        builder.setTitle(this.availableName, String.format("https://crossoutdb.com/item/%s?ref=crossoutmarketbot", this.id));
 
         if (!this.removed) {
             builder.addField(this.getTranslation(Translation.MARKET_BUY), Utilities.money(this.sellPrice, this.getTranslation(Translation.GENERAL_CURRENCY)), true);

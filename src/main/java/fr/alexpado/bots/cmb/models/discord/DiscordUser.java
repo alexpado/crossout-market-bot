@@ -1,6 +1,6 @@
 package fr.alexpado.bots.cmb.models.discord;
 
-import fr.alexpado.bots.cmb.bot.DiscordBot;
+import fr.alexpado.bots.cmb.AppConfig;
 import fr.alexpado.bots.cmb.repositories.DiscordUserRepository;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,24 +28,25 @@ public class DiscordUser {
 
     private boolean watcherPaused;
 
-    public static DiscordUser fromJDAUser(User user) {
+    public static DiscordUser fromJDAUser(AppConfig config, User user) {
 
         DiscordUser discordUser = new DiscordUser();
 
         discordUser.setId(user.getIdLong());
         discordUser.setName(user.getName());
         discordUser.setAvatarUrl(user.getEffectiveAvatarUrl());
-        discordUser.setLanguage(DiscordBot.getInstance().getConfig().getDefaultLocale());
+        discordUser.setLanguage(config.getDefaultLocale());
         discordUser.setWatcherPaused(false);
 
         return discordUser;
     }
 
-    public static DiscordUser fromRefresh(DiscordUserRepository repository, User user) {
+    public static DiscordUser fromRefresh(AppConfig config, User user) {
+        DiscordUserRepository repository = config.getDiscordUserRepository();
         Optional<DiscordUser> optionalDiscordUser = repository.findById(user.getIdLong());
         DiscordUser discordUser;
         if (!optionalDiscordUser.isPresent()) {
-            discordUser = DiscordUser.fromJDAUser(user);
+            discordUser = DiscordUser.fromJDAUser(config, user);
         } else {
             discordUser = optionalDiscordUser.get();
             discordUser.setName(user.getName());

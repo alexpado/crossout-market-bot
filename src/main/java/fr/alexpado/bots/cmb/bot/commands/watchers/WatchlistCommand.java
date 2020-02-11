@@ -47,7 +47,7 @@ public class WatchlistCommand extends WatcherCommandGroup {
         } else {
             List<TranslatableWatcher> translatableWatchers = new ArrayList<>();
             for (Watcher watcher : watchers) {
-                translatableWatchers.add(watcher.getTranslatableWatcher(this.getConfig(), this.getDiscordGuild().getLanguage()));
+                translatableWatchers.add(watcher.getTranslatableWatcher(this.getConfig(), this.getEffectiveLanguage()));
             }
             new TranslatableEmbedPage<TranslatableWatcher>(message, translatableWatchers, 10, guild.getLanguage()) {
                 @Override

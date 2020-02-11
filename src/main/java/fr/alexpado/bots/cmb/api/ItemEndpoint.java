@@ -35,8 +35,12 @@ public class ItemEndpoint extends APIEndpoint<Item, Integer> {
 
     @Override
     public Optional<Item> getOne(Integer id) {
+        return this.getOne(id, this.config.getDefaultLocale());
+    }
+
+    public Optional<Item> getOne(Integer id, String language) {
         try {
-            HttpRequest request = new HttpRequest(String.format("%s/item/%s?removedItems=true&metaItems=true", this.getHost(), id));
+            HttpRequest request = new HttpRequest(String.format("%s/item/%s?removedItems=true&metaItems=true&language=%s", this.getHost(), id, language));
             JSONArray array = request.readJsonArray();
             if (array.length() == 1) {
                 return Item.from(this.config, array.getJSONObject(0));
@@ -49,8 +53,12 @@ public class ItemEndpoint extends APIEndpoint<Item, Integer> {
 
     @Override
     public List<Item> getAll() {
+        return this.getAll(this.config.getDefaultLocale());
+    }
+
+    public List<Item> getAll(String language) {
         try {
-            HttpRequest request = new HttpRequest(String.format("%s/items", this.getHost()));
+            HttpRequest request = new HttpRequest(String.format("%s/items?language=%s", this.getHost(), language));
             JSONArray array = request.readJsonArray();
             return this.readResponse(array);
         } catch (IOException e) {
@@ -59,15 +67,16 @@ public class ItemEndpoint extends APIEndpoint<Item, Integer> {
         }
     }
 
-    public List<Item> searchByName(String itemName) {
+    public List<Item> searchByName(String itemName, String language) {
         HashMap<String, String> query = new HashMap<>();
         query.put("query", itemName);
+        query.put("language", language);
         return this.search(query);
     }
 
     public List<Item> search(Map<String, String> params) {
 
-        List<String> allowedParams = Arrays.asList("rarity", "category", "faction", "removedItems", "metaItems", "query");
+        List<String> allowedParams = Arrays.asList("rarity", "category", "faction", "removedItems", "metaItems", "query", "language");
         List<String> filteredParams = new ArrayList<>();
 
         params.forEach((k, v) -> {

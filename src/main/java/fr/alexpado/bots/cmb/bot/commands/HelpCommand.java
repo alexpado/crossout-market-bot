@@ -41,7 +41,7 @@ public class HelpCommand extends TranslatableBotCommand {
             helpItems.put(command.getLabel(), command.getDescription());
         }
 
-        List<Translation> translationList = repository.getNeededFromLanguage(helpItems.values(), this.getDiscordGuild().getLanguage());
+        List<Translation> translationList = repository.getNeededFromLanguage(helpItems.values(), this.getEffectiveLanguage());
         HashMap<String, String> translationMap = new HashMap<>();
 
         for (Translation translation : translationList) {

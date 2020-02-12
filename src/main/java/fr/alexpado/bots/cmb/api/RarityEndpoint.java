@@ -8,20 +8,18 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
+import java.util.Optional;
 
 public class RarityEndpoint extends APIEndpoint<Rarity, Integer> {
 
-    private Map<Integer, Color> colorMap = new HashMap<>();
-
     public RarityEndpoint(String apiRoot) {
         super(apiRoot);
-        colorMap.put(1, new Color(151, 151, 151));
-        colorMap.put(2, new Color(0, 64, 253));
-        colorMap.put(3, new Color(106, 0, 130));
-        colorMap.put(4, new Color(218, 165, 32));
-        colorMap.put(5, new Color(210, 151, 30));
+    }
+
+    public static Rarity getDefaultRarity() {
+        return new Rarity(0, "Unknown", Color.BLACK);
     }
 
     @Override
@@ -45,7 +43,6 @@ public class RarityEndpoint extends APIEndpoint<Rarity, Integer> {
 
             for (int i = 0; i < array.length(); i++) {
                 JSONObject o = array.getJSONObject(i);
-                o.put("color", this.getColorFor(o.getInt("id")).getRGB());
                 Optional<Rarity> rarity = Rarity.from(o);
                 rarity.ifPresent(rarityList::add);
             }
@@ -56,7 +53,4 @@ public class RarityEndpoint extends APIEndpoint<Rarity, Integer> {
         return rarityList;
     }
 
-    public Color getColorFor(int id) {
-        return colorMap.get(id);
-    }
 }

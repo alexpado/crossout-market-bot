@@ -29,10 +29,13 @@ public final class JDACommandManager extends ListenerAdapter {
     }
 
     /**
-     * Retrieves the {@link JDACommandExecutor} that match the label provided. It will try to find the {@link JDACommandExecutor} matching the label first.
-     * If no {@link JDACommandExecutor} has been found, it will try with the aliases defined.
+     * Retrieves the {@link JDACommandExecutor} that match the label provided. It will try to find the {@link
+     * JDACommandExecutor} matching the label first. If no {@link JDACommandExecutor} has been found, it will try with
+     * the aliases defined.
      *
-     * @param label Label that has been used to trigger the command system.
+     * @param label
+     *         Label that has been used to trigger the command system.
+     *
      * @return Probably a {@link JDACommandExecutor} instance if one exists matching the label provided.
      */
     private Optional<JDACommandExecutor> getCommand(String label) {
@@ -45,10 +48,11 @@ public final class JDACommandManager extends ListenerAdapter {
 
     /**
      * Registers a new {@link JDACommandExecutor}. If the executor's label is already registered, it won't be registered
-     * even if the {@link JDACommandExecutor} is not the same.
-     * This would be pointless as the executor will never be matched with {@link #getCommand(String)}.
+     * even if the {@link JDACommandExecutor} is not the same. This would be pointless as the executor will never be
+     * matched with {@link #getCommand(String)}.
      *
-     * @param command The {@link JDACommandExecutor} to register.
+     * @param command
+     *         The {@link JDACommandExecutor} to register.
      */
     public void registerCommand(JDACommandExecutor command) {
         if (!this.getCommand(command.getLabel()).isPresent()) {
@@ -67,10 +71,12 @@ public final class JDACommandManager extends ListenerAdapter {
 
     /**
      * Called when {@link #onGuildMessageReceived(GuildMessageReceivedEvent)} has detected a command. It will first try
-     * to find the {@link JDACommandExecutor} linked to the label. If one is found, it will check if this executor should
-     * be executed by calling {@link JDACommandExecutor#isEnabled(CommandEvent)}.
+     * to find the {@link JDACommandExecutor} linked to the label. If one is found, it will check if this executor
+     * should be executed by calling {@link JDACommandExecutor#isEnabled(CommandEvent)}.
      *
-     * @param event The {@link GuildMessageReceivedEvent} produced by JDA.
+     * @param event
+     *         The {@link GuildMessageReceivedEvent} produced by JDA.
+     *
      * @return The {@link CommandExecutionResponse} providing the execution status of the current command executor.
      */
     private CommandExecutionResponse runCommand(GuildMessageReceivedEvent event) {

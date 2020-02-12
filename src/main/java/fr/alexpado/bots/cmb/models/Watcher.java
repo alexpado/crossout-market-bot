@@ -15,6 +15,20 @@ import javax.persistence.*;
 @Getter
 public class Watcher {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    @OneToOne
+    private DiscordUser user;
+    private int itemId;
+    private String itemName;
+    private float sellPrice;
+    private float buyPrice;
+    private int watcherType;
+    private float price;
+    private long repeatEvery = 300000;
+    private long lastExecution = System.currentTimeMillis();
+
     public Watcher() {
         super();
     }
@@ -29,29 +43,6 @@ public class Watcher {
     public TranslatableWatcher getTranslatableWatcher(AppConfig config, String language) throws MissingTranslationException {
         return new TranslatableWatcher(config, this, language);
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-
-    @OneToOne
-    private DiscordUser user;
-
-    private int itemId;
-
-    private String itemName;
-
-    private float sellPrice;
-
-    private float buyPrice;
-
-    private int watcherType;
-
-    private float price;
-
-    private long repeatEvery = 300000;
-
-    private long lastExecution = System.currentTimeMillis();
 
     @Override
     public String toString() {

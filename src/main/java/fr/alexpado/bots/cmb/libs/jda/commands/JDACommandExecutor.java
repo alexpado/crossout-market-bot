@@ -59,7 +59,9 @@ public abstract class JDACommandExecutor {
      * <p>
      * By default, blacklist non-user executed commands.
      *
-     * @param event A {@link CommandEvent} generated after a command being triggered.
+     * @param event
+     *         A {@link CommandEvent} generated after a command being triggered.
+     *
      * @return True if the command should be executed. False instead.
      */
     public final boolean isEnabled(CommandEvent event) {
@@ -67,9 +69,8 @@ public abstract class JDACommandExecutor {
     }
 
     /**
-     * Gets all aliases that are able to trigger this command.
-     * If an alias declared here is used as a command label, the label will have the highest priority and this command
-     * won't be executed.
+     * Gets all aliases that are able to trigger this command. If an alias declared here is used as a command label, the
+     * label will have the highest priority and this command won't be executed.
      *
      * @return A list of alias to trigger this command.
      */
@@ -91,8 +92,10 @@ public abstract class JDACommandExecutor {
     /**
      * Edit the message to show an error embed.
      *
-     * @param message Message to edit
-     * @param text    Error text to show
+     * @param message
+     *         Message to edit
+     * @param text
+     *         Error text to show
      */
     protected final void sendError(Message message, String text) {
         this.innerEmbed(message, text, Color.RED);
@@ -101,9 +104,12 @@ public abstract class JDACommandExecutor {
     /**
      * Edit the message to show an error embed.
      *
-     * @param message    Message to edit
-     * @param text       Format for the message.
-     * @param additional Parameter to use with the format.
+     * @param message
+     *         Message to edit
+     * @param text
+     *         Format for the message.
+     * @param additional
+     *         Parameter to use with the format.
      */
     protected final void sendError(Message message, String text, String... additional) {
         this.innerEmbed(message, text, Color.RED, additional);
@@ -112,8 +118,10 @@ public abstract class JDACommandExecutor {
     /**
      * Edit the message to show an info embed.
      *
-     * @param message Message to edit
-     * @param text    Error text to show
+     * @param message
+     *         Message to edit
+     * @param text
+     *         Error text to show
      */
     protected final void sendInfo(Message message, String text) {
         this.innerEmbed(message, text, Color.CYAN);
@@ -122,9 +130,12 @@ public abstract class JDACommandExecutor {
     /**
      * Edit the message to show an info embed.
      *
-     * @param message    Message to edit
-     * @param text       Format for the message.
-     * @param additional Parameter to use with the format.
+     * @param message
+     *         Message to edit
+     * @param text
+     *         Format for the message.
+     * @param additional
+     *         Parameter to use with the format.
      */
     protected final void sendInfo(Message message, String text, String... additional) {
         this.innerEmbed(message, text, Color.CYAN, additional);
@@ -133,8 +144,10 @@ public abstract class JDACommandExecutor {
     /**
      * Edit the message to show a warning embed.
      *
-     * @param message Message to edit
-     * @param text    Error text to show
+     * @param message
+     *         Message to edit
+     * @param text
+     *         Error text to show
      */
     protected final void sendWarn(Message message, String text) {
         this.innerEmbed(message, text, Color.ORANGE);
@@ -143,9 +156,12 @@ public abstract class JDACommandExecutor {
     /**
      * Edit the message to show a warning embed.
      *
-     * @param message    Message to edit
-     * @param text       Format for the message.
-     * @param additional Parameter to use with the format.
+     * @param message
+     *         Message to edit
+     * @param text
+     *         Format for the message.
+     * @param additional
+     *         Parameter to use with the format.
      */
     protected final void sendWarn(Message message, String text, String... additional) {
         this.innerEmbed(message, text, Color.ORANGE, additional);

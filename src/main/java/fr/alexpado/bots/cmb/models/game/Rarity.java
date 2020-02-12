@@ -24,6 +24,11 @@ public class Rarity extends JSONModel {
         this.name = name;
     }
 
+    public Rarity(int id, String name, Color color) {
+        this(id, name);
+        this.color = color;
+    }
+
     public static Optional<Rarity> from(JSONObject dataSource) {
         try {
             return Optional.of(new Rarity(dataSource));
@@ -38,7 +43,7 @@ public class Rarity extends JSONModel {
         try {
             this.id = dataSource.getInt("id");
             this.name = dataSource.getString("name");
-            this.color = new Color(dataSource.getInt("color"));
+            this.color = new Color(dataSource.getInt("primaryColor"));
 
             return true;
         } catch (JSONException e) {
@@ -46,4 +51,8 @@ public class Rarity extends JSONModel {
         }
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

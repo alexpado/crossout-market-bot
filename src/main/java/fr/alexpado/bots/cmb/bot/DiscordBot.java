@@ -2,19 +2,16 @@ package fr.alexpado.bots.cmb.bot;
 
 import fr.alexpado.bots.cmb.AppConfig;
 import fr.alexpado.bots.cmb.libs.jda.JDABot;
-import fr.alexpado.bots.cmb.repositories.*;
+import fr.alexpado.bots.cmb.repositories.DiscordGuildRepository;
+import fr.alexpado.bots.cmb.repositories.DiscordUserRepository;
+import fr.alexpado.bots.cmb.repositories.TranslationRepository;
+import fr.alexpado.bots.cmb.repositories.WatcherRepository;
 import net.dv8tion.jda.api.AccountType;
 
 public class DiscordBot extends JDABot {
 
-    private static DiscordBot instance;
-
-    public static DiscordBot getInstance() {
-        return instance;
-    }
-
     public final static String INVITE = "https://discordapp.com/api/oauth2/authorize?client_id=500032551977746453&permissions=59456&scope=bot";
-
+    private static DiscordBot instance;
     private AppConfig config;
 
     public DiscordBot(AppConfig config) {
@@ -22,6 +19,10 @@ public class DiscordBot extends JDABot {
         this.config = config;
         this.registerModules();
         DiscordBot.instance = this;
+    }
+
+    public static DiscordBot getInstance() {
+        return instance;
     }
 
     public void registerModules() {

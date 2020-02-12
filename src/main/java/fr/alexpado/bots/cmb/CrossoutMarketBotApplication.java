@@ -11,10 +11,6 @@ public class CrossoutMarketBotApplication {
 
     public static AppConfig config;
 
-    public static void main(String[] args) {
-        SpringApplication.run(CrossoutMarketBotApplication.class, args);
-    }
-
     public CrossoutMarketBotApplication(AppConfig configurationProvider) {
         config = configurationProvider;
         DiscordBot bot = configurationProvider.discordBot();
@@ -24,6 +20,10 @@ public class CrossoutMarketBotApplication {
         } catch (LoginException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(CrossoutMarketBotApplication.class, args);
     }
 
 }

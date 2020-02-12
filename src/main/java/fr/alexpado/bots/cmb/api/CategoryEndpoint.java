@@ -47,4 +47,15 @@ public class CategoryEndpoint extends APIEndpoint<Category, Integer> {
 
         return categoryList;
     }
+
+    public boolean exists(String name) {
+
+
+        for (Category element : this.getAll()) {
+            if (element.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

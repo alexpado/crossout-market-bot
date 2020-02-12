@@ -43,4 +43,8 @@ public class Faction extends JSONModel {
         }
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

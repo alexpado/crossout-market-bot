@@ -34,9 +34,8 @@ public abstract class JDAModule {
     }
 
     /**
-     * Get this module name that will be also used for the configuration file name.
-     * Should be unique or the configuration files will be messed up.
-     * Avoid special character as each OS have its own rules for file.
+     * Get this module name that will be also used for the configuration file name. Should be unique or the
+     * configuration files will be messed up. Avoid special character as each OS have its own rules for file.
      *
      * @return The module name that will be used in logs when needed.
      */

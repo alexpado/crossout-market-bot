@@ -47,4 +47,13 @@ public class FactionEndpoint extends APIEndpoint<Faction, Integer> {
 
         return factionList;
     }
+
+    public boolean exists(String name) {
+        for (Faction element : this.getAll()) {
+            if (element.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

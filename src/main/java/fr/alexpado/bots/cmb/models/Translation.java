@@ -63,6 +63,11 @@ public class Translation {
     public static final String WATCHERS_WRONG_TYPE = "watchers.wrong.type";
     public static final String WATCHERS_WRONG_VALUE = "watchers.wrong.value";
 
+    public static final String RARITIES_INVALID = "rarities.invalid";
+    public static final String CATEGORIES_INVALID = "categories.invalid";
+    public static final String FACTIONS_INVALID = "factions.invalid";
+    public static final String TYPES_INVALID = "types.invalid";
+
     public static final String HELP_DESCRIPTION = "help.description";
 
     @Id

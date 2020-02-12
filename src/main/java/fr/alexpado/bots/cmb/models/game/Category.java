@@ -43,4 +43,9 @@ public class Category extends JSONModel {
         }
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }

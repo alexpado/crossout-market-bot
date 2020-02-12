@@ -43,4 +43,8 @@ public class Type extends JSONModel {
         }
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

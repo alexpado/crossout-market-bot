@@ -49,7 +49,8 @@ public abstract class JDABot extends ListenerAdapter {
     /**
      * Runs the login sequence of JDA.
      *
-     * @throws LoginException Threw if the login didn't succeed.
+     * @throws LoginException
+     *         Threw if the login didn't succeed.
      */
     public final void login() throws LoginException {
         this.jdaBuilder.setToken(this.getDiscordToken());
@@ -59,9 +60,13 @@ public abstract class JDABot extends ListenerAdapter {
     /**
      * Retrieves a module by its class. If the module has not been registered, the result will be empty.
      *
-     * @param clazz Class of the module to retrieve.
-     * @param <T>   Instance type of the module to retrieve
+     * @param clazz
+     *         Class of the module to retrieve.
+     * @param <T>
+     *         Instance type of the module to retrieve
+     *
      * @return An optional module. Empty if no module matches the class provided.
+     *
      * @see #registerModule(JDAModule)
      */
     public final <T extends JDAModule> Optional<T> getModule(Class<T> clazz) {
@@ -79,7 +84,8 @@ public abstract class JDABot extends ListenerAdapter {
     /**
      * Registers a new module in this bot instance.
      *
-     * @param module The module to register.
+     * @param module
+     *         The module to register.
      */
     public final void registerModule(JDAModule module) {
         // Let's check if this module has not been registered yet.

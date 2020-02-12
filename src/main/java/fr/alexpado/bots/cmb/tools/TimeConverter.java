@@ -11,7 +11,7 @@ public class TimeConverter {
     private long seconds;
 
     public TimeConverter(long duration) {
-        this.hours   = TimeUnit.HOURS.convert(duration, TimeUnit.SECONDS);
+        this.hours = TimeUnit.HOURS.convert(duration, TimeUnit.SECONDS);
         this.minutes = TimeUnit.MINUTES.convert(duration, TimeUnit.SECONDS);
         this.seconds = duration;
         this.minutes -= this.hours * 60;
@@ -19,12 +19,12 @@ public class TimeConverter {
     }
 
     public static long fromString(String str) {
-        String  regex   = "(([0-5]?[0-9])h)?(([0-5]?[0-9])m?)?";
+        String regex = "(([0-5]?[0-9])h)?(([0-5]?[0-9])m?)?";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(str);
-        long    time    = 0L;
+        long time = 0L;
         if (matcher.find()) {
-            String hour   = matcher.group(2);
+            String hour = matcher.group(2);
             String minute = matcher.group(4);
             if (hour != null) {
                 time += Long.parseLong(hour) * 3600000;

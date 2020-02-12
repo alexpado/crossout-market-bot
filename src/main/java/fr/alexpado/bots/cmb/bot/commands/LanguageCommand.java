@@ -1,18 +1,22 @@
 package fr.alexpado.bots.cmb.bot.commands;
 
+import fr.alexpado.bots.cmb.api.ItemEndpoint;
 import fr.alexpado.bots.cmb.interfaces.command.TranslatableBotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.models.Translation;
+import fr.alexpado.bots.cmb.models.Watcher;
 import fr.alexpado.bots.cmb.models.discord.DiscordChannel;
 import fr.alexpado.bots.cmb.models.discord.DiscordGuild;
 import fr.alexpado.bots.cmb.models.discord.DiscordUser;
+import fr.alexpado.bots.cmb.models.game.Item;
 import fr.alexpado.bots.cmb.repositories.TranslationRepository;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class LanguageCommand extends TranslatableBotCommand {
@@ -115,6 +119,13 @@ public class LanguageCommand extends TranslatableBotCommand {
         DiscordUser user = this.getDiscordUser();
         user.setLanguage(lang);
         this.getConfig().getDiscordUserRepository().save(user);
-        // TODO Refresh watcher's item name with new localization.
+
+        List<Watcher> watchers = this.getConfig().getWatcherRepository().getFromUser(user);
+        List<Item> items = new ItemEndpoint(this.getConfig()).getAll(lang);
+
+        HashMap<Integer, Item> itemsMap = new HashMap<>();
+        items.forEach(item -> itemsMap.put(item.getId(), item));
+        watchers.forEach(watcher -> watcher.setItemName(itemsMap.get(watcher.getId()).getAvailableName()));
+        this.getConfig().getWatcherRepository().saveAll(watchers);
     }
 }

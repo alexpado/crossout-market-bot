@@ -18,6 +18,16 @@ import java.util.Optional;
 @Setter
 public class DiscordGuild {
 
+    @Id
+    private long id;
+    private String name;
+    private String iconUrl;
+    @OneToOne
+    private DiscordUser user;
+    @Column(length = 3)
+    private String language;
+    private long itemGraphInterval;
+
     public static DiscordGuild fromJDAGuild(AppConfig config, Guild guild, DiscordUser owner) {
         DiscordGuild discordGuild = new DiscordGuild();
 
@@ -47,20 +57,5 @@ public class DiscordGuild {
         repository.save(discordGuild);
         return discordGuild;
     }
-
-    @Id
-    private long id;
-
-    private String name;
-
-    private String iconUrl;
-
-    @OneToOne
-    private DiscordUser user;
-
-    @Column(length = 3)
-    private String language;
-
-    private long itemGraphInterval;
 
 }

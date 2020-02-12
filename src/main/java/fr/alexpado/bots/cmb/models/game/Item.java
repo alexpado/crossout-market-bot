@@ -1,6 +1,7 @@
 package fr.alexpado.bots.cmb.models.game;
 
 import fr.alexpado.bots.cmb.AppConfig;
+import fr.alexpado.bots.cmb.api.RarityEndpoint;
 import fr.alexpado.bots.cmb.bot.DiscordBot;
 import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.interfaces.translatable.TranslatableJSONModel;
@@ -74,7 +75,9 @@ public class Item extends TranslatableJSONModel {
         try {
             this.id = dataSource.getInt("id");
             this.name = dataSource.getString("name");
-            this.availableName = dataSource.getString("availableName");
+
+            // this.availableName = dataSource.getString("availableName");
+            this.availableName = this.name;
 
             if (dataSource.get("description") == JSONObject.NULL) {
                 this.description = "";
@@ -82,7 +85,12 @@ public class Item extends TranslatableJSONModel {
                 this.description = Utilities.removeHTML(dataSource.getString("description"));
             }
 
-            this.rarity = new Rarity(dataSource.getInt("rarityId"), dataSource.getString("rarityName"));
+            if (dataSource.getInt("rarityId") == 0) {
+                this.rarity = RarityEndpoint.getDefaultRarity();
+            } else {
+                this.rarity = new Rarity(dataSource.getInt("rarityId"), dataSource.getString("rarityName"));
+            }
+
             this.sellPrice = dataSource.getInt("sellPrice");
             this.buyPrice = dataSource.getInt("buyPrice");
             this.craftingSellSum = dataSource.getInt("craftingSellSum");

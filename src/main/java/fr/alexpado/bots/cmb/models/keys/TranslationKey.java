@@ -9,14 +9,14 @@ import java.io.Serializable;
 @Setter
 public class TranslationKey implements Serializable {
 
+    private String translationKey;
+    private String language;
+
     public static TranslationKey of(String language, String translationKey) {
         TranslationKey key = new TranslationKey();
         key.language = language;
         key.translationKey = translationKey;
         return key;
     }
-
-    private String translationKey;
-    private String language;
 
 }

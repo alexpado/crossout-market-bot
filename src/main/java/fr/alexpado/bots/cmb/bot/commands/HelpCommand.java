@@ -11,9 +11,10 @@ import fr.alexpado.bots.cmb.repositories.TranslationRepository;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class HelpCommand extends TranslatableBotCommand {
 
@@ -23,11 +24,34 @@ public class HelpCommand extends TranslatableBotCommand {
 
     @Override
     public List<String> getRequiredTranslation() {
-        return Collections.singletonList(Translation.GENERAL_INVITE);
+        return Arrays.asList(
+                Translation.GENERAL_INVITE,
+                Translation.COMMANDS_NOTFOUND,
+                Translation.COMMANDS_NOHELP,
+                Translation.HELP_DESCRIPTION
+        );
     }
 
     @Override
     public void execute(CommandEvent event, Message message) {
+        if (event.getArgs().size() == 1) {
+            Optional<JDACommandExecutor> optionalExecutor = this.getModule().getBot().getCommandManager().getCommand(event.getArgs().get(0));
+            if (optionalExecutor.isPresent()) {
+                EmbedBuilder builder = optionalExecutor.get().getAdvancedHelp();
+                if (builder != null) {
+                    message.editMessage(optionalExecutor.get().getAdvancedHelp().build()).queue();
+                    return;
+                }
+                this.sendWarn(message, this.getTranslation(Translation.COMMANDS_NOHELP));
+                return;
+            }
+            this.sendError(message, this.getTranslation(Translation.COMMANDS_NOTFOUND));
+            return;
+        }
+        this.showHelp(event, message);
+    }
+
+    private void showHelp(CommandEvent event, Message message) {
         CrossoutModule crossout = this.getCrossoutModule();
         TranslationRepository repository = this.getConfig().getTranslationRepository();
 
@@ -52,6 +76,11 @@ public class HelpCommand extends TranslatableBotCommand {
         helpItems.forEach((label, description) -> builder.addField(label, description, false));
 
 
-        event.getChannel().sendMessage(builder.build()).queue();
+        message.editMessage(builder.build()).queue();
+    }
+
+    @Override
+    public EmbedBuilder getAdvancedHelp() {
+        return null;
     }
 }

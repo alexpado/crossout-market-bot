@@ -8,6 +8,9 @@ import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.models.Watcher;
 import fr.alexpado.bots.cmb.models.game.Item;
+import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
+import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.ArrayList;
@@ -87,4 +90,31 @@ public class WatcherSettingsCommand extends WatcherCommandGroup {
         this.getRepository().save(watcher);
         this.sendInfo(message, this.getTranslation(Translation.WATCHERS_UPDATED));
     }
+
+    @Override
+    public EmbedBuilder getAdvancedHelp() {
+        EmbedBuilder builder = super.getAdvancedHelp();
+        builder.setTitle("Advanced help for : watchersettings");
+
+        AdvancedHelpBuilder helpBuilder = new AdvancedHelpBuilder();
+
+        helpBuilder.setDescription(this.getTranslation(this.getDescription()));
+
+        AdvancedHelpSection parametersSection = new AdvancedHelpSection("Usage");
+        parametersSection.addField("**`cm:watchersettings <id> when <buy|sell> (price) <over|under> <price>`**", "Change your price watcher settings.");
+        parametersSection.addField("**`cm:watchersettings <id> every <interval>`**", "Change your watcher interval.");
+        parametersSection.addField("**`cm:watchersettings <id> always`**", "Change your price watcher to a normal watcher.");
+
+        AdvancedHelpSection examplesSection = new AdvancedHelpSection("Example");
+        examplesSection.addField("`cm:watchersettings 404 when sell price over 66.66`", "Change the watcher with ID 404 to a price watcher.");
+        examplesSection.addField("`cm:watchersettings 404 always`", "Change the watcher with ID 404 to a normal watcher.");
+        examplesSection.addField("`cm:watchersettings 404 every 1h`", "Change the watcher with ID 404 interval.");
+
+        helpBuilder.addSection(parametersSection);
+        helpBuilder.addSection(examplesSection);
+
+        builder.setDescription(helpBuilder.toString());
+        return builder;
+    }
+
 }

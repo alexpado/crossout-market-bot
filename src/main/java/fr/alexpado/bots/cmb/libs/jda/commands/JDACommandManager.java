@@ -38,7 +38,7 @@ public final class JDACommandManager extends ListenerAdapter {
      *
      * @return Probably a {@link JDACommandExecutor} instance if one exists matching the label provided.
      */
-    private Optional<JDACommandExecutor> getCommand(String label) {
+    public Optional<JDACommandExecutor> getCommand(String label) {
         Optional<JDACommandExecutor> optionalCommand = this.commands.stream().filter(command -> command.getLabel().equalsIgnoreCase(label)).findFirst();
         if (optionalCommand.isPresent()) {
             return optionalCommand;

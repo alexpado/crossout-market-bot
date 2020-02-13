@@ -12,6 +12,8 @@ import fr.alexpado.bots.cmb.models.discord.DiscordUser;
 import fr.alexpado.bots.cmb.models.game.Item;
 import fr.alexpado.bots.cmb.repositories.TranslationRepository;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
+import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
+import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
@@ -128,4 +130,29 @@ public class LanguageCommand extends TranslatableBotCommand {
         watchers.forEach(watcher -> watcher.setItemName(itemsMap.get(watcher.getId()).getAvailableName()));
         this.getConfig().getWatcherRepository().saveAll(watchers);
     }
+
+    @Override
+    public EmbedBuilder getAdvancedHelp() {
+        EmbedBuilder builder = super.getAdvancedHelp();
+        builder.setTitle("Advanced help for : language");
+
+        AdvancedHelpBuilder helpBuilder = new AdvancedHelpBuilder();
+
+        helpBuilder.setDescription(this.getTranslation(this.getDescription()));
+
+        AdvancedHelpSection usages = new AdvancedHelpSection("Usage");
+        usages.addField("**`cm:language <server|guild|channel|user> <language|remove>`**", "Set the language for the desired target. 'Remove' is only available on channels.");
+
+        AdvancedHelpSection examples = new AdvancedHelpSection("Example");
+        examples.addField("`cm:language server en`", "Set the server language to english.");
+        examples.addField("`cm:language user ru`", "Set your own language to russian.");
+        examples.addField("`cm:language channel remove`", "Remove the current language defined on this channel. (Will use the server's language)");
+
+        helpBuilder.addSection(usages);
+        helpBuilder.addSection(examples);
+
+        builder.setDescription(helpBuilder.toString());
+        return builder;
+    }
+
 }

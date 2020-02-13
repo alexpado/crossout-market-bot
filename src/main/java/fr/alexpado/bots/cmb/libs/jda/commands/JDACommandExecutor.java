@@ -45,6 +45,17 @@ public abstract class JDACommandExecutor {
     }
 
     /**
+     * Gets the embed to show advanced help and/or example on how to use this command.
+     *
+     * @return EmbedBuilder instance.
+     */
+    public EmbedBuilder getAdvancedHelp() {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setFooter("Advanced help is still under development. Translations won't be available.");
+        return builder;
+    }
+
+    /**
      * Gets the module to which the command belong.
      *
      * @return A {@link JDAModule} instance.

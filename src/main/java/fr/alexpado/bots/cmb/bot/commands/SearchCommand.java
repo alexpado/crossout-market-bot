@@ -16,6 +16,8 @@ import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import fr.alexpado.bots.cmb.tools.CommandArgumentsParser;
 import fr.alexpado.bots.cmb.tools.Utilities;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
+import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
+import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
@@ -134,5 +136,33 @@ public class SearchCommand extends ItemBotCommand {
         List<Item> items = endpoint.search(query);
 
         this.manageItemList(event, message, items, null);
+    }
+
+    @Override
+    public EmbedBuilder getAdvancedHelp() {
+        EmbedBuilder builder = super.getAdvancedHelp();
+        builder.setTitle("Advanced help for : search");
+
+        AdvancedHelpBuilder helpBuilder = new AdvancedHelpBuilder();
+
+        String desc = this.getTranslation(this.getDescription()) + "\nTo search for an item by its name, use `cm:item <item name>`";
+        helpBuilder.setDescription(desc);
+
+        AdvancedHelpSection parametersSection = new AdvancedHelpSection("Parameters");
+        parametersSection.addField("**`--rarity <name>`**", "Find all items within this rarity.");
+        parametersSection.addField("**`--category <name>`**", "Find all items within this category.");
+        parametersSection.addField("**`--faction <name>`**", "Find all items within this faction.");
+
+        AdvancedHelpSection examplesSection = new AdvancedHelpSection("Example");
+        examplesSection.addField("`cm:search --rarity Common --faction Lunatics`", "Find all **Common** item within the **Lunatics** faction.");
+        examplesSection.addField("`cm:search --rarity azerty`", "As the **azerty** rarity doesn't exists, a list of valid rarities will be shown. This work for every search parameters.");
+        examplesSection.addField("**`--faction <name>`**", "Find all items within this faction.");
+
+        helpBuilder.addSection(parametersSection);
+        helpBuilder.addSection(examplesSection);
+
+
+        builder.setDescription(helpBuilder.toString());
+        return builder;
     }
 }

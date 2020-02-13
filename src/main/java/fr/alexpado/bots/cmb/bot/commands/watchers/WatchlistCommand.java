@@ -60,5 +60,8 @@ public class WatchlistCommand extends WatcherCommandGroup {
         }
     }
 
-
+    @Override
+    public EmbedBuilder getAdvancedHelp() {
+        return null;
+    }
 }

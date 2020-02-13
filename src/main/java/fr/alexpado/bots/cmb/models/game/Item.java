@@ -76,8 +76,7 @@ public class Item extends TranslatableJSONModel {
             this.id = dataSource.getInt("id");
             this.name = dataSource.getString("name");
 
-            // this.availableName = dataSource.getString("availableName");
-            this.availableName = this.name;
+            this.availableName = dataSource.getString("availableName");
 
             if (dataSource.get("description") == JSONObject.NULL) {
                 this.description = "";

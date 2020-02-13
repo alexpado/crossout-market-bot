@@ -8,6 +8,8 @@ import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.models.game.Pack;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
+import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
+import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
@@ -64,6 +66,30 @@ public class PackCommand extends TranslatableBotCommand {
                 }
             };
         }
+    }
+
+    @Override
+    public EmbedBuilder getAdvancedHelp() {
+        EmbedBuilder builder = super.getAdvancedHelp();
+        builder.setTitle("Advanced help for : pack");
+
+        AdvancedHelpBuilder helpBuilder = new AdvancedHelpBuilder();
+
+        helpBuilder.setDescription(this.getTranslation(this.getDescription()));
+
+
+        AdvancedHelpSection usages = new AdvancedHelpSection("Usage");
+        usages.addField("**`cm:pack <pack name>`**", "Search for a pack. Show the detail if only one is found.");
+
+        AdvancedHelpSection examples = new AdvancedHelpSection("Example");
+        examples.addField("`cm:pack Arachnophobia`", "Show the details for the Arachnophobia pack.");
+        examples.addField("`cm:item ara`", "Show a list of pack containing **ara** in their name.");
+
+        helpBuilder.addSection(usages);
+        helpBuilder.addSection(examples);
+
+        builder.setDescription(helpBuilder.toString());
+        return builder;
     }
 
 }

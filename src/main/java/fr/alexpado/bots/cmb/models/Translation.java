@@ -68,6 +68,9 @@ public class Translation {
     public static final String FACTIONS_INVALID = "factions.invalid";
     public static final String TYPES_INVALID = "types.invalid";
 
+    public static final String COMMANDS_NOTFOUND = "commands.notfound";
+    public static final String COMMANDS_NOHELP = "commands.nohelp";
+
     public static final String HELP_DESCRIPTION = "help.description";
 
     @Id

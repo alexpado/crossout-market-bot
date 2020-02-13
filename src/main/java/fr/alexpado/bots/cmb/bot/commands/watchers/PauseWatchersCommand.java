@@ -5,6 +5,7 @@ import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.models.Translation;
 import fr.alexpado.bots.cmb.models.discord.DiscordUser;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.ArrayList;
@@ -42,5 +43,10 @@ public class PauseWatchersCommand extends WatcherCommandGroup {
 
         this.getConfig().getDiscordUserRepository().save(user);
         this.sendInfo(message, this.getTranslation(key));
+    }
+
+    @Override
+    public EmbedBuilder getAdvancedHelp() {
+        return null;
     }
 }

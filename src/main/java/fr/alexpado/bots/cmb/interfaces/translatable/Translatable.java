@@ -56,6 +56,10 @@ public abstract class Translatable implements ITranslatable {
         // Load the translation keys list to avoid multiple array generation.
         List<String> translationKeys = this.getRequiredTranslation();
 
+        if (translationKeys.size() == 0) {
+            return;
+        }
+
         List<Translation> localeTranslations;
         try {
             localeTranslations = this.fetch(translationKeys, language);

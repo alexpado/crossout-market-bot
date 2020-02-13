@@ -59,7 +59,7 @@ public class LanguageCommand extends TranslatableBotCommand {
         }
 
         if (event.getArgs().size() != 2) {
-            this.sendWarn(message, this.getTranslation(Translation.GENERAL_BAD_SYNTAX));
+            this.sendWarn(message, String.format(this.getTranslation(Translation.GENERAL_BAD_SYNTAX), this.getLabel()));
             return;
         }
 

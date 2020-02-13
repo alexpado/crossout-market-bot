@@ -32,7 +32,8 @@ public class CrossoutModule extends JDAModule {
                 new PauseWatchersCommand(this),
                 new HelpCommand(this),
                 new LanguageCommand(this),
-                new SearchCommand(this)
+                new SearchCommand(this),
+                new TranslateCommand(this)
         );
     }
 }

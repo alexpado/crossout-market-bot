@@ -22,8 +22,8 @@ public class Watcher {
     private DiscordUser user;
     private int itemId;
     private String itemName;
-    private float sellPrice;
-    private float buyPrice;
+    private int sellPrice;
+    private int buyPrice;
     private int watcherType;
     private float price;
     private long repeatEvery = 300000;
@@ -52,7 +52,7 @@ public class Watcher {
     public void loadItem(Item item) {
         this.setItemId(item.getId());
         this.setItemName(item.getName());
-        this.setSellPrice(item.getSellPrice() / 100.0f);
-        this.setBuyPrice(item.getBuyPrice() / 100.0f);
+        this.setSellPrice(item.getSellPrice());
+        this.setBuyPrice(item.getBuyPrice());
     }
 }

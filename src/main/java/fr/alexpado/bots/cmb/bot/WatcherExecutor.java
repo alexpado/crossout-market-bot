@@ -2,6 +2,7 @@ package fr.alexpado.bots.cmb.bot;
 
 import fr.alexpado.bots.cmb.AppConfig;
 import fr.alexpado.bots.cmb.api.ItemEndpoint;
+import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.models.Watcher;
 import fr.alexpado.bots.cmb.models.game.Item;
 import fr.alexpado.bots.cmb.repositories.TranslationRepository;
@@ -60,10 +61,42 @@ public class WatcherExecutor {
                     continue;
                 }
 
-                user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(builder.build()).queue(message -> {
-                    watcher.setLastExecution(System.currentTimeMillis());
-                    this.watcherRepository.save(watcher);
-                }, Throwable::printStackTrace), Throwable::printStackTrace);
+                watcher.setLastExecution(System.currentTimeMillis());
+                this.watcherRepository.save(watcher);
+
+                WatcherType type = WatcherType.getFromId(watcher.getWatcherType());
+
+                boolean send = false;
+
+                switch (type) {
+                    case SELL_OVER:
+                        send = item.getBuyPrice() > watcher.getPrice();
+                        break;
+                    case SELL_UNDER:
+                        send = item.getBuyPrice() < watcher.getPrice();
+                        break;
+                    case BUY_OVER:
+                        send = item.getSellPrice() > watcher.getPrice();
+                        break;
+                    case BUY_UNDER:
+                        send = item.getSellPrice() < watcher.getPrice();
+                        break;
+                    case NORMAL:
+                        send = true;
+                        break;
+                    case UNKNOWN:
+                        send = false;
+                        break;
+                }
+
+                if (send) {
+                    user.openPrivateChannel().queue(privateChannel ->
+                            privateChannel.sendMessage(builder.build()).queue(message -> {
+                                    },
+                                    Throwable::printStackTrace
+                            ), Throwable::printStackTrace
+                    );
+                }
             } catch (MissingTranslationException e) {
                 e.printStackTrace();
             }

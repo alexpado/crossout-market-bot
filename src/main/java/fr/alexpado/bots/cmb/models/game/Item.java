@@ -39,6 +39,9 @@ public class Item extends TranslatableJSONModel {
 
     public Item(AppConfig config, JSONObject dataSource) throws Exception {
         super(config, dataSource);
+        RarityEndpoint endpoint = new RarityEndpoint(config.getApiHost());
+        Optional<Rarity> optionalRarity = endpoint.getOne(this.rarity.getId());
+        optionalRarity.ifPresent(value -> this.rarity = value);
     }
 
     public static Optional<Item> from(AppConfig config, JSONObject dataSource) {

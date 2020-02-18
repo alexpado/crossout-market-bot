@@ -87,14 +87,14 @@ public class WatchCommand extends WatcherCommandGroup {
             }
             watcher.setWatcherType(watcherType.getId());
 
-            if (watcherType != WatcherType.NORMAL) {
-                if (!optionalPrice.isPresent()) {
-                    this.sendError(message, Translation.WATCHERS_WRONG_PRICE);
-                    return;
-                }
-                Float price = optionalPrice.get();
-                watcher.setPrice(price);
+            if (!optionalPrice.isPresent()) {
+                this.sendError(message, Translation.WATCHERS_WRONG_PRICE);
+                return;
             }
+            Float price = optionalPrice.get();
+            watcher.setPrice(price);
+        } else {
+            watcher.setWatcherType(WatcherType.NORMAL.getId());
         }
 
         optionalInterval.ifPresent(watcher::setRepeatEvery);

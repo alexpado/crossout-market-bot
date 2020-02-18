@@ -96,10 +96,6 @@ public abstract class JDACommandExecutor {
         message.editMessage(new EmbedBuilder().setDescription(text).setColor(color).build()).queue();
     }
 
-    private void innerEmbed(Message message, String text, Color color, String... additional) {
-        message.editMessage(new EmbedBuilder().setDescription(String.format(text, additional)).setColor(color).build()).queue();
-    }
-
     /**
      * Edit the message to show an error embed.
      *
@@ -110,20 +106,6 @@ public abstract class JDACommandExecutor {
      */
     protected final void sendError(Message message, String text) {
         this.innerEmbed(message, text, Color.RED);
-    }
-
-    /**
-     * Edit the message to show an error embed.
-     *
-     * @param message
-     *         Message to edit
-     * @param text
-     *         Format for the message.
-     * @param additional
-     *         Parameter to use with the format.
-     */
-    protected final void sendError(Message message, String text, String... additional) {
-        this.innerEmbed(message, text, Color.RED, additional);
     }
 
     /**
@@ -139,20 +121,6 @@ public abstract class JDACommandExecutor {
     }
 
     /**
-     * Edit the message to show an info embed.
-     *
-     * @param message
-     *         Message to edit
-     * @param text
-     *         Format for the message.
-     * @param additional
-     *         Parameter to use with the format.
-     */
-    protected final void sendInfo(Message message, String text, String... additional) {
-        this.innerEmbed(message, text, Color.CYAN, additional);
-    }
-
-    /**
      * Edit the message to show a warning embed.
      *
      * @param message
@@ -162,20 +130,6 @@ public abstract class JDACommandExecutor {
      */
     protected final void sendWarn(Message message, String text) {
         this.innerEmbed(message, text, Color.ORANGE);
-    }
-
-    /**
-     * Edit the message to show a warning embed.
-     *
-     * @param message
-     *         Message to edit
-     * @param text
-     *         Format for the message.
-     * @param additional
-     *         Parameter to use with the format.
-     */
-    protected final void sendWarn(Message message, String text, String... additional) {
-        this.innerEmbed(message, text, Color.ORANGE, additional);
     }
 
     /**

@@ -1,13 +1,12 @@
 package fr.alexpado.bots.cmb;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
 class CrossoutMarketBotApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    public void testIsUndefined() {
+        // TODO : Write some tests someday, I really need to learn these...
+    }
 
 }

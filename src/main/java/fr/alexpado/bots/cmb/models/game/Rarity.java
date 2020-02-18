@@ -43,7 +43,12 @@ public class Rarity extends JSONModel {
         try {
             this.id = dataSource.getInt("id");
             this.name = dataSource.getString("name");
-            this.color = new Color(dataSource.getInt("primaryColor"));
+
+            String colorHex = dataSource.getString("primarycolor");
+            int r = Integer.parseInt(colorHex.substring(0, 2), 16);
+            int g = Integer.parseInt(colorHex.substring(2, 4), 16);
+            int b = Integer.parseInt(colorHex.substring(4, 6), 16);
+            this.color = new Color(r, g, b);
 
             return true;
         } catch (JSONException e) {

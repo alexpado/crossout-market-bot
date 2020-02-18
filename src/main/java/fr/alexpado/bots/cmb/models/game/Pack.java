@@ -31,6 +31,8 @@ public class Pack extends TranslatableJSONModel {
     private int gbpPrice = 0;
     private int rubPrice = 0;
 
+    private int rawCoins = 0;
+
     public Pack(AppConfig config, JSONObject source) {
         super(config);
         this.reload(source);
@@ -53,6 +55,7 @@ public class Pack extends TranslatableJSONModel {
             this.name = dataSource.getString("name");
             this.sellSum = dataSource.getInt("sellsum");
             this.buySum = dataSource.getInt("buysum");
+            this.rawCoins = dataSource.getInt("rawcoins");
 
             JSONObject appPrices = dataSource.getJSONObject("appprices");
 
@@ -120,11 +123,14 @@ public class Pack extends TranslatableJSONModel {
                     this.getPriceLine(this.rubPrice, "RUB")
             ), true);
 
+            float value = this.buySum / 100f + this.rawCoins;
+            System.out.println(value);
+
             builder.addField("", String.format("%s\n%s\n%s\n%s",
-                    "10 Coins/USD",
-                    "10 Coins/USD",
-                    "10 Coins/USD",
-                    "10 Coins/USD"
+                    Utilities.money(value / (this.usdPrice / 100f), "Coins/USD"),
+                    Utilities.money(value / (this.eurPrice / 100f), "Coins/EUR"),
+                    Utilities.money(value / (this.gbpPrice / 100f), "Coins/GBP"),
+                    Utilities.money(value / (this.rubPrice / 100f), "Coins/RUB")
             ), true);
             builder.addField("", "", true);
         }

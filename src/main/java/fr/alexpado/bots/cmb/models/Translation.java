@@ -19,6 +19,7 @@ public class Translation {
     public static final String GENERAL_ERROR = "general.error";
     public static final String GENERAL_INVITE = "general.invite";
     public static final String GENERAL_BAD_SYNTAX = "general.syntax";
+    public static final String GENERAL_FORBIDDEN = "general.forbidden";
 
     public static final String ITEMS_LIST = "items.list";
     public static final String ITEMS_MULTIPLE = "items.multiple";

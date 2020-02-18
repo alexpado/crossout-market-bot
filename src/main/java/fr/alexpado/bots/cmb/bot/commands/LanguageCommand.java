@@ -15,6 +15,7 @@ import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.Arrays;
@@ -44,6 +45,11 @@ public class LanguageCommand extends TranslatableBotCommand {
     @Override
     public void execute(CommandEvent event, Message message) {
 
+        boolean isOwner = event.getMember().isOwner();
+        boolean isAdmin = event.getMember().getPermissions().contains(Permission.ADMINISTRATOR);
+        boolean canManageChannel = event.getMember().getPermissions().contains(Permission.MANAGE_CHANNEL);
+        boolean canManageThisChannel = event.getMember().getPermissions(event.getChannel()).contains(Permission.MANAGE_CHANNEL);
+
         this.loadSupportedLanguages();
 
         if (event.getArgs().size() == 0) {
@@ -72,6 +78,11 @@ public class LanguageCommand extends TranslatableBotCommand {
         switch (event.getArgs().get(0)) {
             case "guild":
             case "server":
+                if (!isOwner || !isAdmin) {
+                    this.sendError(message, this.getTranslation(Translation.GENERAL_FORBIDDEN));
+                    return;
+                }
+
                 if (lang.equals("remove")) {
                     this.sendError(message, this.getTranslation(Translation.LANGUAGES_NOTSUPPORTED));
                     return;
@@ -80,6 +91,11 @@ public class LanguageCommand extends TranslatableBotCommand {
                 this.sendInfo(message, this.getTranslation(Translation.LANGUAGES_GUILD_UPDATED));
                 break;
             case "channel":
+                if (!isOwner || !isAdmin || !canManageChannel || !canManageThisChannel) {
+                    this.sendError(message, this.getTranslation(Translation.GENERAL_FORBIDDEN));
+                    return;
+                }
+
                 this.setChannelLanguage(lang);
                 this.sendInfo(message, this.getTranslation(Translation.LANGUAGES_CHANNEL_UPDATED));
                 break;

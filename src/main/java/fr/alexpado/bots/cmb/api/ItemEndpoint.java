@@ -28,9 +28,7 @@ public class ItemEndpoint extends APIEndpoint<Item, Integer> {
 
         HashMap<Integer, Rarity> rarities = new HashMap<>();
 
-        this.rarityEndpoint.getAll().forEach(rarity -> {
-            rarities.put(rarity.getId(), rarity);
-        });
+        this.rarityEndpoint.getAll().forEach(rarity -> rarities.put(rarity.getId(), rarity));
 
         List<Item> itemList = new ArrayList<>();
 

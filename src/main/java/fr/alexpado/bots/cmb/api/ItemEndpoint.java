@@ -4,6 +4,7 @@ import fr.alexpado.bots.cmb.AppConfig;
 import fr.alexpado.bots.cmb.interfaces.APIEndpoint;
 import fr.alexpado.bots.cmb.libs.HttpRequest;
 import fr.alexpado.bots.cmb.models.game.Item;
+import fr.alexpado.bots.cmb.models.game.Rarity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,18 +16,25 @@ import java.util.*;
 public class ItemEndpoint extends APIEndpoint<Item, Integer> {
 
     private AppConfig config;
+    private RarityEndpoint rarityEndpoint;
 
     public ItemEndpoint(AppConfig config) {
         super(config.getApiHost());
         this.config = config;
+        this.rarityEndpoint = new RarityEndpoint(config.getApiHost());
     }
 
     private List<Item> readResponse(JSONArray array) {
+
+        HashMap<Integer, Rarity> rarities = new HashMap<>();
+
+        this.rarityEndpoint.getAll().forEach(rarity -> rarities.put(rarity.getId(), rarity));
+
         List<Item> itemList = new ArrayList<>();
 
         for (int i = 0; i < array.length(); i++) {
             JSONObject o = array.getJSONObject(i);
-            Optional<Item> item = Item.from(this.config, o);
+            Optional<Item> item = Item.from(this.config, o, rarities);
             item.ifPresent(itemList::add);
         }
 

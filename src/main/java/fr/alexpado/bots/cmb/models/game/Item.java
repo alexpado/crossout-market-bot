@@ -44,13 +44,27 @@ public class Item extends TranslatableJSONModel {
         optionalRarity.ifPresent(value -> this.rarity = value);
     }
 
-    public static Optional<Item> from(AppConfig config, JSONObject dataSource) {
+    public Item(AppConfig config, JSONObject dataSource, HashMap<Integer, Rarity> rarities) throws Exception {
+        super(config, dataSource);
+        if (this.rarity.getId() != 0) {
+            this.rarity = rarities.get(this.rarity.getId());
+        }
+    }
+
+    public static Optional<Item> from(AppConfig config, JSONObject dataSource, HashMap<Integer, Rarity> rarities) {
         try {
+            if (rarities != null) {
+                return Optional.of(new Item(config, dataSource, rarities));
+            }
             return Optional.of(new Item(config, dataSource));
         } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();
         }
+    }
+
+    public static Optional<Item> from(AppConfig config, JSONObject dataSource) {
+        return Item.from(config, dataSource, null);
     }
 
     @Override
@@ -179,7 +193,7 @@ public class Item extends TranslatableJSONModel {
 
     @Override
     public String toString() {
-        return name;
+        return this.availableName;
     }
 
 }

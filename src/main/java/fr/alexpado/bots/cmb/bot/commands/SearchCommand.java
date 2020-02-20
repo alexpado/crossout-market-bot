@@ -132,6 +132,8 @@ public class SearchCommand extends ItemBotCommand {
             query.put("metaItems", "true");
         }
 
+        query.put("language", this.getEffectiveLanguage());
+
         ItemEndpoint endpoint = new ItemEndpoint(this.getConfig());
         List<Item> items = endpoint.search(query);
 

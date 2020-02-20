@@ -143,7 +143,7 @@ public class LanguageCommand extends TranslatableBotCommand {
 
         HashMap<Integer, Item> itemsMap = new HashMap<>();
         items.forEach(item -> itemsMap.put(item.getId(), item));
-        watchers.forEach(watcher -> watcher.setItemName(itemsMap.get(watcher.getId()).getAvailableName()));
+        watchers.forEach(watcher -> watcher.setItemName(itemsMap.get(watcher.getItemId()).getAvailableName()));
         this.getConfig().getWatcherRepository().saveAll(watchers);
     }
 

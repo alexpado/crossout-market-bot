@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface WatcherRepository extends CrudRepository<Watcher, Integer> {
 
-    @Query(value = "SELECT w FROM Watcher w WHERE w.lastExecution + w.repeatEvery < :min")
+    @Query(value = "SELECT w FROM Watcher w WHERE w.lastExecution + w.repeatEvery < :min AND w.user.watcherPaused = false")
     List<Watcher> getExecutables(@Param("min") long minExecutionTime);
 
     @Query(value = "SELECT w FROM Watcher w WHERE w.user = :user")

@@ -5,7 +5,6 @@ import fr.alexpado.bots.cmb.api.ItemEndpoint;
 import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.models.Watcher;
 import fr.alexpado.bots.cmb.models.game.Item;
-import fr.alexpado.bots.cmb.repositories.TranslationRepository;
 import fr.alexpado.bots.cmb.repositories.WatcherRepository;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -21,12 +20,10 @@ import java.util.Optional;
 public class WatcherExecutor {
 
     private WatcherRepository watcherRepository;
-    private TranslationRepository translationRepository;
     private AppConfig config;
 
-    public WatcherExecutor(@Qualifier("appConfig") AppConfig config, WatcherRepository watcherRepository, TranslationRepository translationRepository) {
+    public WatcherExecutor(@Qualifier("appConfig") AppConfig config, WatcherRepository watcherRepository) {
         this.watcherRepository = watcherRepository;
-        this.translationRepository = translationRepository;
         this.config = config;
     }
 
@@ -83,9 +80,6 @@ public class WatcherExecutor {
                         break;
                     case NORMAL:
                         send = true;
-                        break;
-                    case UNKNOWN:
-                        send = false;
                         break;
                 }
 

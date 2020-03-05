@@ -1,0 +1,24 @@
+{
+  "source": "graph3.png",
+  "map": {
+    "minValue": {
+      "x": 46,
+      "y": 174
+    },
+    "maxValue": {
+      "x": 46,
+      "y": 6
+    },
+    "graph": {
+      "s": 3,
+      "w": 695,
+      "x": 51,
+      "h": 120,
+      "y": 40
+    },
+    "intervalText": {
+      "x": 650,
+      "y": 6
+    }
+  }
+}

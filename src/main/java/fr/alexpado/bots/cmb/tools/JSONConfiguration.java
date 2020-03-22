@@ -17,10 +17,6 @@ public class JSONConfiguration extends JSONObject {
 
     private File file;
 
-    public JSONConfiguration(String filename) throws Exception {
-        this(new File("configs/" + filename + ".json"));
-    }
-
     public JSONConfiguration(JSONObject object) {
         super(object);
     }
@@ -31,17 +27,13 @@ public class JSONConfiguration extends JSONObject {
         this.save();
     }
 
-    public JSONConfiguration(String dummy, String content) throws Exception {
+    public JSONConfiguration(String content) throws Exception {
         super(content);
     }
 
     public void save() throws IOException {
-        File file = new File("configs");
-        if (!file.exists()) {
-            file.mkdirs();
-        }
         FileWriter writer = new FileWriter(this.file);
-        writer.write(this.toString(4));
+        writer.write(this.toString(2));
         writer.close();
     }
 

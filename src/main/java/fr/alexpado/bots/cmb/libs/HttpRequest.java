@@ -50,7 +50,7 @@ public class HttpRequest {
     }
 
     public JSONConfiguration readJsonConfiguration() throws Exception {
-        return new JSONConfiguration("", this.readOutput());
+        return new JSONConfiguration(this.readOutput());
     }
 
 }

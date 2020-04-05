@@ -33,3 +33,6 @@ out/
 
 ### Spring Property file
 src/main/resources/application.properties
+
+.idea/*
+.gradle/*

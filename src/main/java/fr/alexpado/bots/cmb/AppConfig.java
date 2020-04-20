@@ -54,6 +54,9 @@ public class AppConfig {
     @Value("${bot.item.graph.duration}")
     private Long graphInterval;
 
+    @Value("${server.port}")
+    private Integer serverPort;
+
     @Bean
     public AppConfig configurationProvider() {
         return new AppConfig();

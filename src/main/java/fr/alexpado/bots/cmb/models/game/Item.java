@@ -170,13 +170,14 @@ public class Item extends TranslatableJSONModel {
 
     private EmbedBuilder getRawEmbed(JDA jda) {
         EmbedBuilder builder = new EmbedBuilder();
+        Integer serverPort = getConfig().getServerPort();
 
         builder.setAuthor(this.getTranslation(Translation.GENERAL_INVITE), DiscordBot.INVITE, jda.getSelfUser().getAvatarUrl());
         builder.setTitle(this.name, String.format("https://crossoutdb.com/item/%s?ref=crossoutmarketbot", this.id));
         builder.setDescription(this.description);
 
         builder.setThumbnail(String.format("https://crossoutdb.com/img/items/%s.png?ref=crossoutmarketbot", this.id));
-        builder.setImage(String.format("http://bots.alexpado.fr:8181/chart/%s/%s/chart.png", this.id, this.lastUpdate));
+        builder.setImage(String.format("http://bots.alexpado.fr:%s/chart/%s/%s/chart.png", serverPort, this.lastUpdate, this.id));
 
         if (this.removed) {
             builder.addField(this.getTranslation(Translation.ITEMS_REMOVED), this.getTranslation(Translation.ITEMS_UNAVAILABLE), true);

@@ -14,11 +14,14 @@ public abstract class TranslatableJSONModel extends JSONModel implements ITransl
 
     private Map<String, String> translations = new HashMap<>();
 
+    private AppConfig config;
+
     // Fake double extends
     private Translatable translatable;
 
     public TranslatableJSONModel(AppConfig config, JSONObject dataSource) throws Exception {
         super(dataSource);
+        this.config = config;
         this.translatable = new Translatable(config) {
             @Override
             public List<String> getRequiredTranslation() {
@@ -51,4 +54,9 @@ public abstract class TranslatableJSONModel extends JSONModel implements ITransl
     public List<Translation> fetch(List<String> keys, String language) throws MissingTranslationException {
         return translatable.fetch(keys, language);
     }
+
+    public AppConfig getConfig() {
+        return config;
+    }
+
 }

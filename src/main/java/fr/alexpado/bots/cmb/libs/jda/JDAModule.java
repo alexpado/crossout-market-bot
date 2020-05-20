@@ -18,7 +18,7 @@ import java.util.List;
  */
 public abstract class JDAModule {
 
-    private JDABot bot;
+    private final JDABot bot;
 
     public JDAModule(JDABot bot) throws RuntimeException {
         this.bot = bot;

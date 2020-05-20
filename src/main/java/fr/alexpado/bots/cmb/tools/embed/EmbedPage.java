@@ -9,11 +9,11 @@ import java.util.List;
 
 public abstract class EmbedPage<T> extends ReactionListener {
 
-    private ArrayList<String> items = new ArrayList<>();
-    private List<T> origin;
+    private final ArrayList<String> items = new ArrayList<>();
+    private final List<T> origin;
+    private final int count = 10;
     private int currentPage = 1;
     private int totalPage = 1;
-    private int count = 10;
 
     protected EmbedPage(Message message, List<T> items, int timeout) {
         super(message, timeout);

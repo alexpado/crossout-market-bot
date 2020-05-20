@@ -1,8 +1,8 @@
 package fr.alexpado.bots.cmb.interfaces.translatable;
 
-import fr.alexpado.bots.cmb.AppConfig;
+import fr.alexpado.bots.cmb.CrossoutConfiguration;
 import fr.alexpado.bots.cmb.interfaces.JSONModel;
-import fr.alexpado.bots.cmb.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import org.json.JSONObject;
 
@@ -12,14 +12,12 @@ import java.util.Map;
 
 public abstract class TranslatableJSONModel extends JSONModel implements ITranslatable {
 
-    private Map<String, String> translations = new HashMap<>();
-
-    private AppConfig config;
-
+    private final Map<String, String> translations = new HashMap<>();
     // Fake double extends
-    private Translatable translatable;
+    private final Translatable translatable;
+    private CrossoutConfiguration config;
 
-    public TranslatableJSONModel(AppConfig config, JSONObject dataSource) throws Exception {
+    public TranslatableJSONModel(CrossoutConfiguration config, JSONObject dataSource) throws Exception {
         super(dataSource);
         this.config = config;
         this.translatable = new Translatable(config) {
@@ -30,7 +28,7 @@ public abstract class TranslatableJSONModel extends JSONModel implements ITransl
         };
     }
 
-    public TranslatableJSONModel(AppConfig config) {
+    public TranslatableJSONModel(CrossoutConfiguration config) {
         super();
         this.translatable = new Translatable(config) {
             @Override
@@ -55,7 +53,7 @@ public abstract class TranslatableJSONModel extends JSONModel implements ITransl
         return translatable.fetch(keys, language);
     }
 
-    public AppConfig getConfig() {
+    public CrossoutConfiguration getConfig() {
         return config;
     }
 

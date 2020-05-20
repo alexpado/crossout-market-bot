@@ -1,13 +1,13 @@
 package fr.alexpado.bots.cmb.throwables;
 
-import fr.alexpado.bots.cmb.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
 
 import java.util.List;
 
 public class MissingTranslationException extends Exception {
 
-    private List<String> missingTranslations;
-    private List<Translation> loadedTranslations;
+    private final List<String> missingTranslations;
+    private final List<Translation> loadedTranslations;
 
     public MissingTranslationException(List<String> missingTranslations, List<Translation> loadedTranslations) {
         super(String.format("Missing translations : %s", String.join(", ", missingTranslations)));
@@ -26,4 +26,5 @@ public class MissingTranslationException extends Exception {
     public List<Translation> getLoadedTranslations() {
         return loadedTranslations;
     }
+
 }

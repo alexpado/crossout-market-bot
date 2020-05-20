@@ -15,7 +15,8 @@ build/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/*
+!.idea/codeStyles
 *.iws
 *.iml
 *.ipr
@@ -34,5 +35,4 @@ out/
 ### Spring Property file
 src/main/resources/application.properties
 
-.idea/*
 .gradle/*

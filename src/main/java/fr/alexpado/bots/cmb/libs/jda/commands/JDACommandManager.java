@@ -19,9 +19,9 @@ import java.util.Optional;
  */
 public final class JDACommandManager extends ListenerAdapter {
 
-    private JDABot bot;
-    private String prefix;
-    private List<JDACommandExecutor> commands = new ArrayList<>();
+    private final JDABot bot;
+    private final String prefix;
+    private final List<JDACommandExecutor> commands = new ArrayList<>();
 
     public JDACommandManager(JDABot bot, String prefix) {
         this.bot = bot;

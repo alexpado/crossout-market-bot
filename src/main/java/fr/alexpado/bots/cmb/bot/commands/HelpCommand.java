@@ -6,8 +6,8 @@ import fr.alexpado.bots.cmb.interfaces.command.TranslatableBotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.commands.JDACommandExecutor;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.models.Translation;
-import fr.alexpado.bots.cmb.repositories.TranslationRepository;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.repositories.TranslationRepository;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
@@ -53,7 +53,7 @@ public class HelpCommand extends TranslatableBotCommand {
 
     private void showHelp(CommandEvent event, Message message) {
         CrossoutModule crossout = this.getCrossoutModule();
-        TranslationRepository repository = this.getConfig().getTranslationRepository();
+        TranslationRepository repository = this.getConfig().getRepositoryAccessor().getTranslationRepository();
 
         EmbedBuilder builder = new EmbedBuilder();
         builder.setAuthor(this.getTranslation(Translation.GENERAL_INVITE), DiscordBot.INVITE, event.getJDA().getSelfUser().getAvatarUrl());
@@ -83,4 +83,5 @@ public class HelpCommand extends TranslatableBotCommand {
     public EmbedBuilder getAdvancedHelp() {
         return null;
     }
+
 }

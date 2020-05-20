@@ -36,4 +36,5 @@ public class CrossoutModule extends JDAModule {
                 new TranslateCommand(this)
         );
     }
+
 }

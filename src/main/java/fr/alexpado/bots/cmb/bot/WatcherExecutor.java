@@ -1,11 +1,12 @@
 package fr.alexpado.bots.cmb.bot;
 
-import fr.alexpado.bots.cmb.AppConfig;
+import fr.alexpado.bots.cmb.CrossoutConfiguration;
 import fr.alexpado.bots.cmb.api.ItemEndpoint;
 import fr.alexpado.bots.cmb.enums.WatcherType;
-import fr.alexpado.bots.cmb.models.Watcher;
-import fr.alexpado.bots.cmb.models.game.Item;
-import fr.alexpado.bots.cmb.repositories.WatcherRepository;
+import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
+import fr.alexpado.bots.cmb.modules.crossout.models.settings.UserSettings;
+import fr.alexpado.bots.cmb.modules.crossout.repositories.WatcherRepository;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
@@ -19,10 +20,10 @@ import java.util.Optional;
 @Component
 public class WatcherExecutor {
 
-    private WatcherRepository watcherRepository;
-    private AppConfig config;
+    private final WatcherRepository watcherRepository;
+    private final CrossoutConfiguration config;
 
-    public WatcherExecutor(@Qualifier("appConfig") AppConfig config, WatcherRepository watcherRepository) {
+    public WatcherExecutor(@Qualifier("crossoutConfiguration") CrossoutConfiguration config, WatcherRepository watcherRepository) {
         this.watcherRepository = watcherRepository;
         this.config = config;
     }
@@ -39,7 +40,15 @@ public class WatcherExecutor {
         List<Watcher> watchers = this.watcherRepository.getExecutables(System.currentTimeMillis());
 
         for (Watcher watcher : watchers) {
-            Optional<Item> optionalItem = endpoint.getOne(watcher.getItemId(), watcher.getUser().getLanguage());
+            Optional<UserSettings> optionalUserSettings = this.config.getRepositoryAccessor().getUserSettingsRepository().findByUser(watcher.getUser());
+
+            if (!optionalUserSettings.isPresent()) {
+                // WUT ?!
+                continue;
+            }
+
+            UserSettings settings = optionalUserSettings.get();
+            Optional<Item> optionalItem = endpoint.getOne(watcher.getItemId(), settings.getLanguage());
 
             if (!optionalItem.isPresent()) {
                 continue;
@@ -48,7 +57,7 @@ public class WatcherExecutor {
             Item item = optionalItem.get();
 
             try {
-                item.fetchTranslations(watcher.getUser().getLanguage());
+                item.fetchTranslations(settings.getLanguage());
 
                 EmbedBuilder builder = item.getDiffEmbed(DiscordBot.jda, watcher.getSellPrice(), watcher.getBuyPrice());
 
@@ -96,4 +105,5 @@ public class WatcherExecutor {
             }
         }
     }
+
 }

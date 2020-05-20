@@ -2,10 +2,10 @@ package fr.alexpado.bots.cmb.interfaces.command;
 
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.models.FakeItem;
-import fr.alexpado.bots.cmb.models.Translation;
-import fr.alexpado.bots.cmb.models.game.Item;
-import fr.alexpado.bots.cmb.repositories.FakeItemRepository;
+import fr.alexpado.bots.cmb.modules.crossout.models.FakeItem;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
+import fr.alexpado.bots.cmb.modules.crossout.repositories.FakeItemRepository;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -36,7 +36,7 @@ public abstract class ItemBotCommand extends TranslatableBotCommand {
             if (itemName != null) {
                 String query = "%" + itemName.toLowerCase() + "%";
 
-                FakeItemRepository repository = this.getConfig().getFakeItemRepository();
+                FakeItemRepository repository = this.getConfig().getRepositoryAccessor().getFakeItemRepository();
                 Optional<FakeItem> fakeItemOptional = repository.findEasterEgg(query);
 
                 if (fakeItemOptional.isPresent()) {

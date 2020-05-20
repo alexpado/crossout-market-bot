@@ -7,11 +7,11 @@ import fr.alexpado.bots.cmb.api.RarityEndpoint;
 import fr.alexpado.bots.cmb.interfaces.command.ItemBotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.models.Translation;
-import fr.alexpado.bots.cmb.models.game.Category;
-import fr.alexpado.bots.cmb.models.game.Faction;
-import fr.alexpado.bots.cmb.models.game.Item;
-import fr.alexpado.bots.cmb.models.game.Rarity;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Category;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Faction;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Rarity;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import fr.alexpado.bots.cmb.tools.CommandArgumentsParser;
 import fr.alexpado.bots.cmb.tools.Utilities;
@@ -167,4 +167,5 @@ public class SearchCommand extends ItemBotCommand {
         builder.setDescription(helpBuilder.toString());
         return builder;
     }
+
 }

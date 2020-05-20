@@ -2,7 +2,7 @@ package fr.alexpado.bots.cmb.api;
 
 import fr.alexpado.bots.cmb.interfaces.APIEndpoint;
 import fr.alexpado.bots.cmb.libs.HttpRequest;
-import fr.alexpado.bots.cmb.models.game.Type;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Type;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -47,4 +47,5 @@ public class TypeEndpoint extends APIEndpoint<Type, Integer> {
 
         return typeList;
     }
+
 }

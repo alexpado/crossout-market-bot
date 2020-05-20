@@ -8,7 +8,7 @@ import java.util.List;
 
 public abstract class TranslatableEmbedPage<T extends Translatable> extends EmbedPage<T> {
 
-    private String lang;
+    private final String lang;
 
     protected TranslatableEmbedPage(Message message, List<T> items, int timeout, String lang) {
         super(message, items, timeout);
@@ -31,4 +31,5 @@ public abstract class TranslatableEmbedPage<T extends Translatable> extends Embe
         }
         return "{:MTE:}";
     }
+
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class MarketEndpoint {
 
-    private String host;
+    private final String host;
 
     /**
      * APIEndpoint constructor.

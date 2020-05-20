@@ -7,10 +7,10 @@ import net.dv8tion.jda.api.entities.User;
 
 public class ReactionAction {
 
-    private ReactionListener listener;
-    private Message message;
-    private User user;
-    private MessageReaction reaction;
+    private final ReactionListener listener;
+    private final Message message;
+    private final User user;
+    private final MessageReaction reaction;
 
     ReactionAction(ReactionListener listener, Message message, User user, MessageReaction reaction) {
         this.listener = listener;
@@ -38,4 +38,5 @@ public class ReactionAction {
     public void removeReaction() {
         this.reaction.removeReaction(this.user).queue();
     }
+
 }

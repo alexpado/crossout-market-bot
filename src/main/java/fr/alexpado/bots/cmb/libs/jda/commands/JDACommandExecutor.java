@@ -18,8 +18,8 @@ import java.util.function.Consumer;
  */
 public abstract class JDACommandExecutor {
 
-    private JDAModule module;
-    private String label;
+    private final JDAModule module;
+    private final String label;
 
     public JDACommandExecutor(JDAModule module, String label) {
         this.module = module;

@@ -3,10 +3,8 @@ package fr.alexpado.bots.cmb.bot.commands.watchers;
 import fr.alexpado.bots.cmb.interfaces.command.WatcherCommandGroup;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.models.Translation;
-import fr.alexpado.bots.cmb.models.Watcher;
-import fr.alexpado.bots.cmb.models.discord.DiscordGuild;
-import fr.alexpado.bots.cmb.models.discord.DiscordUser;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import fr.alexpado.bots.cmb.tools.TranslatableWatcher;
 import fr.alexpado.bots.cmb.tools.embed.TranslatableEmbedPage;
@@ -37,10 +35,7 @@ public class WatchlistCommand extends WatcherCommandGroup {
 
     @Override
     public void execute(CommandEvent event, Message message) throws MissingTranslationException {
-        DiscordUser user = this.getDiscordUser();
-        DiscordGuild guild = this.getDiscordGuild();
-
-        List<Watcher> watchers = this.getRepository().getFromUser(user);
+        List<Watcher> watchers = this.getRepository().findAllByUser(this.getDiscordUser());
 
         if (watchers.size() == 0) {
             this.sendError(message, this.getTranslation(Translation.WATCHERS_NONE));
@@ -49,7 +44,7 @@ public class WatchlistCommand extends WatcherCommandGroup {
             for (Watcher watcher : watchers) {
                 translatableWatchers.add(watcher.getTranslatableWatcher(this.getConfig(), this.getEffectiveLanguage()));
             }
-            new TranslatableEmbedPage<TranslatableWatcher>(message, translatableWatchers, 10, guild.getLanguage()) {
+            new TranslatableEmbedPage<TranslatableWatcher>(message, translatableWatchers, 10, this.getGuildSettings().getLanguage()) {
                 @Override
                 public EmbedBuilder getEmbed() {
                     EmbedBuilder builder = new EmbedBuilder();
@@ -64,4 +59,5 @@ public class WatchlistCommand extends WatcherCommandGroup {
     public EmbedBuilder getAdvancedHelp() {
         return null;
     }
+
 }

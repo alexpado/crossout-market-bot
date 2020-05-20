@@ -14,15 +14,13 @@ import java.net.URLConnection;
 
 public class HttpRequest {
 
-    private final Logger log = LoggerFactory.getLogger(HttpRequest.class);
-
-    private URL url;
-    private URLConnection connection;
+    private final URLConnection connection;
 
     public HttpRequest(String url) throws IOException {
-        this.url = new URL(url);
-        this.connection = this.url.openConnection();
+        URL urlInstance = new URL(url);
+        this.connection = urlInstance.openConnection();
 
+        Logger log = LoggerFactory.getLogger(HttpRequest.class);
         log.info(url);
 
         this.connection.setRequestProperty("X-RequestedBy", "DiscordBot");

@@ -1,10 +1,10 @@
 package fr.alexpado.bots.cmb.api;
 
-import fr.alexpado.bots.cmb.AppConfig;
+import fr.alexpado.bots.cmb.CrossoutConfiguration;
 import fr.alexpado.bots.cmb.interfaces.APIEndpoint;
 import fr.alexpado.bots.cmb.libs.HttpRequest;
-import fr.alexpado.bots.cmb.models.game.Item;
-import fr.alexpado.bots.cmb.models.game.Rarity;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Rarity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,10 +15,10 @@ import java.util.*;
 
 public class ItemEndpoint extends APIEndpoint<Item, Integer> {
 
-    private AppConfig config;
-    private RarityEndpoint rarityEndpoint;
+    private final CrossoutConfiguration config;
+    private final RarityEndpoint rarityEndpoint;
 
-    public ItemEndpoint(AppConfig config) {
+    public ItemEndpoint(CrossoutConfiguration config) {
         super(config.getApiHost());
         this.config = config;
         this.rarityEndpoint = new RarityEndpoint(config.getApiHost());

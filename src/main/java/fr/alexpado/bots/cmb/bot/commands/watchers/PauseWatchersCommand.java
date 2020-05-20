@@ -3,8 +3,8 @@ package fr.alexpado.bots.cmb.bot.commands.watchers;
 import fr.alexpado.bots.cmb.interfaces.command.WatcherCommandGroup;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.models.Translation;
-import fr.alexpado.bots.cmb.models.discord.DiscordUser;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.settings.UserSettings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
@@ -30,18 +30,18 @@ public class PauseWatchersCommand extends WatcherCommandGroup {
 
     @Override
     public void execute(CommandEvent event, Message message) {
-        DiscordUser user = this.getDiscordUser();
+        UserSettings settings = this.getUserSettings();
         String key;
 
-        if (user.isWatcherPaused()) {
-            user.setWatcherPaused(false);
+        if (settings.isWatcherPaused()) {
+            settings.setWatcherPaused(false);
             key = Translation.WATCHERS_RESUMED;
         } else {
-            user.setWatcherPaused(true);
+            settings.setWatcherPaused(true);
             key = Translation.WATCHERS_PAUSED;
         }
 
-        this.getConfig().getDiscordUserRepository().save(user);
+        this.getUserSettingsRepository().save(settings);
         this.sendInfo(message, this.getTranslation(key));
     }
 
@@ -49,4 +49,5 @@ public class PauseWatchersCommand extends WatcherCommandGroup {
     public EmbedBuilder getAdvancedHelp() {
         return null;
     }
+
 }

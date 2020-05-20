@@ -6,17 +6,18 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
 public class ReactionListener extends ListenerAdapter {
 
-    private EditorTimer editorTimer;
-    private Timer timer = new Timer();
-    private Message message;
+    private final EditorTimer editorTimer;
+    private final Timer timer = new Timer();
+    private final Message message;
+    private final HashMap<String, Consumer<ReactionAction>> reactionActions = new HashMap<>();
     private boolean resetTimer = false;
-    private HashMap<String, Consumer<ReactionAction>> reactionActions = new HashMap<>();
 
     public ReactionListener(Message message, int timeout) {
         this.message = message;
@@ -51,7 +52,7 @@ public class ReactionListener extends ListenerAdapter {
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
         if (event.getMessageIdLong() != message.getIdLong()) return;
         String emote = event.getReactionEmote().getName();
-        if (event.getUser().equals(event.getJDA().getSelfUser())) return;
+        if (Objects.equals(event.getUser(), event.getJDA().getSelfUser())) return;
         ReactionAction action = new ReactionAction(this, this.message, event.getUser(), event.getReaction());
         Consumer<ReactionAction> consumer = this.reactionActions.get(emote);
         if (consumer != null) consumer.accept(action);
@@ -59,7 +60,7 @@ public class ReactionListener extends ListenerAdapter {
 
     private class EditorTimer extends TimerTask {
 
-        private int timeout;
+        private final int timeout;
         private int timeLeft;
 
         EditorTimer(int timeout) {
@@ -80,6 +81,7 @@ public class ReactionListener extends ListenerAdapter {
             }
 
         }
+
     }
 
 }

@@ -1,6 +1,6 @@
 package fr.alexpado.bots.cmb.libs.jda;
 
-import fr.alexpado.bots.cmb.AppConfig;
+import fr.alexpado.bots.cmb.CrossoutConfiguration;
 import fr.alexpado.bots.cmb.libs.jda.commands.JDACommandManager;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import net.dv8tion.jda.api.AccountType;
@@ -22,14 +22,14 @@ import java.util.Optional;
  */
 public abstract class JDABot extends ListenerAdapter {
 
-    private List<JDAModule> modules = new ArrayList<>();
-    private JDABuilder jdaBuilder;
-    private JDACommandManager commandManager;
+    private final List<JDAModule> modules = new ArrayList<>();
+    private final JDABuilder jdaBuilder;
+    private final JDACommandManager commandManager;
 
     @Value("${discord.prefix}")
     private String prefix;
 
-    public JDABot(AccountType accountType, AppConfig config) {
+    public JDABot(AccountType accountType, CrossoutConfiguration config) {
         this.jdaBuilder = new JDABuilder(accountType);
         this.commandManager = new JDACommandManager(this, config.getDiscordPrefix());
 

@@ -1,10 +1,10 @@
 package fr.alexpado.bots.cmb.tools;
 
-import fr.alexpado.bots.cmb.AppConfig;
+import fr.alexpado.bots.cmb.CrossoutConfiguration;
 import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.interfaces.translatable.Translatable;
-import fr.alexpado.bots.cmb.models.Translation;
-import fr.alexpado.bots.cmb.models.Watcher;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import lombok.SneakyThrows;
 
@@ -13,9 +13,9 @@ import java.util.List;
 
 public class TranslatableWatcher extends Translatable {
 
-    private Watcher watcher;
+    private final Watcher watcher;
 
-    public TranslatableWatcher(AppConfig config, Watcher watcher, String language) throws MissingTranslationException {
+    public TranslatableWatcher(CrossoutConfiguration config, Watcher watcher, String language) throws MissingTranslationException {
         super(config);
         this.watcher = watcher;
         this.fetchTranslations(language);
@@ -53,4 +53,5 @@ public class TranslatableWatcher extends Translatable {
 
         return String.format("[%s] %s", this.watcher.getId(), this.watcher.getItemName());
     }
+
 }

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public abstract class APIEndpoint<T, U> {
 
-    private String host;
+    private final String host;
 
     /**
      * APIEndpoint constructor.

@@ -1,9 +1,9 @@
 package fr.alexpado.bots.cmb.api;
 
-import fr.alexpado.bots.cmb.AppConfig;
+import fr.alexpado.bots.cmb.CrossoutConfiguration;
 import fr.alexpado.bots.cmb.interfaces.APIEndpoint;
 import fr.alexpado.bots.cmb.libs.HttpRequest;
-import fr.alexpado.bots.cmb.models.game.Pack;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Pack;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,9 +14,9 @@ import java.util.Optional;
 
 public class PackEnpoint extends APIEndpoint<Pack, Integer> {
 
-    private AppConfig config;
+    private final CrossoutConfiguration config;
 
-    public PackEnpoint(AppConfig config) {
+    public PackEnpoint(CrossoutConfiguration config) {
         super(config.getApiHost());
         this.config = config;
     }
@@ -52,4 +52,5 @@ public class PackEnpoint extends APIEndpoint<Pack, Integer> {
             return new ArrayList<>();
         }
     }
+
 }

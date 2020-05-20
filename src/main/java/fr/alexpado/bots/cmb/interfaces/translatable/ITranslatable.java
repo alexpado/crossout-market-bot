@@ -1,7 +1,7 @@
 package fr.alexpado.bots.cmb.interfaces.translatable;
 
 
-import fr.alexpado.bots.cmb.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 
 import java.util.List;

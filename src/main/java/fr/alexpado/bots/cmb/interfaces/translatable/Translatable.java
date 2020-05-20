@@ -1,9 +1,9 @@
 package fr.alexpado.bots.cmb.interfaces.translatable;
 
 
-import fr.alexpado.bots.cmb.AppConfig;
-import fr.alexpado.bots.cmb.models.Translation;
-import fr.alexpado.bots.cmb.repositories.TranslationRepository;
+import fr.alexpado.bots.cmb.CrossoutConfiguration;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.repositories.TranslationRepository;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 
 import java.util.HashMap;
@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 
 public abstract class Translatable implements ITranslatable {
 
-    private AppConfig config;
-    private TranslationRepository repository;
-    private Map<String, String> translations = new HashMap<>();
+    private final CrossoutConfiguration config;
+    private final TranslationRepository repository;
+    private final Map<String, String> translations = new HashMap<>();
 
     /**
      * Translatable constructor.
@@ -23,9 +23,9 @@ public abstract class Translatable implements ITranslatable {
      * @param config
      *         Application configuration holder
      */
-    public Translatable(AppConfig config) {
+    public Translatable(CrossoutConfiguration config) {
         this.config = config;
-        this.repository = config.getTranslationRepository();
+        this.repository = config.getRepositoryAccessor().getTranslationRepository();
     }
 
     /**

@@ -15,10 +15,10 @@ import java.util.List;
  */
 public final class CommandEvent {
 
-    private GuildMessageReceivedEvent event;
-    private JDABot bot;
-    private String label;
-    private List<String> args;
+    private final GuildMessageReceivedEvent event;
+    private final JDABot bot;
+    private final String label;
+    private final List<String> args;
 
     public CommandEvent(JDABot bot, GuildMessageReceivedEvent event, String label) {
         this.bot = bot;

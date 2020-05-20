@@ -1,6 +1,6 @@
 package fr.alexpado.bots.cmb.enums;
 
-import fr.alexpado.bots.cmb.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
 
 public enum WatcherType {
 
@@ -11,8 +11,8 @@ public enum WatcherType {
     NORMAL(5, Translation.WATCHERS_NORMAL),
     UNKNOWN(0, "");
 
-    private int id;
-    private String translation;
+    private final int id;
+    private final String translation;
 
     WatcherType(int id, String translation) {
         this.id = id;

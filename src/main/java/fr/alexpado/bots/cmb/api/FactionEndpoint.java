@@ -2,7 +2,7 @@ package fr.alexpado.bots.cmb.api;
 
 import fr.alexpado.bots.cmb.interfaces.APIEndpoint;
 import fr.alexpado.bots.cmb.libs.HttpRequest;
-import fr.alexpado.bots.cmb.models.game.Faction;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Faction;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -56,4 +56,5 @@ public class FactionEndpoint extends APIEndpoint<Faction, Integer> {
         }
         return false;
     }
+
 }

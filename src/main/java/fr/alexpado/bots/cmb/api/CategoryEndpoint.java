@@ -2,7 +2,7 @@ package fr.alexpado.bots.cmb.api;
 
 import fr.alexpado.bots.cmb.interfaces.APIEndpoint;
 import fr.alexpado.bots.cmb.libs.HttpRequest;
-import fr.alexpado.bots.cmb.models.game.Category;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Category;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -58,4 +58,5 @@ public class CategoryEndpoint extends APIEndpoint<Category, Integer> {
         }
         return false;
     }
+
 }

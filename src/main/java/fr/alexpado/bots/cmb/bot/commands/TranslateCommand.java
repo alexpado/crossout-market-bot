@@ -31,4 +31,5 @@ public class TranslateCommand extends TranslatableBotCommand {
     public List<String> getRequiredTranslation() {
         return new ArrayList<>();
     }
+
 }

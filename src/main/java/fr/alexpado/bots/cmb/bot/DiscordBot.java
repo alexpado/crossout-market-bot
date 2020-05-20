@@ -1,11 +1,7 @@
 package fr.alexpado.bots.cmb.bot;
 
-import fr.alexpado.bots.cmb.AppConfig;
+import fr.alexpado.bots.cmb.CrossoutConfiguration;
 import fr.alexpado.bots.cmb.libs.jda.JDABot;
-import fr.alexpado.bots.cmb.repositories.DiscordGuildRepository;
-import fr.alexpado.bots.cmb.repositories.DiscordUserRepository;
-import fr.alexpado.bots.cmb.repositories.TranslationRepository;
-import fr.alexpado.bots.cmb.repositories.WatcherRepository;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -15,24 +11,24 @@ import javax.annotation.Nonnull;
 public class DiscordBot extends JDABot {
 
     public final static String INVITE = "https://discordapp.com/api/oauth2/authorize?client_id=500032551977746453&permissions=59456&scope=bot";
-    private static DiscordBot instance;
     public static JDA jda;
-    private AppConfig config;
+    private static DiscordBot instance;
+    private final CrossoutConfiguration config;
 
-    public DiscordBot(AppConfig config) {
+    public DiscordBot(CrossoutConfiguration config) {
         super(AccountType.BOT, config);
         this.config = config;
         this.registerModules();
         DiscordBot.instance = this;
     }
 
+    public static DiscordBot getInstance() {
+        return instance;
+    }
+
     @Override
     public void onGenericEvent(@Nonnull GenericEvent event) {
         DiscordBot.jda = event.getJDA();
-    }
-
-    public static DiscordBot getInstance() {
-        return instance;
     }
 
     public void registerModules() {
@@ -44,25 +40,8 @@ public class DiscordBot extends JDABot {
         return this.config.getDiscordToken();
     }
 
-    public AppConfig getConfig() {
+    public CrossoutConfiguration getConfig() {
         return config;
-    }
-
-
-    public TranslationRepository getTranslationRepository() {
-        return this.config.translationRepository;
-    }
-
-    public WatcherRepository getWatcherRepository() {
-        return this.config.watcherRepository;
-    }
-
-    public DiscordUserRepository getDiscordUserRepository() {
-        return this.config.discordUserRepository;
-    }
-
-    public DiscordGuildRepository getDiscordGuildRepository() {
-        return this.config.discordGuildRepository;
     }
 
 }

@@ -9,15 +9,14 @@ import java.util.regex.Pattern;
 
 public class CommandArgumentsParser {
 
-    private Pattern pattern = Pattern.compile("--(\\S*) (\"([^\"]*)\"|[^-]\\S*)?");
-
-    private HashMap<String, String> arguments = new HashMap<>();
+    private final HashMap<String, String> arguments = new HashMap<>();
 
     public CommandArgumentsParser(CommandEvent event) {
         this(String.join(" ", event.getArgs()));
     }
 
     public CommandArgumentsParser(String fullCommand) {
+        Pattern pattern = Pattern.compile("--(\\S*) (\"([^\"]*)\"|[^-]\\S*)?");
         Matcher matcher = pattern.matcher(fullCommand);
         System.out.println(matcher.groupCount());
 

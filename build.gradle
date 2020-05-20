@@ -39,6 +39,19 @@ dependencies {
     // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.5.3'
     compile group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+}
+
+task copyConfigurationMetadata(type: Copy) {
+    from(compileJava) {
+        include 'META-INF/spring-configuration-metadata.json'
+    }
+    into "out/production/classes"
+}
+compileJava {
+    dependsOn processResources
+    finalizedBy copyConfigurationMetadata
 }
 
 test {

@@ -7,15 +7,15 @@ import java.util.List;
 
 public class Graph {
 
-    private int height = 100;
-    private int width = 400;
+    private final int height = 100;
+    private final int width = 400;
 
-    private int margin = 20;
+    private final int margin = 20;
 
     private int max = Integer.MIN_VALUE;
     private int min = Integer.MAX_VALUE;
 
-    private List<GraphSet> sets = new ArrayList<>();
+    private final List<GraphSet> sets = new ArrayList<>();
 
     public Graph(GraphSet... valuesSets) {
         for (GraphSet set : valuesSets) {

@@ -4,13 +4,13 @@ import fr.alexpado.bots.cmb.api.ItemEndpoint;
 import fr.alexpado.bots.cmb.interfaces.command.TranslatableBotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.models.Translation;
-import fr.alexpado.bots.cmb.models.Watcher;
-import fr.alexpado.bots.cmb.models.discord.DiscordChannel;
-import fr.alexpado.bots.cmb.models.discord.DiscordGuild;
-import fr.alexpado.bots.cmb.models.discord.DiscordUser;
-import fr.alexpado.bots.cmb.models.game.Item;
-import fr.alexpado.bots.cmb.repositories.TranslationRepository;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
+import fr.alexpado.bots.cmb.modules.crossout.models.settings.ChannelSettings;
+import fr.alexpado.bots.cmb.modules.crossout.models.settings.GuildSettings;
+import fr.alexpado.bots.cmb.modules.crossout.models.settings.UserSettings;
+import fr.alexpado.bots.cmb.modules.crossout.repositories.TranslationRepository;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
@@ -113,7 +113,7 @@ public class LanguageCommand extends TranslatableBotCommand {
     }
 
     private void loadSupportedLanguages() {
-        TranslationRepository repository = this.getConfig().getTranslationRepository();
+        TranslationRepository repository = this.getConfig().getRepositoryAccessor().getTranslationRepository();
         this.supportedLanguages = repository.supportedLanguages();
     }
 
@@ -122,29 +122,29 @@ public class LanguageCommand extends TranslatableBotCommand {
     }
 
     private void setServerLanguage(String lang) {
-        DiscordGuild guild = this.getDiscordGuild();
-        guild.setLanguage(lang);
-        this.getConfig().getDiscordGuildRepository().save(guild);
+        GuildSettings settings = this.getGuildSettings();
+        settings.setLanguage(lang);
+        this.getGuildSettingsRepository().save(settings);
     }
 
     private void setChannelLanguage(String lang) {
-        DiscordChannel channel = this.getDiscordChannel();
-        channel.setLanguage(lang.equals("remove") ? null : lang);
-        this.getConfig().getDiscordChannelRepository().save(channel);
+        ChannelSettings settings = this.getChannelSettings();
+        settings.setLanguage(lang.equals("remove") ? null : lang);
+        this.getChannelSettingsRepository().save(settings);
     }
 
     private void setUserLanguage(String lang) {
-        DiscordUser user = this.getDiscordUser();
-        user.setLanguage(lang);
-        this.getConfig().getDiscordUserRepository().save(user);
+        UserSettings settings = this.getUserSettings();
+        settings.setLanguage(lang);
+        this.getUserSettingsRepository().save(settings);
 
-        List<Watcher> watchers = this.getConfig().getWatcherRepository().getFromUser(user);
+        List<Watcher> watchers = this.getConfig().getRepositoryAccessor().getWatcherRepository().findAllByUser(this.getDiscordUser());
         List<Item> items = new ItemEndpoint(this.getConfig()).getAll(lang);
 
         HashMap<Integer, Item> itemsMap = new HashMap<>();
         items.forEach(item -> itemsMap.put(item.getId(), item));
         watchers.forEach(watcher -> watcher.setItemName(itemsMap.get(watcher.getItemId()).getAvailableName()));
-        this.getConfig().getWatcherRepository().saveAll(watchers);
+        this.getConfig().getRepositoryAccessor().getWatcherRepository().saveAll(watchers);
     }
 
     @Override

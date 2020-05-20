@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 public class AdvancedHelpSection {
 
-    private String sectionName;
+    private final String sectionName;
 
-    private HashMap<String, String> fields = new HashMap<>();
+    private final HashMap<String, String> fields = new HashMap<>();
 
     public AdvancedHelpSection(String sectionName) {
         this.sectionName = sectionName;

@@ -5,9 +5,9 @@ import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.interfaces.command.WatcherCommandGroup;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.models.Translation;
-import fr.alexpado.bots.cmb.models.Watcher;
-import fr.alexpado.bots.cmb.models.game.Item;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
+import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -47,7 +47,7 @@ public class WatchCommand extends WatcherCommandGroup {
         }
 
         ItemEndpoint itemEndpoint = new ItemEndpoint(this.getConfig());
-        List<Item> items = itemEndpoint.searchByName(optionalItemName.get(), this.getDiscordUser().getLanguage());
+        List<Item> items = itemEndpoint.searchByName(optionalItemName.get(), this.getUserSettings().getLanguage());
 
         Item item = null;
 
@@ -129,4 +129,5 @@ public class WatchCommand extends WatcherCommandGroup {
         builder.setDescription(helpBuilder.toString());
         return builder;
     }
+
 }

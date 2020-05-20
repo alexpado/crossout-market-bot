@@ -1,0 +1,69 @@
+{
+  "properties": [
+    {
+      "name": "server.domain",
+      "type": "java.lang.String",
+      "description": "FQDN of the machine hosting the application."
+    },
+    {
+      "name": "http.identity.group",
+      "type": "java.lang.String",
+      "description": "UserAgent group identifier for this application."
+    },
+    {
+      "name": "http.identity.name",
+      "type": "java.lang.String",
+      "description": "UserAgent application identifier."
+    },
+    {
+      "name": "api.host",
+      "type": "java.lang.String",
+      "description": "Root URL of the CrossoutDB API."
+    },
+    {
+      "name": "discord.token",
+      "type": "java.lang.String",
+      "description": "Discord token to use for the discord bot."
+    },
+    {
+      "name": "bot.prefix",
+      "type": "java.lang.String",
+      "description": "Prefix to use for the discord bot."
+    },
+    {
+      "name": "bot.item.graph.duration",
+      "type": "java.lang.String",
+      "description": "Default timespan shown in the price charts."
+    },
+    {
+      "name": "bot.item.graph.source",
+      "type": "java.lang.String",
+      "description": "URL pointing to the chart generator."
+    },
+    {
+      "name": "watchers.timeout",
+      "type": "java.lang.String",
+      "description": "Delay (in ms) between watchers execution."
+    },
+    {
+      "name": "i18n.default",
+      "type": "java.lang.String",
+      "description": "Default language to use for the application."
+    },
+    {
+      "name": "discord.clientId",
+      "type": "java.lang.String",
+      "description": "Discord Application's client ID."
+    },
+    {
+      "name": "discord.clientSecret",
+      "type": "java.lang.String",
+      "description": "Discord Application's client secret."
+    },
+    {
+      "name": "discord.redirectUri",
+      "type": "java.lang.String",
+      "description": "One of the Discord Application's redirect URIs."
+    }
+  ]
+}

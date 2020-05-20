@@ -5,10 +5,10 @@ import java.util.List;
 
 public class GraphSet {
 
-    private List<Integer> values;
-    private String setName;
+    private final List<Integer> values;
+    private final String setName;
 
-    private List<Integer> clampedValue = new ArrayList<>();
+    private final List<Integer> clampedValue = new ArrayList<>();
 
     private int min = Integer.MAX_VALUE;
     private int max = Integer.MIN_VALUE;

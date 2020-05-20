@@ -3,10 +3,9 @@ package fr.alexpado.bots.cmb.interfaces.command;
 import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.models.Translation;
-import fr.alexpado.bots.cmb.models.Watcher;
-import fr.alexpado.bots.cmb.models.discord.DiscordUser;
-import fr.alexpado.bots.cmb.repositories.WatcherRepository;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
+import fr.alexpado.bots.cmb.modules.crossout.repositories.WatcherRepository;
 import fr.alexpado.bots.cmb.tools.TimeConverter;
 import net.dv8tion.jda.api.entities.Message;
 
@@ -91,8 +90,21 @@ public abstract class WatcherCommandGroup extends TranslatableBotCommand {
         }
     }
 
-    public final Optional<Watcher> getWatcher(Message message, DiscordUser user, int id) {
-        WatcherRepository watcherRepository = this.getConfig().getWatcherRepository();
+    public final Optional<Watcher> getWatcher(Message message, CommandEvent event) {
+        int watcherId;
+
+        try {
+            watcherId = Integer.parseInt(event.getArgs().get(0));
+        } catch (NumberFormatException e) {
+            this.sendError(message, this.getTranslation(Translation.WATCHERS_WRONG_ID));
+            return Optional.empty();
+        }
+
+        return this.getWatcher(message, watcherId);
+    }
+
+    public final Optional<Watcher> getWatcher(Message message, int id) {
+        WatcherRepository watcherRepository = this.getConfig().getRepositoryAccessor().getWatcherRepository();
         Optional<Watcher> optionalWatcher = watcherRepository.findById(id);
 
         if (!optionalWatcher.isPresent()) {
@@ -102,7 +114,7 @@ public abstract class WatcherCommandGroup extends TranslatableBotCommand {
 
         Watcher watcher = optionalWatcher.get();
 
-        if (watcher.getUser().getId() != user.getId()) {
+        if (!watcher.getUser().getId().equals(this.getDiscordUser().getId())) {
             this.sendError(message, this.getTranslation(Translation.WATCHERS_FORBIDDEN));
             return Optional.empty();
         }
@@ -111,7 +123,7 @@ public abstract class WatcherCommandGroup extends TranslatableBotCommand {
     }
 
     public final WatcherRepository getRepository() {
-        return this.getConfig().getWatcherRepository();
+        return this.getConfig().getRepositoryAccessor().getWatcherRepository();
     }
 
     @Override
@@ -126,4 +138,5 @@ public abstract class WatcherCommandGroup extends TranslatableBotCommand {
                 WatcherType.NORMAL.getTranslation()
         );
     }
+
 }

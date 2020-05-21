@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.User;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -15,7 +16,7 @@ import java.io.Serializable;
 public class DiscordUser implements Serializable {
 
     @Id
-    private Long id;
+    private long id;
 
     private String avatar;
 
@@ -47,6 +48,19 @@ public class DiscordUser implements Serializable {
         this.name = user.getName();
 
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DiscordUser)) return false;
+        DiscordUser that = (DiscordUser) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

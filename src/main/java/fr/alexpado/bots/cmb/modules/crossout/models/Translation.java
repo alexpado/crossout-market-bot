@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -85,5 +86,19 @@ public class Translation {
 
     @NotNull
     private String text;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Translation)) return false;
+        Translation that = (Translation) o;
+        return translationKey.equals(that.translationKey) &&
+                language.equals(that.language);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(translationKey, language);
+    }
 
 }

@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -16,7 +17,7 @@ import javax.validation.constraints.NotNull;
 public class GuildSettings {
 
     @Id
-    private Long id;
+    private long id;
 
     @OneToOne
     @JoinColumn(name = "id")
@@ -35,6 +36,19 @@ public class GuildSettings {
         settings.setId(guild.getId());
         settings.setGuild(guild);
         return settings;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GuildSettings)) return false;
+        GuildSettings settings = (GuildSettings) o;
+        return id == settings.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

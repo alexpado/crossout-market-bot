@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -16,7 +17,7 @@ public class UserSettings {
 
     @Id
     @Column(length = 20)
-    private Long id;
+    private long id;
 
     @OneToOne
     @JoinColumn(name = "id")
@@ -39,6 +40,19 @@ public class UserSettings {
 
     public boolean isWatcherPaused() {
         return watcherPaused;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserSettings)) return false;
+        UserSettings settings = (UserSettings) o;
+        return id == settings.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -14,7 +15,7 @@ import javax.persistence.OneToOne;
 public class DiscordGuild {
 
     @Id
-    private Long id;
+    private long id;
 
     @OneToOne
     private DiscordUser owner;
@@ -34,6 +35,19 @@ public class DiscordGuild {
         this.guildIcon = guild.getIconId();
 
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DiscordGuild)) return false;
+        DiscordGuild that = (DiscordGuild) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

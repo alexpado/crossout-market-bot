@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -15,7 +16,7 @@ import javax.validation.constraints.NotNull;
 public class ChannelSettings {
 
     @Id
-    private Long id;
+    private long id;
 
     @OneToOne
     @JoinColumn(name = "id")
@@ -33,6 +34,19 @@ public class ChannelSettings {
         settings.setId(channel.getId());
         settings.setChannel(channel);
         return settings;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChannelSettings)) return false;
+        ChannelSettings settings = (ChannelSettings) o;
+        return id == settings.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

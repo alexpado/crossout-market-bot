@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.awt.*;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -42,6 +43,19 @@ public class FakeItem {
         builder.setColor(Color.PINK);
 
         return builder;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FakeItem)) return false;
+        FakeItem fakeItem = (FakeItem) o;
+        return id == fakeItem.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

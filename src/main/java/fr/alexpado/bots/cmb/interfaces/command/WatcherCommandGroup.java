@@ -114,7 +114,7 @@ public abstract class WatcherCommandGroup extends TranslatableBotCommand {
 
         Watcher watcher = optionalWatcher.get();
 
-        if (!watcher.getUser().getId().equals(this.getDiscordUser().getId())) {
+        if (!watcher.getUser().equals(this.getDiscordUser())) {
             this.sendError(message, this.getTranslation(Translation.WATCHERS_FORBIDDEN));
             return Optional.empty();
         }

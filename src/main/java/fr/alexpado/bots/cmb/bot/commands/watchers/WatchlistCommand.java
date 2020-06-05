@@ -35,7 +35,7 @@ public class WatchlistCommand extends WatcherCommandGroup {
 
     @Override
     public void execute(CommandEvent event, Message message) throws MissingTranslationException {
-        List<Watcher> watchers = this.getRepository().findAllByUser(this.getDiscordUser());
+        List<Watcher> watchers = this.getRepository().findAllByUserId(this.getDiscordUser().getId());
 
         if (watchers.size() == 0) {
             this.sendError(message, this.getTranslation(Translation.WATCHERS_NONE));

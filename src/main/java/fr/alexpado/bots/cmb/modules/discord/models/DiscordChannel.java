@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.ToString;
 import net.dv8tion.jda.api.entities.GuildChannel;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -15,9 +16,9 @@ import java.util.Objects;
 public class DiscordChannel {
 
     @Id
-    private long id;
+    private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private DiscordGuild guild;
 
     private String name;

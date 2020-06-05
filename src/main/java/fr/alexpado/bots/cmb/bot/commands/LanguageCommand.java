@@ -138,7 +138,7 @@ public class LanguageCommand extends TranslatableBotCommand {
         settings.setLanguage(lang);
         this.getUserSettingsRepository().save(settings);
 
-        List<Watcher> watchers = this.getConfig().getRepositoryAccessor().getWatcherRepository().findAllByUser(this.getDiscordUser());
+        List<Watcher> watchers = this.getConfig().getRepositoryAccessor().getWatcherRepository().findAllByUserId(this.getDiscordUser().getId());
         List<Item> items = new ItemEndpoint(this.getConfig()).getAll(lang);
 
         HashMap<Integer, Item> itemsMap = new HashMap<>();

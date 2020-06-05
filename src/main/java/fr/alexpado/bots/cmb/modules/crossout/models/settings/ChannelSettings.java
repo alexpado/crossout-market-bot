@@ -16,9 +16,9 @@ import java.util.Objects;
 public class ChannelSettings {
 
     @Id
-    private long id;
+    private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
     @MapsId
     private DiscordChannel channel;
@@ -41,7 +41,7 @@ public class ChannelSettings {
         if (this == o) return true;
         if (!(o instanceof ChannelSettings)) return false;
         ChannelSettings settings = (ChannelSettings) o;
-        return id == settings.id;
+        return id.equals(settings.id);
     }
 
     @Override

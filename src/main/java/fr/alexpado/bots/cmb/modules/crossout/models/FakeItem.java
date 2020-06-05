@@ -21,7 +21,7 @@ public class FakeItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @NotNull
     private String name;
@@ -50,7 +50,7 @@ public class FakeItem {
         if (this == o) return true;
         if (!(o instanceof FakeItem)) return false;
         FakeItem fakeItem = (FakeItem) o;
-        return id == fakeItem.id;
+        return id.equals(fakeItem.id);
     }
 
     @Override

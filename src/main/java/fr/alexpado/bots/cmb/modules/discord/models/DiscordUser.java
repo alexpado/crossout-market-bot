@@ -16,7 +16,7 @@ import java.util.Objects;
 public class DiscordUser implements Serializable {
 
     @Id
-    private long id;
+    private Long id;
 
     private String avatar;
 

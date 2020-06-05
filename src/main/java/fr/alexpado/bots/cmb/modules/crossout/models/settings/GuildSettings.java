@@ -17,9 +17,9 @@ import java.util.Objects;
 public class GuildSettings {
 
     @Id
-    private long id;
+    private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
     @MapsId
     private DiscordGuild guild;
@@ -43,7 +43,7 @@ public class GuildSettings {
         if (this == o) return true;
         if (!(o instanceof GuildSettings)) return false;
         GuildSettings settings = (GuildSettings) o;
-        return id == settings.id;
+        return id.equals(settings.id);
     }
 
     @Override

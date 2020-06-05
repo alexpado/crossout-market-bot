@@ -17,9 +17,9 @@ public class UserSettings {
 
     @Id
     @Column(length = 20)
-    private long id;
+    private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
     @MapsId
     private DiscordUser user;
@@ -47,7 +47,7 @@ public class UserSettings {
         if (this == o) return true;
         if (!(o instanceof UserSettings)) return false;
         UserSettings settings = (UserSettings) o;
-        return id == settings.id;
+        return id.equals(settings.id);
     }
 
     @Override

@@ -19,7 +19,7 @@ public class Watcher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @OneToOne
     @NotNull
@@ -74,7 +74,7 @@ public class Watcher {
         if (this == o) return true;
         if (!(o instanceof Watcher)) return false;
         Watcher watcher = (Watcher) o;
-        return id == watcher.id;
+        return id.equals(watcher.id);
     }
 
     @Override

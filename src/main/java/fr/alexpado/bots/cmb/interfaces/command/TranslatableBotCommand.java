@@ -74,9 +74,9 @@ public abstract class TranslatableBotCommand extends JDACommandExecutor implemen
 
     private void loadObjects(CommandEvent event) {
         // Retrieve what we need
-        this.discordUser = DiscordUser.getInstance(event.getAuthor());
-        this.discordGuild = DiscordGuild.getInstance(event.getGuild());
-        this.discordChannel = DiscordChannel.getInstance(event.getChannel());
+        this.discordUser = discordUserRepository.findById(event.getAuthor().getIdLong()).orElse(DiscordUser.getInstance(event.getAuthor()));
+        this.discordGuild = discordGuildRepository.findById(event.getGuild().getIdLong()).orElse(DiscordGuild.getInstance(event.getGuild()));
+        this.discordChannel = discordChannelRepository.findById(event.getChannel().getIdLong()).orElse(DiscordChannel.getInstance(event.getChannel()));
 
         // Retrieve options, or create it.
         this.userSettings = userSettingsRepository.findById(this.discordUser.getId()).orElse(UserSettings.getInstance(this.discordUser));

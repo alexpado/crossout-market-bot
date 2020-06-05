@@ -43,7 +43,7 @@ public class DiscordGuild {
         if (this == o) return true;
         if (!(o instanceof DiscordGuild)) return false;
         DiscordGuild that = (DiscordGuild) o;
-        return id == that.id;
+        return id.equals(that.id);
     }
 
     @Override

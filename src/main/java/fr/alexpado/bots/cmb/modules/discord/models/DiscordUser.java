@@ -55,7 +55,7 @@ public class DiscordUser implements Serializable {
         if (this == o) return true;
         if (!(o instanceof DiscordUser)) return false;
         DiscordUser that = (DiscordUser) o;
-        return id == that.id;
+        return id.equals(that.id);
     }
 
     @Override

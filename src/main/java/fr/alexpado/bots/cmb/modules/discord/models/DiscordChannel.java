@@ -40,7 +40,7 @@ public class DiscordChannel {
         if (this == o) return true;
         if (!(o instanceof DiscordChannel)) return false;
         DiscordChannel that = (DiscordChannel) o;
-        return id == that.id;
+        return id.equals(that.id);
     }
 
     @Override

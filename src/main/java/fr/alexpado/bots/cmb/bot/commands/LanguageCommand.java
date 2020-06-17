@@ -78,7 +78,7 @@ public class LanguageCommand extends TranslatableBotCommand {
         switch (event.getArgs().get(0)) {
             case "guild":
             case "server":
-                if (!isOwner || !isAdmin) {
+                if (!isOwner && !isAdmin) {
                     this.sendError(message, this.getTranslation(Translation.GENERAL_FORBIDDEN));
                     return;
                 }
@@ -91,7 +91,7 @@ public class LanguageCommand extends TranslatableBotCommand {
                 this.sendInfo(message, this.getTranslation(Translation.LANGUAGES_GUILD_UPDATED));
                 break;
             case "channel":
-                if (!isOwner || !isAdmin || !canManageChannel || !canManageThisChannel) {
+                if (!isOwner && !isAdmin && !canManageChannel && !canManageThisChannel) {
                     this.sendError(message, this.getTranslation(Translation.GENERAL_FORBIDDEN));
                     return;
                 }

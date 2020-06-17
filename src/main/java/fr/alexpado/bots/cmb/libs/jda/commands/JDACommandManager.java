@@ -101,7 +101,7 @@ public final class JDACommandManager extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-        if (event.getMessage().getContentRaw().startsWith(this.prefix)) {
+        if (event.getMessage().getContentRaw().toLowerCase().startsWith(this.prefix.toLowerCase())) {
             this.runCommand(event);
         }
     }

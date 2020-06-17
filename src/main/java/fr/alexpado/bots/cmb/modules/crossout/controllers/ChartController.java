@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 @RestController()
@@ -27,21 +28,55 @@ public class ChartController {
         this.crossoutConfiguration = config;
     }
 
+    private File getGraph(String hashIdentifier) throws Exception {
+        File cacheFolder = new File("cache");
+
+        if (!cacheFolder.exists()) {
+            if (!cacheFolder.mkdirs()) {
+                throw new Exception("Unable to create the cache directory.");
+            }
+        }
+
+        File graphCacheFolder = new File(cacheFolder, "graph");
+
+        if (!graphCacheFolder.exists()) {
+            if (!graphCacheFolder.mkdirs()) {
+                throw new Exception("Unable to create the graph cache directory.");
+            }
+        }
+
+        return new File(graphCacheFolder, hashIdentifier);
+    }
+
     @GetMapping(value = "/chart/{end:[0-9]*}/{itemID:[0-9]*}.png", produces = {MediaType.IMAGE_PNG_VALUE})
     public @ResponseBody
     byte[] getChartPicture(@PathVariable long end, @PathVariable int itemID) throws Exception {
-
         try {
-            long interval = crossoutConfiguration.getGraphInterval();
+            String imgIdentifier = end + "$" + itemID;
+            File graphFile = this.getGraph(imgIdentifier);
+            BufferedImage image;
 
-            MarketEndpoint market = new MarketEndpoint(crossoutConfiguration.getApiHost());
-            List<GraphSet> graphs = market.getMarketData(end - interval, end, itemID);
+            if (graphFile.exists()) {
+                image = ImageIO.read(graphFile);
+            } else {
+                long interval = crossoutConfiguration.getGraphInterval();
 
-            MarketGraph graph = new MarketGraph("Last 5 hours", graphs.get(0), graphs.get(1));
-            BufferedImage img = graph.draw(Color.GREEN, Color.RED);
+                MarketEndpoint market = new MarketEndpoint(crossoutConfiguration.getApiHost());
+                List<GraphSet> graphs = market.getMarketData(end - interval, end, itemID);
+
+                MarketGraph graph = new MarketGraph("Last 5 hours", graphs.get(0), graphs.get(1));
+                image = graph.draw(Color.GREEN, Color.RED);
+            }
 
             ByteArrayOutputStream output = new ByteArrayOutputStream();
-            ImageIO.write(img, "png", output);
+            FileOutputStream fileOutputStream = new FileOutputStream(graphFile);
+
+            ImageIO.write(image, "png", output);
+
+            ImageIO.write(image, "png", fileOutputStream);
+            fileOutputStream.close();
+
+            output.close();
             return output.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();

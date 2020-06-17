@@ -80,7 +80,7 @@ public final class JDACommandManager extends ListenerAdapter {
      * @return The {@link CommandExecutionResponse} providing the execution status of the current command executor.
      */
     private CommandExecutionResponse runCommand(GuildMessageReceivedEvent event) {
-        String label = event.getMessage().getContentRaw().split(" ")[0].replace(this.prefix, "");
+        String label = event.getMessage().getContentRaw().toLowerCase().split(" ")[0].replace(this.prefix.toLowerCase(), "");
         Optional<JDACommandExecutor> optionalCommand = this.getCommand(label);
 
         if (optionalCommand.isPresent()) {

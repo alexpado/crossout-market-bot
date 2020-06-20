@@ -6,7 +6,6 @@ plugins {
 
 group = 'fr.alexpado.bots'
 version = '3.0.0-SNAPSHOT'
-sourceCompatibility = '1.8'
 
 configurations {
     developmentOnly
@@ -38,6 +37,9 @@ dependencies {
     compile 'net.dv8tion:JDA:4.1.1_108'
     // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.5.3'
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.20'
+
     compile group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
 
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
@@ -56,4 +58,16 @@ compileJava {
 
 test {
     useJUnitPlatform()
+}
+
+tasks.withType(org.gradle.jvm.tasks.Jar) {
+
+    if (project.hasProperty('destinationPath')) {
+        destinationDirectory = file(project.property('destinationPath'))
+    }
+
+    if (project.hasProperty('destinationName')) {
+        archiveFileName = project.property('destinationName') + '.jar'
+    }
+
 }

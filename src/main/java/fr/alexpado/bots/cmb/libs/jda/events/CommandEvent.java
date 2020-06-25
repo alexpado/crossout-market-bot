@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public final class CommandEvent {
         this.bot = bot;
         this.event = event;
         List<String> tmpArgs = Arrays.asList(event.getMessage().getContentRaw().split(" "));
-        this.args = tmpArgs.subList(1, tmpArgs.size());
+        this.args  = new ArrayList<>(tmpArgs.subList(1, tmpArgs.size()));
         this.label = label;
     }
 

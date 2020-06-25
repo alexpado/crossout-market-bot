@@ -9,7 +9,7 @@ import fr.alexpado.bots.cmb.modules.crossout.models.settings.UserSettings;
 import fr.alexpado.bots.cmb.modules.crossout.repositories.WatcherRepository;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +20,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Component
 public class WatcherExecutor {
@@ -47,6 +45,7 @@ public class WatcherExecutor {
 
         List<Watcher> watchers = this.watcherRepository.getExecutables(System.currentTimeMillis());
         List<Watcher> toRemove = new ArrayList<>();
+        List<Watcher> toSave   = new ArrayList<>();
 
         for (Watcher watcher : watchers) {
             LOGGER.debug("Executing watcher {} ...", watcher.getId());
@@ -89,16 +88,16 @@ public class WatcherExecutor {
 
                 switch (type) {
                     case SELL_OVER:
-                        send = item.getBuyPrice() > watcher.getPrice();
+                        send = (item.getBuyPrice() / 100.0) > watcher.getPrice();
                         break;
                     case SELL_UNDER:
-                        send = item.getBuyPrice() < watcher.getPrice();
+                        send = (item.getBuyPrice() / 100.0) < watcher.getPrice();
                         break;
                     case BUY_OVER:
-                        send = item.getSellPrice() > watcher.getPrice();
+                        send = (item.getSellPrice() / 100.0) > watcher.getPrice();
                         break;
                     case BUY_UNDER:
-                        send = item.getSellPrice() < watcher.getPrice();
+                        send = (item.getSellPrice() / 100.0) < watcher.getPrice();
                         break;
                     case NORMAL:
                         send = true;
@@ -107,22 +106,21 @@ public class WatcherExecutor {
 
 
                 if (send) {
-                    this.sendWatcher(user, builder, (message) -> LOGGER.debug("Watcher {} executed !", watcher.getId()), e -> {
-                        LOGGER.error("An error occurred while sending the message", e);
+
+                    try {
+                        this.sendWatcher(user, builder);
+                        toSave.add(watcher);
+                    } catch (Exception e) {
+                        toRemove.add(watcher);
                         LOGGER.warn("Unable to execute the watcher {} for user {}.", watcher.getId(), watcher.getUser()
                                                                                                              .getId());
-                        toRemove.add(watcher);
-                    });
+                    }
 
                 }
             } catch (MissingTranslationException e) {
                 LOGGER.error("One or more translations are missing !", e);
             }
         }
-
-        List<Watcher> toSave = watchers.stream()
-                                       .filter(watcher -> !toRemove.contains(watcher))
-                                       .collect(Collectors.toList());
 
         LOGGER.info("Watcher Execution Report: {} executed, {} removed.", toSave.size(), toRemove.size());
 
@@ -131,10 +129,10 @@ public class WatcherExecutor {
 
     }
 
-    private void sendWatcher(User user, EmbedBuilder builder, Consumer<Message> onSuccess, Consumer<Throwable> onFailure) {
+    private void sendWatcher(User user, EmbedBuilder builder) {
 
-        user.openPrivateChannel()
-            .queue(channel -> channel.sendMessage(builder.build()).queue(null, onFailure), onFailure);
+        PrivateChannel channel = user.openPrivateChannel().complete();
+        channel.sendMessage(builder.build()).complete();
     }
 
 }

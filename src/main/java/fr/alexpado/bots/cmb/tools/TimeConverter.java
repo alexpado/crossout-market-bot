@@ -19,18 +19,18 @@ public class TimeConverter {
     }
 
     public static long fromString(String str) {
-        String regex = "(([0-5]?[0-9])h)?(([0-5]?[0-9])m?)?";
+        String  regex   = "(?<hours>\\d*h)?(?<minutes>\\d+m)";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(str);
-        long time = 0L;
+        long    time    = 0L;
         if (matcher.find()) {
-            String hour = matcher.group(2);
-            String minute = matcher.group(4);
+            String hour   = matcher.group("hours");
+            String minute = matcher.group("minutes");
             if (hour != null) {
-                time += Long.parseLong(hour) * 3600000;
+                time += Long.parseLong(hour.replace("h", "")) * 3600000;
             }
             if (minute != null) {
-                time += Long.parseLong(minute) * 60000;
+                time += Long.parseLong(minute.replace("m", "")) * 60000;
             }
         }
         return time;

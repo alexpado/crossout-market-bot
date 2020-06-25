@@ -9,8 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class ItemEndpoint extends APIEndpoint<Item, Integer> {
@@ -88,12 +88,8 @@ public class ItemEndpoint extends APIEndpoint<Item, Integer> {
         List<String> filteredParams = new ArrayList<>();
 
         params.forEach((k, v) -> {
-            if (allowedParams.contains(k.toLowerCase())) {
-                try {
-                    filteredParams.add(k.toLowerCase() + "=" + URLEncoder.encode(v.toLowerCase(), "UTF-8"));
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+            if (allowedParams.contains(k)) {
+                filteredParams.add(k + "=" + URLEncoder.encode(v.toLowerCase(), StandardCharsets.UTF_8));
             }
         });
 

@@ -19,7 +19,7 @@ public class TimeConverter {
     }
 
     public static long fromString(String str) {
-        String  regex   = "(?<hours>\\d*h)?(?<minutes>\\d+m)";
+        String  regex   = "(?<hours>\\d*h)?(?<minutes>\\d+m)?";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(str);
         long    time    = 0L;

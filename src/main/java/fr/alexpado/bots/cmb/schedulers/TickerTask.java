@@ -22,7 +22,6 @@ public class TickerTask {
     private final CrossoutConfiguration configuration;
     private final HealthStatRepository  repository;
     private final WatcherRepository     watcherRepository;
-    private       HealthStat            lastHealth;
     private       int                   checkTimeout;
     private       int                   bannerIndex;
 
@@ -42,8 +41,6 @@ public class TickerTask {
         HealthStat                    stat     = endpoint.getOne(null).orElse(HealthStat.create(-1));
 
         this.repository.save(stat);
-
-        this.lastHealth = stat;
 
         // Cleanup
         LocalDateTime time    = LocalDateTime.now();

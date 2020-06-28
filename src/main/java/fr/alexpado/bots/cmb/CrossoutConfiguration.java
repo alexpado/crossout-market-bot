@@ -53,11 +53,16 @@ public class CrossoutConfiguration {
     @Value("${discord.scope:identify}")
     private String scope;
 
+    @Value("${chart.cache:true}")
+    private boolean cacheEnabled;
+
     public CrossoutConfiguration(RepositoryAccessor repositoryAccessor) {
+
         this.repositoryAccessor = repositoryAccessor;
     }
 
     public DiscordBot discordBot() {
+
         return new DiscordBot(this);
     }
 

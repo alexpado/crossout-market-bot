@@ -4,6 +4,8 @@ import fr.alexpado.bots.cmb.CrossoutConfiguration;
 import fr.alexpado.bots.cmb.api.MarketEndpoint;
 import fr.alexpado.bots.cmb.tools.graph.GraphSet;
 import fr.alexpado.bots.cmb.tools.graph.MarketGraph;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +24,17 @@ import java.util.List;
 @RestController()
 public class ChartController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChartController.class);
+
     private final CrossoutConfiguration crossoutConfiguration;
 
     public ChartController(@Qualifier("crossoutConfiguration") CrossoutConfiguration config) {
+
         this.crossoutConfiguration = config;
     }
 
     private File getGraph(String hashIdentifier) throws Exception {
+
         File cacheFolder = new File("cache");
 
         if (!cacheFolder.exists()) {
@@ -52,11 +58,15 @@ public class ChartController {
     public @ResponseBody
     byte[] getChartPicture(@PathVariable long end, @PathVariable int itemID) throws Exception {
         try {
-            String imgIdentifier = end + "$" + itemID;
-            File graphFile = this.getGraph(imgIdentifier);
+            String        imgIdentifier = end + "$" + itemID;
+            File          graphFile     = this.getGraph(imgIdentifier);
             BufferedImage image;
 
-            if (graphFile.exists()) {
+            if (!this.crossoutConfiguration.isCacheEnabled()) {
+                LOGGER.warn("The chart cache is disabled !");
+            }
+
+            if (this.crossoutConfiguration.isCacheEnabled() && graphFile.exists()) {
                 image = ImageIO.read(graphFile);
             } else {
                 long interval = crossoutConfiguration.getGraphInterval();

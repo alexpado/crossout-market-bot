@@ -4,10 +4,12 @@ import fr.alexpado.bots.cmb.api.ItemEndpoint;
 import fr.alexpado.bots.cmb.interfaces.command.ItemBotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
+import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.HashMap;
@@ -22,8 +24,14 @@ public class ItemCommand extends ItemBotCommand {
 
     @Override
     public void execute(CommandEvent event, Message message) throws MissingTranslationException {
-        ItemEndpoint endpoint = new ItemEndpoint(this.getConfig());
-        Map<String, String> params = new HashMap<>();
+
+        if (event.getJDA().getPresence().getStatus() == OnlineStatus.DO_NOT_DISTURB) {
+            this.sendError(message, this.getTranslation(Translation.XODB_OFFLINE));
+            return;
+        }
+
+        ItemEndpoint        endpoint = new ItemEndpoint(this.getConfig());
+        Map<String, String> params   = new HashMap<>();
 
         if (event.getArgs().contains("-r")) {
             params.put("removedItems", "true");

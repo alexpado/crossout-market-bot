@@ -128,15 +128,9 @@ public abstract class WatcherCommandGroup extends TranslatableBotCommand {
 
     @Override
     public List<String> getRequiredTranslation() {
-        return Arrays.asList(
-                Translation.WATCHERS_NOTFOUND,
-                Translation.WATCHERS_FORBIDDEN,
-                WatcherType.BUY_OVER.getTranslation(),
-                WatcherType.BUY_UNDER.getTranslation(),
-                WatcherType.SELL_OVER.getTranslation(),
-                WatcherType.SELL_UNDER.getTranslation(),
-                WatcherType.NORMAL.getTranslation()
-        );
+        return Arrays.asList(Translation.WATCHERS_NOTFOUND, Translation.WATCHERS_FORBIDDEN, WatcherType.BUY_OVER.getTranslation(), WatcherType.BUY_UNDER
+                .getTranslation(), WatcherType.SELL_OVER.getTranslation(), WatcherType.SELL_UNDER.getTranslation(), WatcherType.NORMAL
+                .getTranslation(), Translation.XODB_OFFLINE);
     }
 
 }

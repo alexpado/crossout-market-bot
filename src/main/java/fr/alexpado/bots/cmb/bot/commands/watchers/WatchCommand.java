@@ -11,6 +11,7 @@ import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.ArrayList;
@@ -21,24 +22,27 @@ import java.util.Optional;
 public class WatchCommand extends WatcherCommandGroup {
 
     public WatchCommand(JDAModule module) {
+
         super(module, "watch");
     }
 
     @Override
     public List<String> getRequiredTranslation() {
+
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(
-                Translation.WATCHERS_WRONG_FOR,
-                Translation.ITEMS_NOTFOUND,
-                Translation.ITEMS_MULTIPLE,
-                Translation.WATCHERS_NEW
-        ));
+        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_WRONG_FOR, Translation.ITEMS_NOTFOUND, Translation.ITEMS_MULTIPLE, Translation.WATCHERS_NEW));
         return requiredTranslations;
     }
 
 
     @Override
     public void execute(CommandEvent event, Message message) {
+
+        if (event.getJDA().getPresence().getStatus() == OnlineStatus.DO_NOT_DISTURB) {
+            this.sendError(message, this.getTranslation(Translation.XODB_OFFLINE));
+            return;
+        }
+
         Optional<String> optionalItemName = this.getItemName(event);
 
         if (!optionalItemName.isPresent()) {
@@ -75,8 +79,8 @@ public class WatchCommand extends WatcherCommandGroup {
         Watcher watcher = Watcher.createFor(this.getDiscordUser(), item);
 
         Optional<WatcherType> optionalWatcherType = this.getType(event);
-        Optional<Float> optionalPrice = this.getPrice(event);
-        Optional<Long> optionalInterval = this.getTime(event);
+        Optional<Float>       optionalPrice       = this.getPrice(event);
+        Optional<Long>        optionalInterval    = this.getTime(event);
 
         if (optionalWatcherType.isPresent()) {
             WatcherType watcherType = optionalWatcherType.get();
@@ -105,6 +109,7 @@ public class WatchCommand extends WatcherCommandGroup {
 
     @Override
     public EmbedBuilder getAdvancedHelp() {
+
         EmbedBuilder builder = super.getAdvancedHelp();
         builder.setTitle("Advanced help for : watch");
 

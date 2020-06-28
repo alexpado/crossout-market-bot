@@ -15,6 +15,7 @@ import java.net.URLConnection;
 public class HttpRequest {
 
     private final URLConnection connection;
+    private       long          lastRequestDuration;
 
     public HttpRequest(String url) throws IOException {
         URL urlInstance = new URL(url);
@@ -28,10 +29,16 @@ public class HttpRequest {
     }
 
     private String readOutput() throws IOException {
+
+        long start = System.currentTimeMillis();
+        this.connection.connect();
+        long end = System.currentTimeMillis();
+        this.lastRequestDuration = end - start;
         InputStreamReader isr = new InputStreamReader(this.connection.getInputStream());
-        BufferedReader reader = new BufferedReader(isr);
-        StringBuilder builder = new StringBuilder();
-        String line;
+
+        BufferedReader reader  = new BufferedReader(isr);
+        StringBuilder  builder = new StringBuilder();
+        String         line;
         while ((line = reader.readLine()) != null) {
             builder.append(line);
         }
@@ -40,14 +47,22 @@ public class HttpRequest {
     }
 
     public JSONArray readJsonArray() throws IOException {
+
         return new JSONArray(this.readOutput());
     }
 
     public JSONObject readJsonObject() throws IOException {
+
         return new JSONObject(this.readOutput());
     }
 
+    public long getLastRequestDuration() {
+
+        return this.lastRequestDuration;
+    }
+
     public JSONConfiguration readJsonConfiguration() throws Exception {
+
         return new JSONConfiguration(this.readOutput());
     }
 

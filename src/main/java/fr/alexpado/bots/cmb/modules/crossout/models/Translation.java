@@ -17,11 +17,12 @@ import java.util.Objects;
 @Setter
 public class Translation {
 
-    public static final String GENERAL_CURRENCY = "general.currency";
-    public static final String GENERAL_ERROR = "general.error";
-    public static final String GENERAL_INVITE = "general.invite";
+    public static final String GENERAL_CURRENCY   = "general.currency";
+    public static final String GENERAL_ERROR      = "general.error";
+    public static final String GENERAL_INVITE     = "general.invite";
     public static final String GENERAL_BAD_SYNTAX = "general.syntax";
-    public static final String GENERAL_FORBIDDEN = "general.forbidden";
+    public static final String GENERAL_FORBIDDEN  = "general.forbidden";
+    public static final String XODB_OFFLINE       = "xodb.offline";
 
     public static final String ITEMS_LIST = "items.list";
     public static final String ITEMS_MULTIPLE = "items.multiple";

@@ -19,6 +19,7 @@ import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.awt.*;
@@ -29,45 +30,51 @@ import java.util.Optional;
 public class SearchCommand extends ItemBotCommand {
 
     public SearchCommand(JDAModule module) {
+
         super(module, "search");
     }
 
     @Override
     public List<String> getRequiredTranslation() {
-        return Utilities.mergeList(super.getRequiredTranslation(),
-                Translation.RARITIES_INVALID,
-                Translation.CATEGORIES_INVALID,
-                Translation.FACTIONS_INVALID,
-                Translation.TYPES_INVALID
-        );
+
+        return Utilities.mergeList(super.getRequiredTranslation(), Translation.RARITIES_INVALID, Translation.CATEGORIES_INVALID, Translation.FACTIONS_INVALID, Translation.TYPES_INVALID);
     }
 
     @Override
     public void execute(CommandEvent event, Message message) throws MissingTranslationException {
+
+
+        if (event.getJDA().getPresence().getStatus() == OnlineStatus.DO_NOT_DISTURB) {
+            this.sendError(message, this.getTranslation(Translation.XODB_OFFLINE));
+            return;
+        }
+
         CommandArgumentsParser parser = new CommandArgumentsParser(event);
 
         boolean removedItems = parser.get("removedItems").isPresent();
-        boolean metaItems = parser.get("metaItems").isPresent();
+        boolean metaItems    = parser.get("metaItems").isPresent();
 
         HashMap<String, String> query = new HashMap<>();
 
-        Optional<String> optionalRarity = parser.get("rarity");
+        Optional<String> optionalRarity   = parser.get("rarity");
         Optional<String> optionalCategory = parser.get("category");
-        Optional<String> optionalFaction = parser.get("faction");
+        Optional<String> optionalFaction  = parser.get("faction");
 
         if (optionalRarity.isPresent()) {
             String rarityName = optionalRarity.get();
 
             RarityEndpoint rarityEndpoint = new RarityEndpoint(this.getConfig().getApiHost());
-            List<Rarity> rarities = rarityEndpoint.getAll();
+            List<Rarity>   rarities       = rarityEndpoint.getAll();
             boolean isValid = rarities.stream().anyMatch(rarity -> rarity.getName().equalsIgnoreCase(rarityName));
 
             if (isValid) {
                 query.put("rarity", rarityName);
             } else {
                 new EmbedPage<Rarity>(message, rarities, 10) {
+
                     @Override
                     public EmbedBuilder getEmbed() {
+
                         EmbedBuilder builder = new EmbedBuilder();
                         builder.setColor(Color.ORANGE);
                         builder.setTitle(SearchCommand.this.getTranslation(Translation.RARITIES_INVALID));
@@ -82,15 +89,18 @@ public class SearchCommand extends ItemBotCommand {
             String categoryName = optionalCategory.get();
 
             CategoryEndpoint categoryEndpoint = new CategoryEndpoint(this.getConfig().getApiHost());
-            List<Category> categories = categoryEndpoint.getAll();
-            boolean isValid = categories.stream().anyMatch(category -> category.getName().equalsIgnoreCase(categoryName));
+            List<Category>   categories       = categoryEndpoint.getAll();
+            boolean isValid = categories.stream()
+                                        .anyMatch(category -> category.getName().equalsIgnoreCase(categoryName));
 
             if (isValid) {
                 query.put("category", categoryName);
             } else {
                 new EmbedPage<Category>(message, categories, 10) {
+
                     @Override
                     public EmbedBuilder getEmbed() {
+
                         EmbedBuilder builder = new EmbedBuilder();
                         builder.setColor(Color.ORANGE);
                         builder.setTitle(SearchCommand.this.getTranslation(Translation.CATEGORIES_INVALID));
@@ -105,15 +115,17 @@ public class SearchCommand extends ItemBotCommand {
             String factionName = optionalFaction.get();
 
             FactionEndpoint factionEndpoint = new FactionEndpoint(this.getConfig().getApiHost());
-            List<Faction> factions = factionEndpoint.getAll();
+            List<Faction>   factions        = factionEndpoint.getAll();
             boolean isValid = factions.stream().anyMatch(faction -> faction.getName().equalsIgnoreCase(factionName));
 
             if (isValid) {
                 query.put("faction", factionName);
             } else {
                 new EmbedPage<Faction>(message, factions, 10) {
+
                     @Override
                     public EmbedBuilder getEmbed() {
+
                         EmbedBuilder builder = new EmbedBuilder();
                         builder.setColor(Color.ORANGE);
                         builder.setTitle(SearchCommand.this.getTranslation(Translation.FACTIONS_INVALID));
@@ -135,13 +147,14 @@ public class SearchCommand extends ItemBotCommand {
         query.put("language", this.getEffectiveLanguage());
 
         ItemEndpoint endpoint = new ItemEndpoint(this.getConfig());
-        List<Item> items = endpoint.search(query);
+        List<Item>   items    = endpoint.search(query);
 
         this.manageItemList(event, message, items, null);
     }
 
     @Override
     public EmbedBuilder getAdvancedHelp() {
+
         EmbedBuilder builder = super.getAdvancedHelp();
         builder.setTitle("Advanced help for : search");
 

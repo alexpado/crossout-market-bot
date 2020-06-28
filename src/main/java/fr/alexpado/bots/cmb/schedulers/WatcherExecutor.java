@@ -1,7 +1,8 @@
-package fr.alexpado.bots.cmb.bot;
+package fr.alexpado.bots.cmb.schedulers;
 
 import fr.alexpado.bots.cmb.CrossoutConfiguration;
 import fr.alexpado.bots.cmb.api.ItemEndpoint;
+import fr.alexpado.bots.cmb.bot.DiscordBot;
 import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
 import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;

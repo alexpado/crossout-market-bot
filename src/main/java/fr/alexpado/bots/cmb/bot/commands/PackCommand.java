@@ -11,6 +11,7 @@ import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.ArrayList;
@@ -20,22 +21,27 @@ import java.util.List;
 public class PackCommand extends TranslatableBotCommand {
 
     public PackCommand(JDAModule module) {
+
         super(module, "pack");
     }
 
     @Override
     public List<String> getRequiredTranslation() {
-        return Arrays.asList(
-                Translation.PACKS_NOTFOUND,
-                Translation.PACKS_LIST
-        );
+
+        return Arrays.asList(Translation.PACKS_NOTFOUND, Translation.PACKS_LIST);
     }
 
     @Override
     public void execute(CommandEvent event, Message message) throws MissingTranslationException {
-        PackEnpoint endpoint = new PackEnpoint(this.getConfig());
-        List<Pack> packs = endpoint.getAll();
-        List<Pack> effectivePacks = new ArrayList<>();
+
+        if (event.getJDA().getPresence().getStatus() == OnlineStatus.DO_NOT_DISTURB) {
+            this.sendError(message, this.getTranslation(Translation.XODB_OFFLINE));
+            return;
+        }
+
+        PackEnpoint endpoint       = new PackEnpoint(this.getConfig());
+        List<Pack>  packs          = endpoint.getAll();
+        List<Pack>  effectivePacks = new ArrayList<>();
 
         String packName = String.join(" ", event.getArgs());
 
@@ -58,8 +64,10 @@ public class PackCommand extends TranslatableBotCommand {
             message.editMessage(pack.getAsEmbed(event.getJDA()).build()).queue();
         } else {
             new EmbedPage<Pack>(message, effectivePacks, 20) {
+
                 @Override
                 public EmbedBuilder getEmbed() {
+
                     EmbedBuilder builder = new EmbedBuilder();
                     builder.setTitle(PackCommand.this.getTranslation(Translation.PACKS_LIST));
                     return builder;
@@ -70,6 +78,7 @@ public class PackCommand extends TranslatableBotCommand {
 
     @Override
     public EmbedBuilder getAdvancedHelp() {
+
         EmbedBuilder builder = super.getAdvancedHelp();
         builder.setTitle("Advanced help for : pack");
 

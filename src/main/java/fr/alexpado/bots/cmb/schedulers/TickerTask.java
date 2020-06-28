@@ -35,7 +35,8 @@ public class TickerTask {
         this.checkTimeout = 0;
     }
 
-    private void doXoDbHealthCheck() {
+    @Scheduled(cron = "0 0/1 * 1/1 * ?")
+    public void doXoDbHealthCheck() {
 
         APIEndpoint<HealthStat, Void> endpoint = new HealthEndpoint(this.configuration.getApiHost());
         HealthStat                    stat     = endpoint.getOne(null).orElse(HealthStat.create(-1));
@@ -57,7 +58,8 @@ public class TickerTask {
         }
     }
 
-    private void doTickerBannerRefresh() {
+    @Scheduled(cron = "0/10 * * 1/1 * ?")
+    public void doTickerBannerRefresh() {
 
         String activityMessage = "--";
 
@@ -84,20 +86,6 @@ public class TickerTask {
             DiscordBot.jda.getPresence().setActivity(Activity.of(Activity.ActivityType.DEFAULT, activityMessage));
         }
 
-    }
-
-
-    @Scheduled(fixedRate = 10000L)
-    public void doTickerTask() {
-
-        if (this.checkTimeout == 0) {
-            this.doXoDbHealthCheck();
-            this.checkTimeout = 6;
-        } else {
-            this.checkTimeout--;
-        }
-
-        this.doTickerBannerRefresh();
     }
 
 }

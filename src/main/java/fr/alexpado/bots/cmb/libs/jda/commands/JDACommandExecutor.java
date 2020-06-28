@@ -19,11 +19,12 @@ import java.util.function.Consumer;
 public abstract class JDACommandExecutor {
 
     private final JDAModule module;
-    private final String label;
+    private final String    label;
 
     public JDACommandExecutor(JDAModule module, String label) {
+
         this.module = module;
-        this.label = label;
+        this.label  = label;
     }
 
     /**
@@ -32,7 +33,8 @@ public abstract class JDACommandExecutor {
      * @return The command's label.
      */
     public final String getLabel() {
-        return label;
+
+        return this.label;
     }
 
     /**
@@ -41,6 +43,7 @@ public abstract class JDACommandExecutor {
      * @return The command's description.
      */
     public String getDescription() {
+
         return "";
     }
 
@@ -50,6 +53,7 @@ public abstract class JDACommandExecutor {
      * @return EmbedBuilder instance.
      */
     public EmbedBuilder getAdvancedHelp() {
+
         EmbedBuilder builder = new EmbedBuilder();
         builder.setFooter("Advanced help is still under development. Translations won't be available.");
         return builder;
@@ -61,7 +65,8 @@ public abstract class JDACommandExecutor {
      * @return A {@link JDAModule} instance.
      */
     public final JDAModule getModule() {
-        return module;
+
+        return this.module;
     }
 
     /**
@@ -76,6 +81,7 @@ public abstract class JDACommandExecutor {
      * @return True if the command should be executed. False instead.
      */
     public final boolean isEnabled(CommandEvent event) {
+
         return !event.getAuthor().isBot();
     }
 
@@ -87,12 +93,14 @@ public abstract class JDACommandExecutor {
      */
     @Nonnull
     public List<String> getAliases() {
+
         return new ArrayList<>();
     }
 
     public abstract void runCommand(CommandEvent event);
 
     private void innerEmbed(Message message, String text, Color color) {
+
         message.editMessage(new EmbedBuilder().setDescription(text).setColor(color).build()).queue();
     }
 
@@ -105,6 +113,7 @@ public abstract class JDACommandExecutor {
      *         Error text to show
      */
     protected final void sendError(Message message, String text) {
+
         this.innerEmbed(message, text, Color.RED);
     }
 
@@ -117,6 +126,7 @@ public abstract class JDACommandExecutor {
      *         Error text to show
      */
     protected final void sendInfo(Message message, String text) {
+
         this.innerEmbed(message, text, Color.CYAN);
     }
 
@@ -129,6 +139,7 @@ public abstract class JDACommandExecutor {
      *         Error text to show
      */
     protected final void sendWarn(Message message, String text) {
+
         this.innerEmbed(message, text, Color.ORANGE);
     }
 
@@ -139,6 +150,7 @@ public abstract class JDACommandExecutor {
      * @param consumer
      */
     protected final void sendWaiting(CommandEvent event, Consumer<Message> consumer) {
+
         event.getChannel().sendMessage(new EmbedBuilder().setDescription(":thinking: ...").build()).queue(consumer);
     }
 

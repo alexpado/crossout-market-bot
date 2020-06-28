@@ -19,23 +19,24 @@ import java.util.Optional;
 public class HelpCommand extends TranslatableBotCommand {
 
     public HelpCommand(JDAModule module) {
+
         super(module, "help");
     }
 
     @Override
     public List<String> getRequiredTranslation() {
-        return Arrays.asList(
-                Translation.GENERAL_INVITE,
-                Translation.COMMANDS_NOTFOUND,
-                Translation.COMMANDS_NOHELP,
-                Translation.HELP_DESCRIPTION
-        );
+
+        return Arrays.asList(Translation.GENERAL_INVITE, Translation.COMMANDS_NOTFOUND, Translation.COMMANDS_NOHELP, Translation.HELP_DESCRIPTION);
     }
 
     @Override
     public void execute(CommandEvent event, Message message) {
+
         if (event.getArgs().size() == 1) {
-            Optional<JDACommandExecutor> optionalExecutor = this.getModule().getBot().getCommandManager().getCommand(event.getArgs().get(0));
+            Optional<JDACommandExecutor> optionalExecutor = this.getModule()
+                                                                .getBot()
+                                                                .getCommandManager()
+                                                                .getCommand(event.getArgs().get(0));
             if (optionalExecutor.isPresent()) {
                 EmbedBuilder builder = optionalExecutor.get().getAdvancedHelp();
                 if (builder != null) {
@@ -52,11 +53,14 @@ public class HelpCommand extends TranslatableBotCommand {
     }
 
     private void showHelp(CommandEvent event, Message message) {
-        CrossoutModule crossout = this.getCrossoutModule();
+
+        CrossoutModule        crossout   = this.getCrossoutModule();
         TranslationRepository repository = this.getConfig().getRepositoryAccessor().getTranslationRepository();
 
         EmbedBuilder builder = new EmbedBuilder();
-        builder.setAuthor(this.getTranslation(Translation.GENERAL_INVITE), DiscordBot.INVITE, event.getJDA().getSelfUser().getAvatarUrl());
+        builder.setAuthor(this.getTranslation(Translation.GENERAL_INVITE), DiscordBot.INVITE, event.getJDA()
+                                                                                                   .getSelfUser()
+                                                                                                   .getAvatarUrl());
         builder.setDescription(this.getTranslation(Translation.HELP_DESCRIPTION));
 
         HashMap<String, String> helpItems = new HashMap<>();
@@ -65,8 +69,8 @@ public class HelpCommand extends TranslatableBotCommand {
             helpItems.put(command.getLabel(), command.getDescription());
         }
 
-        List<Translation> translationList = repository.getNeededFromLanguage(helpItems.values(), this.getEffectiveLanguage());
-        HashMap<String, String> translationMap = new HashMap<>();
+        List<Translation>       translationList = repository.getNeededFromLanguage(helpItems.values(), this.getEffectiveLanguage());
+        HashMap<String, String> translationMap  = new HashMap<>();
 
         for (Translation translation : translationList) {
             translationMap.put(translation.getTranslationKey(), translation.getText());
@@ -81,6 +85,7 @@ public class HelpCommand extends TranslatableBotCommand {
 
     @Override
     public EmbedBuilder getAdvancedHelp() {
+
         return null;
     }
 

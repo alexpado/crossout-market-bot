@@ -8,16 +8,15 @@ import java.util.List;
 public class Graph {
 
     private final int height = 100;
-    private final int width = 400;
+    private final int width  = 400;
 
-    private final int margin = 20;
-
-    private int max = Integer.MIN_VALUE;
-    private int min = Integer.MAX_VALUE;
-
-    private final List<GraphSet> sets = new ArrayList<>();
+    private final int            margin = 20;
+    private final List<GraphSet> sets   = new ArrayList<>();
+    private       int            max    = Integer.MIN_VALUE;
+    private       int            min    = Integer.MAX_VALUE;
 
     public Graph(GraphSet... valuesSets) {
+
         for (GraphSet set : valuesSets) {
             this.sets.add(set);
             this.max = Integer.max(set.getMax(), this.max);
@@ -26,34 +25,41 @@ public class Graph {
     }
 
     public void clamp(int height) {
+
         this.sets.forEach(set -> {
             set.clamp(this.min, this.max, height);
         });
     }
 
     public void forceMin(int min) {
+
         this.min = min;
     }
 
     public void forceMax(int max) {
+
         this.max = max;
     }
 
     public int getMin() {
-        return min;
+
+        return this.min;
     }
 
     public int getMax() {
-        return max;
+
+        return this.max;
     }
 
     public List<GraphSet> getSets() {
-        return sets;
+
+        return this.sets;
     }
 
     public BufferedImage draw(Color... colors) throws Exception {
+
         BufferedImage image = new BufferedImage(this.width, this.height, BufferedImage.TYPE_4BYTE_ABGR);
-        Graphics2D _2d = image.createGraphics();
+        Graphics2D    _2d   = image.createGraphics();
 
         _2d.setColor(new Color(255, 255, 255, 15));
 
@@ -66,7 +72,7 @@ public class Graph {
         _2d.drawLine(this.margin, this.margin, this.margin, this.height - this.margin);
         _2d.drawLine(this.margin, this.height - this.margin, this.width - this.margin, this.height - this.margin);
 
-        for (int i = 0; i < this.sets.size(); i++) {
+        for (int i = 0 ; i < this.sets.size() ; i++) {
             if (colors.length > i) {
                 _2d.setColor(colors[i]);
 
@@ -79,7 +85,7 @@ public class Graph {
 
             List<Integer> valuesSet = this.sets.get(i).getClampedValue();
 
-            for (int xVal = 1; xVal < valuesSet.size(); xVal++) {
+            for (int xVal = 1 ; xVal < valuesSet.size() ; xVal++) {
                 int y1 = (this.height - this.margin) - valuesSet.get(xVal - 1);
                 int y2 = (this.height - this.margin) - valuesSet.get(xVal);
 

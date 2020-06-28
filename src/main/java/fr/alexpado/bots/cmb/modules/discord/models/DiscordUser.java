@@ -25,42 +25,48 @@ public class DiscordUser implements Serializable {
     private String name;
 
     public static DiscordUser getInstance(UserResponse response) {
+
         return new DiscordUser().refresh(response);
     }
 
     public static DiscordUser getInstance(User user) {
+
         return new DiscordUser().refresh(user);
     }
 
     public DiscordUser refresh(UserResponse response) {
-        this.id = response.getId();
-        this.avatar = response.getAvatar();
+
+        this.id            = response.getId();
+        this.avatar        = response.getAvatar();
         this.discriminator = response.getDiscriminator();
-        this.name = response.getUsername();
+        this.name          = response.getUsername();
 
         return this;
     }
 
     public DiscordUser refresh(User user) {
-        this.id = user.getIdLong();
-        this.avatar = user.getAvatarId();
+
+        this.id            = user.getIdLong();
+        this.avatar        = user.getAvatarId();
         this.discriminator = user.getDiscriminator();
-        this.name = user.getName();
+        this.name          = user.getName();
 
         return this;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DiscordUser)) return false;
+
+        if (this == o) { return true; }
+        if (!(o instanceof DiscordUser)) { return false; }
         DiscordUser that = (DiscordUser) o;
-        return id.equals(that.id);
+        return this.id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+
+        return Objects.hash(this.id);
     }
 
 }

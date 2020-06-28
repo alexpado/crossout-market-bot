@@ -21,12 +21,13 @@ public class DiscordSettings {
     private final String scope;
 
     public DiscordSettings(CrossoutConfiguration configuration) {
-        this.userAgent = configuration.getIdentityName();
-        this.clientId = configuration.getClientId();
+
+        this.userAgent    = configuration.getIdentityName();
+        this.clientId     = configuration.getClientId();
         this.clientSecret = configuration.getClientSecret();
-        this.grantType = configuration.getGrantType();
-        this.redirectUri = configuration.getRedirectUri();
-        this.scope = configuration.getScope();
+        this.grantType    = configuration.getGrantType();
+        this.redirectUri  = configuration.getRedirectUri();
+        this.scope        = configuration.getScope();
     }
 
 }

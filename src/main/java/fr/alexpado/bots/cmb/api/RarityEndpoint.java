@@ -15,15 +15,18 @@ import java.util.Optional;
 public class RarityEndpoint extends APIEndpoint<Rarity, Integer> {
 
     public RarityEndpoint(String apiRoot) {
+
         super(apiRoot);
     }
 
     public static Rarity getDefaultRarity() {
+
         return new Rarity(0, "Unknown", Color.BLACK);
     }
 
     @Override
     public Optional<Rarity> getOne(Integer id) {
+
         List<Rarity> rarities = this.getAll();
         for (Rarity rarity : rarities) {
             if (rarity.getId() == id) {
@@ -35,14 +38,15 @@ public class RarityEndpoint extends APIEndpoint<Rarity, Integer> {
 
     @Override
     public List<Rarity> getAll() {
+
         List<Rarity> rarityList = new ArrayList<>();
 
         try {
             HttpRequest request = new HttpRequest(String.format("%s/rarities", this.getHost()));
-            JSONArray array = request.readJsonArray();
+            JSONArray   array   = request.readJsonArray();
 
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject o = array.getJSONObject(i);
+            for (int i = 0 ; i < array.length() ; i++) {
+                JSONObject       o      = array.getJSONObject(i);
                 Optional<Rarity> rarity = Rarity.from(o);
                 rarity.ifPresent(rarityList::add);
             }

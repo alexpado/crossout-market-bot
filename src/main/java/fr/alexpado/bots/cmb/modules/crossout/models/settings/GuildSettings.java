@@ -32,6 +32,7 @@ public class GuildSettings {
     private Integer itemGraphInterval = 18000;
 
     public static GuildSettings getInstance(DiscordGuild guild) {
+
         GuildSettings settings = new GuildSettings();
         settings.setId(guild.getId());
         settings.setGuild(guild);
@@ -40,15 +41,17 @@ public class GuildSettings {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof GuildSettings)) return false;
+
+        if (this == o) { return true; }
+        if (!(o instanceof GuildSettings)) { return false; }
         GuildSettings settings = (GuildSettings) o;
-        return id.equals(settings.id);
+        return this.id.equals(settings.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+
+        return Objects.hash(this.id);
     }
 
 }

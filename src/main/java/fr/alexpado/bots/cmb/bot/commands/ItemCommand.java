@@ -19,6 +19,7 @@ import java.util.Map;
 public class ItemCommand extends ItemBotCommand {
 
     public ItemCommand(JDAModule module) {
+
         super(module, "item");
     }
 
@@ -52,11 +53,13 @@ public class ItemCommand extends ItemBotCommand {
 
     @Override
     public List<String> getRequiredTranslation() {
+
         return super.getRequiredTranslation();
     }
 
     @Override
     public EmbedBuilder getAdvancedHelp() {
+
         EmbedBuilder builder = super.getAdvancedHelp();
         builder.setTitle("Advanced help for : item");
 

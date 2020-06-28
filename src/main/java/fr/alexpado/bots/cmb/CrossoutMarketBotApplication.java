@@ -12,10 +12,11 @@ import java.util.Arrays;
 @EnableScheduling
 public class CrossoutMarketBotApplication {
 
-    public static CrossoutConfiguration config;
-    private static boolean noBot = false;
+    public static  CrossoutConfiguration config;
+    private static boolean               noBot = false;
 
     public CrossoutMarketBotApplication(CrossoutConfiguration configurationProvider) {
+
         config = configurationProvider;
 
         if (!noBot) {
@@ -35,6 +36,7 @@ public class CrossoutMarketBotApplication {
     }
 
     public static void main(String[] args) {
+
         noBot = Arrays.asList(args).contains("--no-bot");
         SpringApplication.run(CrossoutMarketBotApplication.class, args);
     }

@@ -14,6 +14,7 @@ public class MarketGraph extends Graph {
     private final String graphName;
 
     public MarketGraph(String graphName, GraphSet... valuesSets) {
+
         super(valuesSets);
         this.graphName = graphName;
     }
@@ -25,7 +26,7 @@ public class MarketGraph extends Graph {
 
         // Load the blueprint picture.
         BufferedImage image = ImageIO.read(new File(configuration.getString("source")));
-        Graphics2D _2d = image.createGraphics();
+        Graphics2D    _2d   = image.createGraphics();
 
         _2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -37,6 +38,7 @@ public class MarketGraph extends Graph {
     }
 
     private void drawSets(Graphics2D _2d, JSONConfiguration configuration) {
+
         int minX = configuration.getInt("map.minValue.x");
         int minY = configuration.getInt("map.minValue.y");
         int maxX = configuration.getInt("map.maxValue.x");
@@ -55,6 +57,7 @@ public class MarketGraph extends Graph {
     }
 
     private void drawGraph(Graphics2D _2d, JSONConfiguration configuration, Color... colors) {
+
         int graphX = configuration.getInt("map.graph.x");
         int graphY = configuration.getInt("map.graph.y");
         int graphH = configuration.getInt("map.graph.h");
@@ -66,7 +69,7 @@ public class MarketGraph extends Graph {
         // Set the stoke width for the graph.
         _2d.setStroke(new BasicStroke(stokeW));
 
-        for (int i = 0; i < this.getSets().size(); i++) {
+        for (int i = 0 ; i < this.getSets().size() ; i++) {
             GraphSet set = this.getSets().get(i);
             if (colors.length > i) {
                 _2d.setColor(colors[i]);
@@ -79,10 +82,10 @@ public class MarketGraph extends Graph {
             int prevY = -1;
             int prevX = -1;
 
-            for (int xVal = 0; xVal < values.size(); xVal++) {
-                int y = graphY + graphH - values.get(xVal);
+            for (int xVal = 0 ; xVal < values.size() ; xVal++) {
+                int y  = graphY + graphH - values.get(xVal);
                 int xn = Math.round(fX * (xVal));
-                int x = xn + graphX;
+                int x  = xn + graphX;
 
                 if (prevY != -1) {
                     _2d.drawLine(prevX, prevY, x, y);

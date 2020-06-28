@@ -19,12 +19,13 @@ import java.util.Optional;
  */
 public final class JDACommandManager extends ListenerAdapter {
 
-    private final JDABot bot;
-    private final String prefix;
+    private final JDABot                   bot;
+    private final String                   prefix;
     private final List<JDACommandExecutor> commands = new ArrayList<>();
 
     public JDACommandManager(JDABot bot, String prefix) {
-        this.bot = bot;
+
+        this.bot    = bot;
         this.prefix = prefix;
     }
 
@@ -39,7 +40,11 @@ public final class JDACommandManager extends ListenerAdapter {
      * @return Probably a {@link JDACommandExecutor} instance if one exists matching the label provided.
      */
     public Optional<JDACommandExecutor> getCommand(String label) {
-        Optional<JDACommandExecutor> optionalCommand = this.commands.stream().filter(command -> command.getLabel().equalsIgnoreCase(label)).findFirst();
+
+        Optional<JDACommandExecutor> optionalCommand = this.commands.stream()
+                                                                    .filter(command -> command.getLabel()
+                                                                                              .equalsIgnoreCase(label))
+                                                                    .findFirst();
         if (optionalCommand.isPresent()) {
             return optionalCommand;
         }
@@ -55,6 +60,7 @@ public final class JDACommandManager extends ListenerAdapter {
      *         The {@link JDACommandExecutor} to register.
      */
     public void registerCommand(JDACommandExecutor command) {
+
         if (!this.getCommand(command.getLabel()).isPresent()) {
             this.commands.add(command);
         }
@@ -66,7 +72,8 @@ public final class JDACommandManager extends ListenerAdapter {
      * @return A list of {@link JDACommandExecutor}.
      */
     public List<JDACommandExecutor> getCommands() {
-        return commands;
+
+        return this.commands;
     }
 
     /**
@@ -80,12 +87,16 @@ public final class JDACommandManager extends ListenerAdapter {
      * @return The {@link CommandExecutionResponse} providing the execution status of the current command executor.
      */
     private CommandExecutionResponse runCommand(GuildMessageReceivedEvent event) {
-        String label = event.getMessage().getContentRaw().toLowerCase().split(" ")[0].replace(this.prefix.toLowerCase(), "");
+
+        String label = event.getMessage()
+                            .getContentRaw()
+                            .toLowerCase()
+                            .split(" ")[0].replace(this.prefix.toLowerCase(), "");
         Optional<JDACommandExecutor> optionalCommand = this.getCommand(label);
 
         if (optionalCommand.isPresent()) {
-            JDACommandExecutor executor = optionalCommand.get();
-            CommandEvent commandEvent = new CommandEvent(this.bot, event, label);
+            JDACommandExecutor executor     = optionalCommand.get();
+            CommandEvent       commandEvent = new CommandEvent(this.bot, event, label);
 
             if (executor.isEnabled(commandEvent)) {
                 executor.runCommand(commandEvent);
@@ -101,6 +112,7 @@ public final class JDACommandManager extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+
         if (event.getMessage().getContentRaw().toLowerCase().startsWith(this.prefix.toLowerCase())) {
             this.runCommand(event);
         }

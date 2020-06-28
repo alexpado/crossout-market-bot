@@ -26,14 +26,15 @@ import java.util.concurrent.atomic.AtomicReference;
 public class AuthController {
 
     private final ApplicationEventPublisher publisher;
-    private final DiscordSettings settings;
-    private final SessionRepository sessionRepository;
-    private final DiscordUserRepository discordUserRepository;
+    private final DiscordSettings           settings;
+    private final SessionRepository         sessionRepository;
+    private final DiscordUserRepository     discordUserRepository;
 
     public AuthController(ApplicationEventPublisher publisher, DiscordSettings settings, SessionRepository sessionRepository, DiscordUserRepository discordUserRepository) {
-        this.publisher = publisher;
-        this.settings = settings;
-        this.sessionRepository = sessionRepository;
+
+        this.publisher             = publisher;
+        this.settings              = settings;
+        this.sessionRepository     = sessionRepository;
         this.discordUserRepository = discordUserRepository;
     }
 
@@ -50,6 +51,7 @@ public class AuthController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Session login(HttpServletRequest request, @RequestHeader(value = "Authorization", defaultValue = "") String bearer) {
+
         String code = bearer.replace("Bearer", "").trim();
 
         Optional<Session> optionalSession = this.sessionRepository.findByCode(code);
@@ -81,9 +83,10 @@ public class AuthController {
      */
     @RequestMapping(value = "/logout", method = RequestMethod.DELETE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void logoutUser(HttpServletRequest request, @RequestBody(required = false) Map<String, String> content) {
-        Session session = new SessionQuery(this.sessionRepository).getSession(request, HttpStatus.UNAUTHORIZED);
-        String otherSessionCode = content != null ? content.getOrDefault("session", session.getCode()) : session.getCode();
-        Session otherSession = new SessionQuery(this.sessionRepository).getSession(otherSessionCode, session.getDiscordUser());
+
+        Session session          = new SessionQuery(this.sessionRepository).getSession(request, HttpStatus.UNAUTHORIZED);
+        String  otherSessionCode = content != null ? content.getOrDefault("session", session.getCode()) : session.getCode();
+        Session otherSession     = new SessionQuery(this.sessionRepository).getSession(otherSessionCode, session.getDiscordUser());
         this.sessionRepository.delete(otherSession);
         throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }
@@ -96,6 +99,7 @@ public class AuthController {
      */
     @RequestMapping(value = "/sessions", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Session> getUserSessions(HttpServletRequest request) {
+
         Session session = new SessionQuery(this.sessionRepository).getSession(request, HttpStatus.UNAUTHORIZED);
         return new SessionQuery(this.sessionRepository).getSessions(session.getDiscordUser());
     }

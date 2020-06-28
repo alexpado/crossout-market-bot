@@ -29,15 +29,17 @@ public class Session {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Session)) return false;
+
+        if (this == o) { return true; }
+        if (!(o instanceof Session)) { return false; }
         Session session = (Session) o;
-        return code.equals(session.code);
+        return this.code.equals(session.code);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(code);
+
+        return Objects.hash(this.code);
     }
 
 }

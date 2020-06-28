@@ -9,69 +9,79 @@ import java.util.List;
 
 public abstract class EmbedPage<T> extends ReactionListener {
 
-    private final ArrayList<String> items = new ArrayList<>();
-    private final List<T> origin;
-    private final int count = 10;
-    private int currentPage = 1;
-    private int totalPage = 1;
+    private final ArrayList<String> items       = new ArrayList<>();
+    private final List<T>           origin;
+    private final int               count       = 10;
+    private       int               currentPage = 1;
+    private       int               totalPage   = 1;
 
     protected EmbedPage(Message message, List<T> items, int timeout) {
+
         super(message, timeout);
         this.origin = items;
 
-        items.forEach(o -> this.items.add(asString(o)));
+        items.forEach(o -> this.items.add(this.asString(o)));
         this.currentPage = 1;
 
         float a = (float) items.size() / 10f;
-        int b = items.size() / 10;
+        int   b = items.size() / 10;
 
         if (a > b) {
-            totalPage = b + 1;
+            this.totalPage = b + 1;
         } else {
-            totalPage = b;
+            this.totalPage = b;
         }
-        totalPage = totalPage == 0 ? 1 : totalPage;
+        this.totalPage = this.totalPage == 0 ? 1 : this.totalPage;
 
         if (items.size() > 10) {
 
             this.addAction("◀", reactionAction -> {
-                previousPage();
+                this.previousPage();
                 reactionAction.getReaction().removeReaction(reactionAction.getUser()).queue();
             });
 
             this.addAction("▶", reactionAction -> {
-                nextPage();
+                this.nextPage();
                 reactionAction.getReaction().removeReaction(reactionAction.getUser()).queue();
             });
 
             this.addAction("❌", reactionAction -> {
-                timeout(message);
+                this.timeout(message);
                 reactionAction.getReaction().removeReaction(reactionAction.getUser()).queue();
             });
-            refreshEmbed();
-            start();
+            this.refreshEmbed();
+            this.start();
         } else {
-            refreshEmbed();
+            this.refreshEmbed();
         }
     }
 
     protected void reloadList() {
+
         this.items.clear();
-        this.origin.forEach(o -> this.items.add(asString(o)));
+        this.origin.forEach(o -> this.items.add(this.asString(o)));
     }
 
     public String asString(T obj) {
+
         return obj.toString();
     }
 
     public abstract EmbedBuilder getEmbed();
 
     protected void refreshEmbed() {
+
         this.resetTimer();
-        this.getMessage().editMessage(this.getEmbed().setDescription(getPageText()).setFooter("Page " + currentPage + "/" + totalPage, null).build()).queue();
+        this.getMessage()
+            .editMessage(this.getEmbed()
+                             .setDescription(this.getPageText())
+                             .setFooter("Page " + this.currentPage + "/" + this.totalPage, null)
+                             .build())
+            .queue();
     }
 
     private boolean isPageValid() {
+
         int[] pageBound = this.getPageBound(this.items.size(), this.currentPage, this.count);
         return pageBound != null;
     }
@@ -79,9 +89,9 @@ public abstract class EmbedPage<T> extends ReactionListener {
     private String getPageText() {
 
         int[] pageBound = this.getPageBound(this.items.size(), this.currentPage, this.count);
-        if (pageBound == null) return "";
+        if (pageBound == null) { return ""; }
         StringBuilder builder = new StringBuilder();
-        for (int i = pageBound[0]; i < pageBound[1]; i++) {
+        for (int i = pageBound[0] ; i < pageBound[1] ; i++) {
             builder.append(this.items.get(i)).append("\n");
         }
 
@@ -89,31 +99,34 @@ public abstract class EmbedPage<T> extends ReactionListener {
     }
 
     private void nextPage() {
+
         this.currentPage++;
 
         if (this.isPageValid()) {
-            refreshEmbed();
+            this.refreshEmbed();
         } else {
             this.currentPage--;
         }
     }
 
     private void previousPage() {
+
         this.currentPage--;
 
         if (this.isPageValid()) {
-            refreshEmbed();
+            this.refreshEmbed();
         } else {
             this.currentPage++;
         }
     }
 
     private int[] getPageBound(int size, int page, int count) {
+
         int startAt = (page - 1) * count;
-        if (startAt > size || startAt < 0) return null;
+        if (startAt > size || startAt < 0) { return null; }
 
         int endAt = startAt + count;
-        if (endAt > size) endAt = size;
+        if (endAt > size) { endAt = size; }
         return new int[]{startAt, endAt};
     }
 

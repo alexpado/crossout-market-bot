@@ -18,6 +18,7 @@ public class HttpRequest {
     private       long          lastRequestDuration;
 
     public HttpRequest(String url) throws IOException {
+
         URL urlInstance = new URL(url);
         this.connection = urlInstance.openConnection();
 

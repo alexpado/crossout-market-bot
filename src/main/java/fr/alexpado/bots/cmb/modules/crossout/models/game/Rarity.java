@@ -11,25 +11,29 @@ import java.util.Optional;
 @Getter
 public class Rarity extends JSONModel {
 
-    private int id;
+    private int    id;
     private String name;
-    private Color color;
+    private Color  color;
 
     public Rarity(JSONObject dataSource) throws Exception {
+
         super(dataSource);
     }
 
     public Rarity(int id, String name) {
-        this.id = id;
+
+        this.id   = id;
         this.name = name;
     }
 
     public Rarity(int id, String name, Color color) {
+
         this(id, name);
         this.color = color;
     }
 
     public static Optional<Rarity> from(JSONObject dataSource) {
+
         try {
             return Optional.of(new Rarity(dataSource));
         } catch (Exception e) {
@@ -40,14 +44,15 @@ public class Rarity extends JSONModel {
 
     @Override
     public boolean reload(JSONObject dataSource) {
+
         try {
-            this.id = dataSource.getInt("id");
+            this.id   = dataSource.getInt("id");
             this.name = dataSource.getString("name");
 
             String colorHex = dataSource.getString("primarycolor");
-            int r = Integer.parseInt(colorHex.substring(0, 2), 16);
-            int g = Integer.parseInt(colorHex.substring(2, 4), 16);
-            int b = Integer.parseInt(colorHex.substring(4, 6), 16);
+            int    r        = Integer.parseInt(colorHex.substring(0, 2), 16);
+            int    g        = Integer.parseInt(colorHex.substring(2, 4), 16);
+            int    b        = Integer.parseInt(colorHex.substring(4, 6), 16);
             this.color = new Color(r, g, b);
 
             return true;
@@ -58,7 +63,8 @@ public class Rarity extends JSONModel {
 
     @Override
     public String toString() {
-        return name;
+
+        return this.name;
     }
 
 }

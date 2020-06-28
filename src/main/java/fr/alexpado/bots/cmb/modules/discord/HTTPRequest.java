@@ -24,19 +24,21 @@ public class HTTPRequest {
     private final DiscordSettings manager;
 
     public HTTPRequest(DiscordSettings manager) {
+
         this.manager = manager;
     }
 
     private void readOutput(HttpsURLConnection connection, Consumer<JSONObject> onSuccess, Consumer<JSONObject> onError) throws IOException {
-        IOException throwable = null;
+
+        IOException    throwable = null;
         BufferedReader in;
         try {
             in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         } catch (IOException e) {
-            in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+            in        = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
             throwable = e;
         }
-        String inputLine;
+        String        inputLine;
         StringBuilder response = new StringBuilder();
 
         while ((inputLine = in.readLine()) != null) {
@@ -52,6 +54,7 @@ public class HTTPRequest {
     }
 
     public void doFullAuth(HttpServletRequest request, DiscordUserRepository dur, SessionRepository sr, Consumer<Session> onSuccess, Consumer<JSONObject> onError) {
+
         String code = request.getHeader("Authorization").replace("Bearer", "").trim();
 
 
@@ -62,8 +65,9 @@ public class HTTPRequest {
     }
 
     public void getUserAuthToken(String code, Consumer<TokenResponse> onSuccess, Consumer<JSONObject> onError) {
+
         try {
-            URL targetUrl = new URL("https://discordapp.com/api/oauth2/token");
+            URL                targetUrl  = new URL("https://discordapp.com/api/oauth2/token");
             HttpsURLConnection connection = (HttpsURLConnection) targetUrl.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("User-Agent", this.manager.getUserAgent());
@@ -72,12 +76,9 @@ public class HTTPRequest {
 
             connection.setDoOutput(true);
             DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-            String postBuilder = "client_id=" + this.manager.getClientId() +
-                    "&client_secret=" + this.manager.getClientSecret() +
-                    "&grant_type=" + this.manager.getGrantType() +
-                    "&code=" + code +
-                    "&redirect_uri=" + this.manager.getRedirectUri() +
-                    "&scope=" + this.manager.getScope();
+            String postBuilder = "client_id=" + this.manager.getClientId() + "&client_secret=" + this.manager.getClientSecret() + "&grant_type=" + this.manager
+                    .getGrantType() + "&code=" + code + "&redirect_uri=" + this.manager.getRedirectUri() + "&scope=" + this.manager
+                                         .getScope();
             wr.writeBytes(postBuilder);
             wr.flush();
             wr.close();
@@ -89,8 +90,9 @@ public class HTTPRequest {
     }
 
     public void getUserInfo(String token, Consumer<UserResponse> onSuccess, Consumer<JSONObject> onError) {
+
         try {
-            URL targetUrl = new URL("https://discordapp.com/api/users/@me");
+            URL                targetUrl  = new URL("https://discordapp.com/api/users/@me");
             HttpsURLConnection connection = (HttpsURLConnection) targetUrl.openConnection();
 
             connection.setRequestProperty("User-Agent", this.manager.getUserAgent());

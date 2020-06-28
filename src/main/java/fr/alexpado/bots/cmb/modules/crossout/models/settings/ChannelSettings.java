@@ -30,6 +30,7 @@ public class ChannelSettings {
     private Boolean announcement = false;
 
     public static ChannelSettings getInstance(DiscordChannel channel) {
+
         ChannelSettings settings = new ChannelSettings();
         settings.setId(channel.getId());
         settings.setChannel(channel);
@@ -38,15 +39,17 @@ public class ChannelSettings {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ChannelSettings)) return false;
+
+        if (this == o) { return true; }
+        if (!(o instanceof ChannelSettings)) { return false; }
         ChannelSettings settings = (ChannelSettings) o;
-        return id.equals(settings.id);
+        return this.id.equals(settings.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+
+        return Objects.hash(this.id);
     }
 
 }

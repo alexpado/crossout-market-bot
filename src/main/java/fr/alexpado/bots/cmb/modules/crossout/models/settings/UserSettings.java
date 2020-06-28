@@ -32,6 +32,7 @@ public class UserSettings {
     private Boolean watcherPaused = false;
 
     public static UserSettings getInstance(DiscordUser user) {
+
         UserSettings settings = new UserSettings();
         settings.setId(user.getId());
         settings.setUser(user);
@@ -39,20 +40,23 @@ public class UserSettings {
     }
 
     public boolean isWatcherPaused() {
-        return watcherPaused;
+
+        return this.watcherPaused;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserSettings)) return false;
+
+        if (this == o) { return true; }
+        if (!(o instanceof UserSettings)) { return false; }
         UserSettings settings = (UserSettings) o;
-        return id.equals(settings.id);
+        return this.id.equals(settings.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+
+        return Objects.hash(this.id);
     }
 
 }

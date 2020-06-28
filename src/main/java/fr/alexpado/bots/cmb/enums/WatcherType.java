@@ -11,15 +11,17 @@ public enum WatcherType {
     NORMAL(5, Translation.WATCHERS_NORMAL),
     UNKNOWN(0, "");
 
-    private final int id;
+    private final int    id;
     private final String translation;
 
     WatcherType(int id, String translation) {
-        this.id = id;
+
+        this.id          = id;
         this.translation = translation;
     }
 
     public static WatcherType getFromId(int id) {
+
         for (WatcherType value : WatcherType.values()) {
             if (value.getId() == id) {
                 return value;
@@ -29,10 +31,12 @@ public enum WatcherType {
     }
 
     public int getId() {
-        return id;
+
+        return this.id;
     }
 
     public String getTranslation() {
-        return translation;
+
+        return this.translation;
     }
 }

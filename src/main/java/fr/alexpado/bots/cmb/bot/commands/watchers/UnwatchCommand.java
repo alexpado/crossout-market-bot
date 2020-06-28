@@ -18,21 +18,21 @@ import java.util.Optional;
 public class UnwatchCommand extends WatcherCommandGroup {
 
     public UnwatchCommand(JDAModule module) {
+
         super(module, "unwatch");
     }
 
     @Override
     public List<String> getRequiredTranslation() {
+
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(
-                Translation.WATCHERS_WRONG_ID,
-                Translation.WATCHERS_UNWATCH
-        ));
+        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_WRONG_ID, Translation.WATCHERS_UNWATCH));
         return requiredTranslations;
     }
 
     @Override
     public void execute(CommandEvent event, Message message) {
+
         Optional<Watcher> optionalWatcher = this.getWatcher(message, event);
 
         if (optionalWatcher.isPresent()) {
@@ -43,6 +43,7 @@ public class UnwatchCommand extends WatcherCommandGroup {
 
     @Override
     public EmbedBuilder getAdvancedHelp() {
+
         EmbedBuilder builder = super.getAdvancedHelp();
         builder.setTitle("Advanced help for : unwatch");
 

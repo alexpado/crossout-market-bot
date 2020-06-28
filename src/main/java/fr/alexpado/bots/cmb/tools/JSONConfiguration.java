@@ -18,34 +18,40 @@ public class JSONConfiguration extends JSONObject {
     private File file;
 
     public JSONConfiguration(JSONObject object) {
+
         super(object);
     }
 
     public JSONConfiguration(File file) throws Exception {
+
         super(file.exists() ? new String(Files.readAllBytes(file.toPath())) : "{}");
         this.file = file;
         this.save();
     }
 
     public JSONConfiguration(String content) throws Exception {
+
         super(content);
     }
 
     public void save() throws IOException {
+
         FileWriter writer = new FileWriter(this.file);
         writer.write(this.toString(2));
         writer.close();
     }
 
     public File getFile() {
-        return file;
+
+        return this.file;
     }
 
     private JSONObject putInPath(String key, Object value) throws JSONException {
+
         List<String> pathToConfig = Arrays.asList(key.split("\\."));
 
         JSONObject object = this;
-        for (int i = 0; i < pathToConfig.size() - 1; i++) {
+        for (int i = 0 ; i < pathToConfig.size() - 1 ; i++) {
             if (!object.has(pathToConfig.get(i))) {
                 object.put(pathToConfig.get(i), new JSONObject());
             }
@@ -56,6 +62,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public JSONObject put(String key, boolean value) throws JSONException {
+
         if (key.contains(".")) {
             return this.putInPath(key, value);
         }
@@ -64,6 +71,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public JSONObject put(String key, Collection<?> value) throws JSONException {
+
         if (key.contains(".")) {
             return this.putInPath(key, value);
         }
@@ -72,6 +80,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public JSONObject put(String key, double value) throws JSONException {
+
         if (key.contains(".")) {
             return this.putInPath(key, value);
         }
@@ -80,6 +89,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public JSONObject put(String key, float value) throws JSONException {
+
         if (key.contains(".")) {
             return this.putInPath(key, value);
         }
@@ -88,6 +98,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public JSONObject put(String key, int value) throws JSONException {
+
         if (key.contains(".")) {
             return this.putInPath(key, value);
         }
@@ -96,6 +107,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public JSONObject put(String key, long value) throws JSONException {
+
         if (key.contains(".")) {
             return this.putInPath(key, value);
         }
@@ -104,6 +116,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public JSONObject put(String key, Map<?, ?> value) throws JSONException {
+
         if (key.contains(".")) {
             return this.putInPath(key, value);
         }
@@ -112,6 +125,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public JSONObject put(String key, Object value) throws JSONException {
+
         if (key.contains(".")) {
             return this.putInPath(key, value);
         }
@@ -119,10 +133,11 @@ public class JSONConfiguration extends JSONObject {
     }
 
     private Object getInPath(String key) throws JSONException {
+
         List<String> pathToConfig = Arrays.asList(key.split("\\."));
 
         JSONObject object = this;
-        for (int i = 0; i < pathToConfig.size(); i++) {
+        for (int i = 0 ; i < pathToConfig.size() ; i++) {
             if (i == pathToConfig.size() - 1) {
                 return object.get(pathToConfig.get(i));
             } else if (object.has(pathToConfig.get(i))) {
@@ -134,6 +149,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public Object get(String key) throws JSONException {
+
         if (key.contains(".")) {
             return this.getInPath(key);
         }
@@ -142,6 +158,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public boolean getBoolean(String key) throws JSONException {
+
         if (key.contains(".")) {
             return ((boolean) this.getInPath(key));
         }
@@ -150,6 +167,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public double getDouble(String key) throws JSONException {
+
         if (key.contains(".")) {
             return ((double) this.getInPath(key));
         }
@@ -158,6 +176,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public float getFloat(String key) throws JSONException {
+
         if (key.contains(".")) {
             return ((float) this.getInPath(key));
         }
@@ -166,6 +185,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public int getInt(String key) throws JSONException {
+
         if (key.contains(".")) {
             return ((int) this.getInPath(key));
         }
@@ -174,6 +194,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public JSONArray getJSONArray(String key) throws JSONException {
+
         if (key.contains(".")) {
             return ((JSONArray) this.getInPath(key));
         }
@@ -182,6 +203,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public JSONObject getJSONObject(String key) throws JSONException {
+
         if (key.contains(".")) {
             return ((JSONObject) this.getInPath(key));
         }
@@ -190,6 +212,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public long getLong(String key) throws JSONException {
+
         if (key.contains(".")) {
             return ((long) this.getInPath(key));
         }
@@ -198,6 +221,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public String getString(String key) throws JSONException {
+
         if (key.contains(".")) {
             return ((String) this.getInPath(key));
         }
@@ -205,10 +229,11 @@ public class JSONConfiguration extends JSONObject {
     }
 
     private boolean hasInPath(String key) throws JSONException {
+
         List<String> pathToConfig = Arrays.asList(key.split("\\."));
 
         JSONObject object = this;
-        for (int i = 0; i < pathToConfig.size(); i++) {
+        for (int i = 0 ; i < pathToConfig.size() ; i++) {
             if (i == pathToConfig.size() - 1) {
                 return object.has(pathToConfig.get(i));
             }
@@ -222,6 +247,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public boolean has(String key) {
+
         if (key.contains(".")) {
             return this.hasInPath(key);
         }
@@ -229,10 +255,11 @@ public class JSONConfiguration extends JSONObject {
     }
 
     private Object removePath(String key) {
+
         List<String> pathToConfig = Arrays.asList(key.split("\\."));
 
         JSONObject object = this;
-        for (int i = 0; i < pathToConfig.size(); i++) {
+        for (int i = 0 ; i < pathToConfig.size() ; i++) {
             if (i == pathToConfig.size() - 1) {
                 return object.remove(pathToConfig.get(i));
             }
@@ -243,6 +270,7 @@ public class JSONConfiguration extends JSONObject {
 
     @Override
     public Object remove(String key) {
+
         if (key.contains(".")) {
             return this.removePath(key);
         }

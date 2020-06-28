@@ -7,11 +7,12 @@ import java.util.regex.Pattern;
 public class TimeConverter {
 
     private final long hours;
-    private long minutes;
-    private long seconds;
+    private       long minutes;
+    private       long seconds;
 
     public TimeConverter(long duration) {
-        this.hours = TimeUnit.HOURS.convert(duration, TimeUnit.SECONDS);
+
+        this.hours   = TimeUnit.HOURS.convert(duration, TimeUnit.SECONDS);
         this.minutes = TimeUnit.MINUTES.convert(duration, TimeUnit.SECONDS);
         this.seconds = duration;
         this.minutes -= this.hours * 60;
@@ -19,6 +20,7 @@ public class TimeConverter {
     }
 
     public static long fromString(String str) {
+
         String  regex   = "(?<hours>\\d*h)?(?<minutes>\\d+m)?";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(str);
@@ -40,11 +42,11 @@ public class TimeConverter {
     public String toString() {
         // TODO remove 0 values
         if (this.hours != 0) {
-            return String.format("%02dh%02dm%02ds", hours, minutes, seconds);
+            return String.format("%02dh%02dm%02ds", this.hours, this.minutes, this.seconds);
         } else if (this.minutes != 0) {
-            return String.format("%02dm%02ds", minutes, seconds);
+            return String.format("%02dm%02ds", this.minutes, this.seconds);
         }
-        return String.format("%02ds", seconds);
+        return String.format("%02ds", this.seconds);
     }
 
 }

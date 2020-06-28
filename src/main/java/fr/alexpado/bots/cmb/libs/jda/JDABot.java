@@ -22,15 +22,16 @@ import java.util.Optional;
  */
 public abstract class JDABot extends ListenerAdapter {
 
-    private final List<JDAModule> modules = new ArrayList<>();
-    private final JDABuilder jdaBuilder;
+    private final List<JDAModule>   modules = new ArrayList<>();
+    private final JDABuilder        jdaBuilder;
     private final JDACommandManager commandManager;
 
     @Value("${discord.prefix}")
     private String prefix;
 
     public JDABot(AccountType accountType, CrossoutConfiguration config) {
-        this.jdaBuilder = new JDABuilder(accountType);
+
+        this.jdaBuilder     = new JDABuilder(accountType);
         this.commandManager = new JDACommandManager(this, config.getDiscordPrefix());
 
         this.jdaBuilder.addEventListeners(this);
@@ -53,6 +54,7 @@ public abstract class JDABot extends ListenerAdapter {
      *         Threw if the login didn't succeed.
      */
     public final void login() throws LoginException {
+
         this.jdaBuilder.setToken(this.getDiscordToken());
         this.jdaBuilder.build();
     }
@@ -70,6 +72,7 @@ public abstract class JDABot extends ListenerAdapter {
      * @see #registerModule(JDAModule)
      */
     public final <T extends JDAModule> Optional<T> getModule(Class<T> clazz) {
+
         for (JDAModule module : this.modules) {
             // Does the current module matches the class to retrieve ?
             if (module.getClass() == clazz) {
@@ -100,11 +103,13 @@ public abstract class JDABot extends ListenerAdapter {
     }
 
     public final void onCommandExecuted(CommandEvent event) {
+
         this.modules.forEach(module -> module.onCommandExecuted(event));
     }
 
     public JDACommandManager getCommandManager() {
-        return commandManager;
+
+        return this.commandManager;
     }
 
 }

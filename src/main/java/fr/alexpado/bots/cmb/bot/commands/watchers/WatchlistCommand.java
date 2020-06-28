@@ -19,22 +19,22 @@ public class WatchlistCommand extends WatcherCommandGroup {
 
 
     public WatchlistCommand(JDAModule module) {
+
         super(module, "watchlist");
     }
 
     @Override
     public List<String> getRequiredTranslation() {
+
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(
-                Translation.WATCHERS_NONE,
-                Translation.WATCHERS_LIST
-        ));
+        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_NONE, Translation.WATCHERS_LIST));
         return requiredTranslations;
     }
 
 
     @Override
     public void execute(CommandEvent event, Message message) throws MissingTranslationException {
+
         List<Watcher> watchers = this.getRepository().findAllByUserId(this.getDiscordUser().getId());
 
         if (watchers.size() == 0) {
@@ -44,9 +44,12 @@ public class WatchlistCommand extends WatcherCommandGroup {
             for (Watcher watcher : watchers) {
                 translatableWatchers.add(watcher.getTranslatableWatcher(this.getConfig(), this.getEffectiveLanguage()));
             }
-            new TranslatableEmbedPage<TranslatableWatcher>(message, translatableWatchers, 10, this.getGuildSettings().getLanguage()) {
+            new TranslatableEmbedPage<TranslatableWatcher>(message, translatableWatchers, 10, this.getGuildSettings()
+                                                                                                  .getLanguage()) {
+
                 @Override
                 public EmbedBuilder getEmbed() {
+
                     EmbedBuilder builder = new EmbedBuilder();
                     builder.setTitle(WatchlistCommand.this.getTranslation(Translation.WATCHERS_LIST));
                     return builder;
@@ -57,6 +60,7 @@ public class WatchlistCommand extends WatcherCommandGroup {
 
     @Override
     public EmbedBuilder getAdvancedHelp() {
+
         return null;
     }
 

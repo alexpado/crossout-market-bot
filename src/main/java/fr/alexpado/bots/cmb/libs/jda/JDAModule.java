@@ -21,6 +21,7 @@ public abstract class JDAModule {
     private final JDABot bot;
 
     public JDAModule(JDABot bot) throws RuntimeException {
+
         this.bot = bot;
     }
 
@@ -30,7 +31,8 @@ public abstract class JDAModule {
      * @return The {@link JDABot} instance.
      */
     public JDABot getBot() {
-        return bot;
+
+        return this.bot;
     }
 
     /**
@@ -48,10 +50,12 @@ public abstract class JDAModule {
      */
     @Nonnull
     public List<ListenerAdapter> getListeners() {
+
         return new ArrayList<>();
     }
 
     public List<JDACommandExecutor> getCommandExecutors() {
+
         return new ArrayList<>();
     }
 

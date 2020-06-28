@@ -43,10 +43,12 @@ public class Watcher {
     private long lastExecution = System.currentTimeMillis();
 
     public Watcher() {
+
         super();
     }
 
     public static Watcher createFor(DiscordUser user, Item item) {
+
         Watcher watcher = new Watcher();
         watcher.setUser(user);
         watcher.loadItem(item);
@@ -54,15 +56,18 @@ public class Watcher {
     }
 
     public TranslatableWatcher getTranslatableWatcher(CrossoutConfiguration config, String language) throws MissingTranslationException {
+
         return new TranslatableWatcher(config, this, language);
     }
 
     @Override
     public String toString() {
+
         return String.format("[%s] %s", this.id, this.itemName);
     }
 
     public void loadItem(Item item) {
+
         this.setItemId(item.getId());
         this.setItemName(item.getName());
         this.setSellPrice(item.getSellPrice());
@@ -71,15 +76,17 @@ public class Watcher {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Watcher)) return false;
+
+        if (this == o) { return true; }
+        if (!(o instanceof Watcher)) { return false; }
         Watcher watcher = (Watcher) o;
-        return id.equals(watcher.id);
+        return this.id.equals(watcher.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+
+        return Objects.hash(this.id);
     }
 
 }

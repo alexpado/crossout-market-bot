@@ -17,12 +17,13 @@ import java.util.List;
 public final class CommandEvent {
 
     private final GuildMessageReceivedEvent event;
-    private final JDABot bot;
-    private final String label;
-    private final List<String> args;
+    private final JDABot                    bot;
+    private final String                    label;
+    private final List<String>              args;
 
     public CommandEvent(JDABot bot, GuildMessageReceivedEvent event, String label) {
-        this.bot = bot;
+
+        this.bot   = bot;
         this.event = event;
         List<String> tmpArgs = Arrays.asList(event.getMessage().getContentRaw().split(" "));
         this.args  = new ArrayList<>(tmpArgs.subList(1, tmpArgs.size()));
@@ -30,47 +31,58 @@ public final class CommandEvent {
     }
 
     public String getLabel() {
-        return label;
+
+        return this.label;
     }
 
     public Guild getGuild() {
-        return event.getGuild();
+
+        return this.event.getGuild();
     }
 
     public TextChannel getChannel() {
-        return event.getChannel();
+
+        return this.event.getChannel();
     }
 
     public User getAuthor() {
-        return event.getAuthor();
+
+        return this.event.getAuthor();
     }
 
     public Member getMember() {
-        return event.getMember();
+
+        return this.event.getMember();
     }
 
     public Message getMessage() {
-        return event.getMessage();
+
+        return this.event.getMessage();
     }
 
     public JDA getJDA() {
-        return event.getJDA();
+
+        return this.event.getJDA();
     }
 
     public User getSelfUser() {
-        return event.getJDA().getSelfUser();
+
+        return this.event.getJDA().getSelfUser();
     }
 
     public Member getSelfMember() {
-        return event.getGuild().getSelfMember();
+
+        return this.event.getGuild().getSelfMember();
     }
 
     public JDABot getBot() {
-        return bot;
+
+        return this.bot;
     }
 
     public List<String> getArgs() {
-        return args;
+
+        return this.args;
     }
 
 

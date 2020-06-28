@@ -6,7 +6,7 @@ import java.util.List;
 public class GraphSet {
 
     private final List<Integer> values;
-    private final String setName;
+    private final String        setName;
 
     private final List<Integer> clampedValue = new ArrayList<>();
 
@@ -15,6 +15,7 @@ public class GraphSet {
 
 
     public GraphSet(List<Integer> values, String setName) {
+
         this.values = values;
 
         for (Integer value : this.values) {
@@ -26,14 +27,17 @@ public class GraphSet {
     }
 
     public int getMax() {
-        return max;
+
+        return this.max;
     }
 
     public int getMin() {
-        return min;
+
+        return this.min;
     }
 
     public void clamp(int min, int max, int height) {
+
         this.values.forEach(value -> {
             double diff = max - min;
             this.clampedValue.add((int) (Math.round((height / diff) * (value - min))));
@@ -41,11 +45,13 @@ public class GraphSet {
     }
 
     public List<Integer> getClampedValue() {
-        return clampedValue;
+
+        return this.clampedValue;
     }
 
     public String getSetName() {
-        return setName;
+
+        return this.setName;
     }
 
 

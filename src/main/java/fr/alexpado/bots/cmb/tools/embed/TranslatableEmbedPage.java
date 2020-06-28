@@ -11,6 +11,7 @@ public abstract class TranslatableEmbedPage<T extends Translatable> extends Embe
     private final String lang;
 
     protected TranslatableEmbedPage(Message message, List<T> items, int timeout, String lang) {
+
         super(message, items, timeout);
         this.lang = lang;
         this.reloadList();
@@ -18,11 +19,13 @@ public abstract class TranslatableEmbedPage<T extends Translatable> extends Embe
     }
 
     public String getLang() {
-        return lang;
+
+        return this.lang;
     }
 
     @Override
     public String asString(T obj) {
+
         try {
             obj.fetchTranslations(this.lang);
             return obj.toString();

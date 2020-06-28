@@ -16,16 +16,18 @@ import java.util.Optional;
 public abstract class WatcherCommandGroup extends TranslatableBotCommand {
 
     public WatcherCommandGroup(JDAModule module, String label) {
+
         super(module, label);
     }
 
     public final Optional<Long> getTime(CommandEvent event) {
+
         int everyIndex = event.getArgs().indexOf("every");
-        int always = event.getArgs().indexOf("always");
+        int always     = event.getArgs().indexOf("always");
 
         if (everyIndex != -1) {
-            String time = event.getArgs().get(everyIndex + 1);
-            long parsedTime = TimeConverter.fromString(time);
+            String time       = event.getArgs().get(everyIndex + 1);
+            long   parsedTime = TimeConverter.fromString(time);
             return Optional.of(parsedTime);
         } else if (always != -1) {
             // Always stick to the default duration
@@ -36,7 +38,8 @@ public abstract class WatcherCommandGroup extends TranslatableBotCommand {
     }
 
     public final Optional<Float> getPrice(CommandEvent event) throws NumberFormatException {
-        int whenIndex = event.getArgs().indexOf("when");
+
+        int whenIndex  = event.getArgs().indexOf("when");
         int priceIndex = event.getArgs().indexOf("price");
 
         if (priceIndex != -1) {
@@ -53,14 +56,15 @@ public abstract class WatcherCommandGroup extends TranslatableBotCommand {
     }
 
     public final Optional<WatcherType> getType(CommandEvent event) {
-        int whenIndex = event.getArgs().indexOf("when");
+
+        int whenIndex  = event.getArgs().indexOf("when");
         int priceIndex = event.getArgs().indexOf("price");
 
         if (whenIndex == -1) {
             return Optional.empty();
         }
 
-        String whenPriceType = event.getArgs().get(whenIndex + 1);
+        String whenPriceType  = event.getArgs().get(whenIndex + 1);
         String whenPriceValue = event.getArgs().get(priceIndex != -1 ? priceIndex + 1 : whenIndex + 2);
 
         if (whenPriceType.equalsIgnoreCase("buy") && whenPriceValue.equalsIgnoreCase("under")) {
@@ -77,9 +81,10 @@ public abstract class WatcherCommandGroup extends TranslatableBotCommand {
     }
 
     public final Optional<String> getItemName(CommandEvent event) {
-        int whenIndex = event.getArgs().indexOf("when");
+
+        int whenIndex  = event.getArgs().indexOf("when");
         int everyIndex = event.getArgs().indexOf("every");
-        int forIndex = event.getArgs().indexOf("for");
+        int forIndex   = event.getArgs().indexOf("for");
 
         if (forIndex != -1) {
             return Optional.of(String.join(" ", event.getArgs().subList(forIndex + 1, event.getArgs().size())));
@@ -91,6 +96,7 @@ public abstract class WatcherCommandGroup extends TranslatableBotCommand {
     }
 
     public final Optional<Watcher> getWatcher(Message message, CommandEvent event) {
+
         int watcherId;
 
         try {
@@ -104,8 +110,9 @@ public abstract class WatcherCommandGroup extends TranslatableBotCommand {
     }
 
     public final Optional<Watcher> getWatcher(Message message, int id) {
+
         WatcherRepository watcherRepository = this.getConfig().getRepositoryAccessor().getWatcherRepository();
-        Optional<Watcher> optionalWatcher = watcherRepository.findById(id);
+        Optional<Watcher> optionalWatcher   = watcherRepository.findById(id);
 
         if (!optionalWatcher.isPresent()) {
             this.sendError(message, this.getTranslation(Translation.WATCHERS_NOTFOUND));
@@ -123,11 +130,13 @@ public abstract class WatcherCommandGroup extends TranslatableBotCommand {
     }
 
     public final WatcherRepository getRepository() {
+
         return this.getConfig().getRepositoryAccessor().getWatcherRepository();
     }
 
     @Override
     public List<String> getRequiredTranslation() {
+
         return Arrays.asList(Translation.WATCHERS_NOTFOUND, Translation.WATCHERS_FORBIDDEN, WatcherType.BUY_OVER.getTranslation(), WatcherType.BUY_UNDER
                 .getTranslation(), WatcherType.SELL_OVER.getTranslation(), WatcherType.SELL_UNDER.getTranslation(), WatcherType.NORMAL
                 .getTranslation(), Translation.XODB_OFFLINE);

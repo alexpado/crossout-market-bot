@@ -8,12 +8,14 @@ public class DiscordLoginEvent extends ApplicationEvent {
     private final Session session;
 
     public DiscordLoginEvent(Object source, Session session) {
+
         super(source);
         this.session = session;
     }
 
     public Session getSession() {
-        return session;
+
+        return this.session;
     }
 
 }

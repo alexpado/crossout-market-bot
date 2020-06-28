@@ -13,8 +13,9 @@ public class TranslationKey implements Serializable {
     private String language;
 
     public static TranslationKey of(String language, String translationKey) {
+
         TranslationKey key = new TranslationKey();
-        key.language = language;
+        key.language       = language;
         key.translationKey = translationKey;
         return key;
     }

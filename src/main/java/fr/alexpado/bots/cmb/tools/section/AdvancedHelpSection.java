@@ -9,15 +9,18 @@ public class AdvancedHelpSection {
     private final HashMap<String, String> fields = new HashMap<>();
 
     public AdvancedHelpSection(String sectionName) {
+
         this.sectionName = sectionName;
     }
 
     public void addField(String key, String value) {
+
         this.fields.put(key, value);
     }
 
     @Override
     public String toString() {
+
         StringBuilder builder = new StringBuilder();
 
         builder.append("** # ").append(this.sectionName).append("**\n");

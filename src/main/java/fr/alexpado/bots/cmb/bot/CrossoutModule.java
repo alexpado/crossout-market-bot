@@ -12,29 +12,20 @@ import java.util.List;
 public class CrossoutModule extends JDAModule {
 
     public CrossoutModule(JDABot bot) throws RuntimeException {
+
         super(bot);
     }
 
     @Override
     public String getName() {
+
         return "crossout";
     }
 
     @Override
     public List<JDACommandExecutor> getCommandExecutors() {
-        return Arrays.asList(
-                new ItemCommand(this),
-                new PackCommand(this),
-                new WatchlistCommand(this),
-                new WatchCommand(this),
-                new WatcherSettingsCommand(this),
-                new UnwatchCommand(this),
-                new PauseWatchersCommand(this),
-                new HelpCommand(this),
-                new LanguageCommand(this),
-                new SearchCommand(this),
-                new TranslateCommand(this)
-        );
+
+        return Arrays.asList(new ItemCommand(this), new PackCommand(this), new WatchlistCommand(this), new WatchCommand(this), new WatcherSettingsCommand(this), new UnwatchCommand(this), new PauseWatchersCommand(this), new HelpCommand(this), new LanguageCommand(this), new SearchCommand(this), new TranslateCommand(this));
     }
 
 }

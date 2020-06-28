@@ -102,4 +102,5 @@ public class TickerTask {
 
         this.doTickerBannerRefresh();
     }
+
 }

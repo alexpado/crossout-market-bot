@@ -10,19 +10,22 @@ import java.util.Optional;
 @Getter
 public class Type extends JSONModel {
 
-    private int id;
+    private int    id;
     private String name;
 
     public Type(JSONObject dataSource) throws Exception {
+
         super(dataSource);
     }
 
     public Type(int id, String name) {
-        this.id = id;
+
+        this.id   = id;
         this.name = name;
     }
 
     public static Optional<Type> from(JSONObject dataSource) {
+
         try {
             return Optional.of(new Type(dataSource));
         } catch (Exception e) {
@@ -33,8 +36,9 @@ public class Type extends JSONModel {
 
     @Override
     public boolean reload(JSONObject dataSource) {
+
         try {
-            this.id = dataSource.getInt("id");
+            this.id   = dataSource.getInt("id");
             this.name = dataSource.getString("name");
 
             return true;
@@ -45,7 +49,8 @@ public class Type extends JSONModel {
 
     @Override
     public String toString() {
-        return name;
+
+        return this.name;
     }
 
 }

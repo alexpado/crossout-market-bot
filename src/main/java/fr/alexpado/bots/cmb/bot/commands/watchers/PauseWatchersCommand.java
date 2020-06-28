@@ -15,23 +15,23 @@ import java.util.List;
 public class PauseWatchersCommand extends WatcherCommandGroup {
 
     public PauseWatchersCommand(JDAModule module) {
+
         super(module, "pausewatchers");
     }
 
     @Override
     public List<String> getRequiredTranslation() {
+
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(
-                Translation.WATCHERS_PAUSED,
-                Translation.WATCHERS_RESUMED
-        ));
+        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_PAUSED, Translation.WATCHERS_RESUMED));
         return requiredTranslations;
     }
 
     @Override
     public void execute(CommandEvent event, Message message) {
+
         UserSettings settings = this.getUserSettings();
-        String key;
+        String       key;
 
         if (settings.isWatcherPaused()) {
             settings.setWatcherPaused(false);
@@ -47,6 +47,7 @@ public class PauseWatchersCommand extends WatcherCommandGroup {
 
     @Override
     public EmbedBuilder getAdvancedHelp() {
+
         return null;
     }
 

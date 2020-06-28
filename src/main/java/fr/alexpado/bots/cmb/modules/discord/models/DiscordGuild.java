@@ -26,13 +26,15 @@ public class DiscordGuild {
     private String guildIcon;
 
     public static DiscordGuild getInstance(Guild guild) {
+
         return new DiscordGuild().refresh(guild);
     }
 
     public DiscordGuild refresh(Guild guild) {
-        this.id = guild.getIdLong();
-        this.owner = DiscordUser.getInstance(guild.getOwner().getUser());
-        this.name = guild.getName();
+
+        this.id        = guild.getIdLong();
+        this.owner     = DiscordUser.getInstance(guild.getOwner().getUser());
+        this.name      = guild.getName();
         this.guildIcon = guild.getIconId();
 
         return this;
@@ -40,15 +42,17 @@ public class DiscordGuild {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DiscordGuild)) return false;
+
+        if (this == o) { return true; }
+        if (!(o instanceof DiscordGuild)) { return false; }
         DiscordGuild that = (DiscordGuild) o;
-        return id.equals(that.id);
+        return this.id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+
+        return Objects.hash(this.id);
     }
 
 }

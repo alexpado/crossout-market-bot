@@ -57,6 +57,7 @@ public class ChartController {
     @GetMapping(value = "/chart/{end:[0-9]*}/{itemID:[0-9]*}.png", produces = {MediaType.IMAGE_PNG_VALUE})
     public @ResponseBody
     byte[] getChartPicture(@PathVariable long end, @PathVariable int itemID) throws Exception {
+
         try {
             String        imgIdentifier = end + "$" + itemID;
             File          graphFile     = this.getGraph(imgIdentifier);
@@ -69,17 +70,17 @@ public class ChartController {
             if (this.crossoutConfiguration.isCacheEnabled() && graphFile.exists()) {
                 image = ImageIO.read(graphFile);
             } else {
-                long interval = crossoutConfiguration.getGraphInterval();
+                long interval = this.crossoutConfiguration.getGraphInterval();
 
-                MarketEndpoint market = new MarketEndpoint(crossoutConfiguration.getApiHost());
+                MarketEndpoint market = new MarketEndpoint(this.crossoutConfiguration.getApiHost());
                 List<GraphSet> graphs = market.getMarketData(end - interval, end, itemID);
 
                 MarketGraph graph = new MarketGraph("Last 5 hours", graphs.get(0), graphs.get(1));
                 image = graph.draw(Color.GREEN, Color.RED);
             }
 
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-            FileOutputStream fileOutputStream = new FileOutputStream(graphFile);
+            ByteArrayOutputStream output           = new ByteArrayOutputStream();
+            FileOutputStream      fileOutputStream = new FileOutputStream(graphFile);
 
             ImageIO.write(image, "png", output);
 
@@ -90,7 +91,7 @@ public class ChartController {
             return output.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
-            BufferedImage img = ImageIO.read(new File("graph3fail.png"));
+            BufferedImage         img    = ImageIO.read(new File("graph3fail.png"));
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             ImageIO.write(img, "png", output);
             return output.toByteArray();

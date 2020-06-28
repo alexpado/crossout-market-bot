@@ -14,6 +14,7 @@ public abstract class APIEndpoint<T, U> {
      *         API Host (root) to use for this endpoint.
      */
     public APIEndpoint(String host) {
+
         this.host = host;
     }
 
@@ -23,7 +24,8 @@ public abstract class APIEndpoint<T, U> {
      * @return API Host (root) to use for this endpoint.
      */
     public String getHost() {
-        return host;
+
+        return this.host;
     }
 
     /**

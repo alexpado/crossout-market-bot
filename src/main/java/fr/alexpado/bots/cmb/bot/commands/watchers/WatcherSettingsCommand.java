@@ -21,30 +21,28 @@ import java.util.Optional;
 public class WatcherSettingsCommand extends WatcherCommandGroup {
 
     public WatcherSettingsCommand(JDAModule module) {
+
         super(module, "watchersettings");
     }
 
     @Override
     public List<String> getRequiredTranslation() {
+
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(
-                Translation.WATCHERS_WRONG_ID,
-                Translation.GENERAL_ERROR,
-                Translation.WATCHERS_REMOVED,
-                Translation.WATCHERS_UPDATED
-        ));
+        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_WRONG_ID, Translation.GENERAL_ERROR, Translation.WATCHERS_REMOVED, Translation.WATCHERS_UPDATED));
         return requiredTranslations;
     }
 
     @Override
     public void execute(CommandEvent event, Message message) {
+
         Optional<Watcher> optionalWatcher = this.getWatcher(message, event);
         if (!optionalWatcher.isPresent()) {
             return;
         }
         Watcher watcher = optionalWatcher.get();
 
-        ItemEndpoint endpoint = new ItemEndpoint(this.getConfig());
+        ItemEndpoint   endpoint     = new ItemEndpoint(this.getConfig());
         Optional<Item> optionalItem = endpoint.getOne(watcher.getItemId());
 
         if (!optionalItem.isPresent()) {
@@ -59,8 +57,8 @@ public class WatcherSettingsCommand extends WatcherCommandGroup {
         }
 
         Optional<WatcherType> optionalWatcherType = this.getType(event);
-        Optional<Float> optionalPrice = this.getPrice(event);
-        Optional<Long> optionalInterval = this.getTime(event);
+        Optional<Float>       optionalPrice       = this.getPrice(event);
+        Optional<Long>        optionalInterval    = this.getTime(event);
 
         if (optionalWatcherType.isPresent()) {
             WatcherType watcherType = optionalWatcherType.get();
@@ -85,6 +83,7 @@ public class WatcherSettingsCommand extends WatcherCommandGroup {
 
     @Override
     public EmbedBuilder getAdvancedHelp() {
+
         EmbedBuilder builder = super.getAdvancedHelp();
         builder.setTitle("Advanced help for : watchersettings");
 

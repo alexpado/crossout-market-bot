@@ -34,6 +34,7 @@ public class FakeItem {
 
 
     public EmbedBuilder getAsEmbed(JDA jda, String generalInvite) {
+
         EmbedBuilder builder = new EmbedBuilder();
 
         builder.setAuthor(generalInvite, DiscordBot.INVITE, jda.getSelfUser().getAvatarUrl());
@@ -47,15 +48,17 @@ public class FakeItem {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof FakeItem)) return false;
+
+        if (this == o) { return true; }
+        if (!(o instanceof FakeItem)) { return false; }
         FakeItem fakeItem = (FakeItem) o;
-        return id.equals(fakeItem.id);
+        return this.id.equals(fakeItem.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+
+        return Objects.hash(this.id);
     }
 
 }

@@ -24,28 +24,32 @@ public class DiscordChannel {
     private String name;
 
     public static DiscordChannel getInstance(GuildChannel channel) {
+
         return new DiscordChannel().refresh(channel);
     }
 
     public DiscordChannel refresh(GuildChannel channel) {
-        this.id = channel.getIdLong();
+
+        this.id    = channel.getIdLong();
         this.guild = DiscordGuild.getInstance(channel.getGuild());
-        this.name = channel.getName();
+        this.name  = channel.getName();
 
         return this;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DiscordChannel)) return false;
+
+        if (this == o) { return true; }
+        if (!(o instanceof DiscordChannel)) { return false; }
         DiscordChannel that = (DiscordChannel) o;
-        return id.equals(that.id);
+        return this.id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+
+        return Objects.hash(this.id);
     }
 
 }

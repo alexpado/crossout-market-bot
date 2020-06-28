@@ -18,24 +18,29 @@ import java.util.Optional;
 public abstract class ItemBotCommand extends TranslatableBotCommand {
 
     public ItemBotCommand(JDAModule module, String label) {
+
         super(module, label);
     }
 
     @Override
     public List<String> getRequiredTranslation() {
+
         return Arrays.asList(Translation.GENERAL_ERROR, Translation.ITEMS_LIST, Translation.ITEMS_NOTFOUND, Translation.GENERAL_INVITE, Translation.XODB_OFFLINE);
     }
 
     public void manageItemList(CommandEvent event, Message message, List<Item> items, String itemName) throws MissingTranslationException {
+
         if (items.size() == 0) {
             if (itemName != null) {
                 String query = "%" + itemName.toLowerCase() + "%";
 
-                FakeItemRepository repository = this.getConfig().getRepositoryAccessor().getFakeItemRepository();
+                FakeItemRepository repository       = this.getConfig().getRepositoryAccessor().getFakeItemRepository();
                 Optional<FakeItem> fakeItemOptional = repository.findEasterEgg(query);
 
                 if (fakeItemOptional.isPresent()) {
-                    message.editMessage(fakeItemOptional.get().getAsEmbed(event.getJDA(), this.getTranslation(Translation.GENERAL_INVITE)).build()).queue();
+                    message.editMessage(fakeItemOptional.get()
+                                                        .getAsEmbed(event.getJDA(), this.getTranslation(Translation.GENERAL_INVITE))
+                                                        .build()).queue();
                     return;
                 }
             }
@@ -57,8 +62,10 @@ public abstract class ItemBotCommand extends TranslatableBotCommand {
 
             // Show the navigation menu.
             new EmbedPage<Item>(message, items, 20) {
+
                 @Override
                 public EmbedBuilder getEmbed() {
+
                     EmbedBuilder builder = new EmbedBuilder();
                     builder.setTitle(ItemBotCommand.this.getTranslation(Translation.ITEMS_LIST));
                     return builder;

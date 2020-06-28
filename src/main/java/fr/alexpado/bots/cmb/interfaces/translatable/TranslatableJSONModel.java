@@ -12,27 +12,33 @@ import java.util.Map;
 
 public abstract class TranslatableJSONModel extends JSONModel implements ITranslatable {
 
-    private final Map<String, String> translations = new HashMap<>();
+    private final Map<String, String>   translations = new HashMap<>();
     // Fake double extends
-    private final Translatable translatable;
-    private CrossoutConfiguration config;
+    private final Translatable          translatable;
+    private       CrossoutConfiguration config;
 
     public TranslatableJSONModel(CrossoutConfiguration config, JSONObject dataSource) throws Exception {
+
         super(dataSource);
-        this.config = config;
+        this.config       = config;
         this.translatable = new Translatable(config) {
+
             @Override
             public List<String> getRequiredTranslation() {
+
                 return TranslatableJSONModel.this.getRequiredTranslation();
             }
         };
     }
 
     public TranslatableJSONModel(CrossoutConfiguration config) {
+
         super();
         this.translatable = new Translatable(config) {
+
             @Override
             public List<String> getRequiredTranslation() {
+
                 return TranslatableJSONModel.this.getRequiredTranslation();
             }
         };
@@ -40,21 +46,25 @@ public abstract class TranslatableJSONModel extends JSONModel implements ITransl
 
     @Override
     public String getTranslation(String key) {
-        return translatable.getTranslation(key);
+
+        return this.translatable.getTranslation(key);
     }
 
     @Override
     public void fetchTranslations(String language) throws MissingTranslationException {
-        translatable.fetchTranslations(language);
+
+        this.translatable.fetchTranslations(language);
     }
 
     @Override
     public List<Translation> fetch(List<String> keys, String language) throws MissingTranslationException {
-        return translatable.fetch(keys, language);
+
+        return this.translatable.fetch(keys, language);
     }
 
     public CrossoutConfiguration getConfig() {
-        return config;
+
+        return this.config;
     }
 
 }

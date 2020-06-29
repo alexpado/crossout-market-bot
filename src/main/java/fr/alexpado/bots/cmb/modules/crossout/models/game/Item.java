@@ -6,6 +6,8 @@ import fr.alexpado.bots.cmb.bot.DiscordBot;
 import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.interfaces.translatable.TranslatableJSONModel;
 import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
+import fr.alexpado.bots.cmb.tools.TranslatableWatcher;
 import fr.alexpado.bots.cmb.tools.Utilities;
 import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -128,9 +130,14 @@ public class Item extends TranslatableJSONModel {
         return String.format(webUrl, this.getId());
     }
 
-    public EmbedBuilder getDiffEmbed(JDA jda, int sellPrice, int buyPrice) {
+    public EmbedBuilder getDiffEmbed(JDA jda, Watcher watcher, TranslatableWatcher translatableWatcher) {
+
+        int sellPrice = watcher.getSellPrice();
+        int buyPrice = watcher.getBuyPrice();
 
         EmbedBuilder builder = this.getRawEmbed(jda);
+        String watcherTitle = translatableWatcher.toString();
+        builder.setAuthor(watcherTitle.substring(4), null, jda.getSelfUser().getAvatarUrl());
 
         if (!this.removed) {
             String currentSellPrice = Utilities.money(this.sellPrice, this.getTranslation(Translation.GENERAL_CURRENCY));

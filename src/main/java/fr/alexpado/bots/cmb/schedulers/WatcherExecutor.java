@@ -72,7 +72,7 @@ public class WatcherExecutor {
             try {
                 item.fetchTranslations(settings.getLanguage());
 
-                EmbedBuilder builder = item.getDiffEmbed(DiscordBot.jda, watcher.getSellPrice(), watcher.getBuyPrice());
+                EmbedBuilder builder = item.getDiffEmbed(DiscordBot.jda, watcher, watcher.getTranslatableWatcher(this.config, settings.getLanguage()));
 
                 User user = DiscordBot.jda.getUserById(watcher.getUser().getId());
 

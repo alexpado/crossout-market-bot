@@ -61,7 +61,7 @@ public class WatchCommand extends WatcherCommandGroup {
         } else if (items.size() > 1) {
             // Try to find a perfect match.
             for (Item el : items) {
-                if (el.getName().equalsIgnoreCase(optionalItemName.get())) {
+                if (el.getAvailableName().equalsIgnoreCase(optionalItemName.get()) || el.getName().equalsIgnoreCase(optionalItemName.get())) {
                     // Perfect match !
                     item = el;
                     break;

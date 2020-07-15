@@ -36,6 +36,12 @@ public class TranslatableWatcher extends Translatable {
         WatcherType type = WatcherType.getFromId(this.watcher.getWatcherType());
         String      time = new TimeConverter(this.watcher.getRepeatEvery() / 1000).toString();
 
+        String watcherName = this.watcher.getName() == null ? "" : this.watcher.getName();
+
+        if (!watcherName.isEmpty()) {
+            return String.format("[%s] %s", this.watcher.getId(), this.watcher.getItemName());
+        }
+
         switch (type) {
             case SELL_OVER:
             case SELL_UNDER:

@@ -1,9 +1,28 @@
 package fr.alexpado.bots.cmb.cleaning.interfaces.common;
 
+/**
+ * Interface representing an object holding a name.
+ *
+ * @author alexpado
+ */
 public interface Nameable {
 
+    /**
+     * Retrieve this {@link Nameable}'s name.
+     *
+     * @return The name.
+     */
     String getName();
 
-    void setName(String name);
+    /**
+     * Define this {@link Nameable}'s name.
+     *
+     * @param name
+     *         The name.
+     */
+    default void setName(String name) {
+
+        throw new UnsupportedOperationException("Unable to set value: This value is read-only.");
+    }
 
 }

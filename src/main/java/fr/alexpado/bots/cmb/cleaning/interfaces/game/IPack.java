@@ -4,30 +4,119 @@ import fr.alexpado.bots.cmb.cleaning.interfaces.common.Identifiable;
 import fr.alexpado.bots.cmb.cleaning.interfaces.common.Marchantable;
 import fr.alexpado.bots.cmb.cleaning.interfaces.common.Nameable;
 
+/**
+ * Interface representing a Crossout's pack.
+ *
+ * @author alexpado
+ */
 public interface IPack extends Identifiable<Integer>, Nameable, Marchantable {
 
+    /**
+     * Retrieve this {@link IPack}'s key identifier.
+     *
+     * @return A string
+     */
     String getKey();
 
-    void setKey();
+    /**
+     * Define this {@link IPack}'s key identifier.
+     *
+     * @param key
+     *         A string
+     */
+    default void setKey(String key) {
 
-    double getPriceUSD();
+        throw new UnsupportedOperationException("Unable to set value: This value is read-only.");
+    }
 
-    void setPriceUSD(double price);
+    /**
+     * Retrieve this {@link IPack}'s price in USD.
+     *
+     * @return The price
+     */
+    Double getPriceUSD();
 
-    double getPriceEUR();
+    /**
+     * Retrieve this {@link IPack}'s price in USD.
+     *
+     * @param price
+     *         The price
+     */
+    default void setPriceUSD(Double price) {
 
-    void setPriceEUR(double price);
+        throw new UnsupportedOperationException("Unable to set value: This value is read-only.");
+    }
 
-    double getPriceGBP();
+    /**
+     * Retrieve this {@link IPack}'s price in EUR.
+     *
+     * @return The price
+     */
+    Double getPriceEUR();
 
-    void setPriceGBP(double price);
+    /**
+     * Retrieve this {@link IPack}'s price in EUR.
+     *
+     * @param price
+     *         The price
+     */
+    default void setPriceEUR(Double price) {
 
-    double getPriceRUB();
+        throw new UnsupportedOperationException("Unable to set value: This value is read-only.");
+    }
 
-    void setPriceRUB(double price);
+    /**
+     * Retrieve this {@link IPack}'s price in GBP.
+     *
+     * @return The price
+     */
+    Double getPriceGBP();
 
-    double getRawCoins();
+    /**
+     * Retrieve this {@link IPack}'s price in GBP.
+     *
+     * @param price
+     *         The price
+     */
+    default void setPriceGBP(Double price) {
 
-    void setRawCoins(double coins);
+        throw new UnsupportedOperationException("Unable to set value: This value is read-only.");
+    }
+
+    /**
+     * Retrieve this {@link IPack}'s price in RUB.
+     *
+     * @return The price
+     */
+    Double getPriceRUB();
+
+    /**
+     * Retrieve this {@link IPack}'s price in RUB.
+     *
+     * @param price
+     *         The price
+     */
+    default void setPriceRUB(Double price) {
+
+        throw new UnsupportedOperationException("Unable to set value: This value is read-only.");
+    }
+
+    /**
+     * Retrieve this {@link IPack}'s value in coins.
+     *
+     * @return The value
+     */
+    Double getRawCoins();
+
+    /**
+     * Retrieve this {@link IPack}'s value in coins.
+     *
+     * @param coins
+     *         The value
+     */
+    default void setRawCoins(Double coins) {
+
+        throw new UnsupportedOperationException("Unable to set value: This value is read-only.");
+    }
 
 }

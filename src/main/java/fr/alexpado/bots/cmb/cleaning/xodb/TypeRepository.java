@@ -1,21 +1,20 @@
 package fr.alexpado.bots.cmb.cleaning.xodb;
 
 import fr.alexpado.bots.cmb.cleaning.XoDB;
-import fr.alexpado.bots.cmb.cleaning.interfaces.game.IItem;
+import fr.alexpado.bots.cmb.cleaning.interfaces.game.IType;
 import fr.alexpado.bots.cmb.cleaning.rest.interfaces.IRestRequest;
 import fr.alexpado.bots.cmb.cleaning.rest.interfaces.RestRepository;
-import fr.alexpado.bots.cmb.cleaning.xodb.item.FindAllItemsAction;
-import fr.alexpado.bots.cmb.cleaning.xodb.item.FindItemByIdAction;
+import fr.alexpado.bots.cmb.cleaning.xodb.type.FindAllTypesAction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
 
-public class ItemRepository implements RestRepository<IItem, Integer> {
+public class TypeRepository implements RestRepository<IType, Integer> {
 
     private final XoDB xoDB;
 
-    public ItemRepository(XoDB xoDB) {
+    public TypeRepository(XoDB xoDB) {
 
         this.xoDB = xoDB;
     }
@@ -23,15 +22,15 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
     /**
      * Retrieve one entity of the current type identifiable by its ID.
      *
-     * @param id
+     * @param integer
      *         The entity's identifier.
      *
      * @return A {@link IRestRequest}
      */
     @Override
-    public @NotNull IRestRequest<IItem> findById(@NotNull Integer id) {
+    public @NotNull IRestRequest<IType> findById(@NotNull Integer integer) {
 
-        return new FindItemByIdAction(this.xoDB, id);
+        throw new UnsupportedOperationException("Finding a type by its id isn't supported by CrossoutDB.");
     }
 
     /**
@@ -40,9 +39,9 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
      * @return A {@link IRestRequest}
      */
     @Override
-    public IRestRequest<List<IItem>> findAll() {
+    public IRestRequest<List<IType>> findAll() {
 
-        return new FindAllItemsAction(this.xoDB);
+        return new FindAllTypesAction(this.xoDB);
     }
 
     /**
@@ -54,9 +53,9 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
      * @return A {@link IRestRequest}.
      */
     @Override
-    public IRestRequest<List<IItem>> findAll(Map<String, Object> meta) {
+    public IRestRequest<List<IType>> findAll(Map<String, Object> meta) {
 
-        return new FindAllItemsAction(this.xoDB, meta);
+        throw new UnsupportedOperationException("Searching for a type isn't supported by CrossoutDB.");
     }
 
     /**
@@ -68,9 +67,9 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
      * @return A {@link IRestRequest}
      */
     @Override
-    public IRestRequest<List<IItem>> findAllByIds(Iterable<Integer> integers) {
+    public IRestRequest<List<IType>> findAllByIds(Iterable<Integer> integers) {
 
-        throw new UnsupportedOperationException("Finding items by their ids isn't supported by CrossoutDB.");
+        throw new UnsupportedOperationException("Finding types by their ids isn't supported by CrossoutDB.");
     }
 
     /**
@@ -86,9 +85,9 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
      * @return A {@link IRestRequest}
      */
     @Override
-    public IRestRequest<List<IItem>> saveAll(Iterable<IItem> entities) {
+    public IRestRequest<List<IType>> saveAll(Iterable<IType> entities) {
 
-        throw new UnsupportedOperationException("Saving items isn't supported by CrossoutDB.");
+        throw new UnsupportedOperationException("Saving types isn't supported by CrossoutDB.");
     }
 
     /**
@@ -104,9 +103,9 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
      * @return A {@link IRestRequest}
      */
     @Override
-    public IRestRequest<IItem> save(IItem entity) {
+    public IRestRequest<IType> save(IType entity) {
 
-        throw new UnsupportedOperationException("Saving an item isn't supported by CrossoutDB.");
+        throw new UnsupportedOperationException("Saving a type isn't supported by CrossoutDB.");
     }
 
     /**
@@ -119,9 +118,9 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
      * @return A {@link IRestRequest}
      */
     @Override
-    public IRestRequest<Void> delete(IItem entity) {
+    public IRestRequest<Void> delete(IType entity) {
 
-        throw new UnsupportedOperationException("Deleting an item isn't supported by CrossoutDB.");
+        throw new UnsupportedOperationException("Deleting a type isn't supported by CrossoutDB.");
     }
 
     /**
@@ -134,8 +133,9 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
      * @return A {@link IRestRequest}
      */
     @Override
-    public IRestRequest<Void> deleteAll(Iterable<IItem> entities) {
+    public IRestRequest<Void> deleteAll(Iterable<IType> entities) {
 
-        throw new UnsupportedOperationException("Deleting items isn't supported by CrossoutDB.");
+        throw new UnsupportedOperationException("Deleting types isn't supported by CrossoutDB.");
     }
+
 }

@@ -1,24 +1,28 @@
-package fr.alexpado.bots.cmb.cleaning.xodb;
+package fr.alexpado.bots.cmb.cleaning.rest.interfaces;
 
-import fr.alexpado.bots.cmb.cleaning.XoDB;
-import fr.alexpado.bots.cmb.cleaning.interfaces.game.IItem;
-import fr.alexpado.bots.cmb.cleaning.rest.interfaces.IRestRequest;
-import fr.alexpado.bots.cmb.cleaning.rest.interfaces.RestRepository;
-import fr.alexpado.bots.cmb.cleaning.xodb.item.FindAllItemsAction;
-import fr.alexpado.bots.cmb.cleaning.xodb.item.FindItemByIdAction;
+import fr.alexpado.bots.cmb.cleaning.interfaces.common.Identifiable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
 
-public class ItemRepository implements RestRepository<IItem, Integer> {
-
-    private final XoDB xoDB;
-
-    public ItemRepository(XoDB xoDB) {
-
-        this.xoDB = xoDB;
-    }
+/**
+ * Interface representing a REST Repository, allowing to request a remote REST API to retrieve entities.
+ * <p>
+ * The targeted entity must implement the interface {@link Identifiable} to ensure that every entity can be obtained
+ * separately.
+ * <p>
+ * Every requests may fail if two or more entity share the same identifier, meaning that serious bug could occur in any
+ * program using the API and requiring identifiable entities.
+ *
+ * @param <T>
+ *         Type of the entity that will be retrieved from the REST API
+ * @param <ID>
+ *         Type of the entity type's identifier.
+ *
+ * @author alexpado
+ */
+public interface RestRepository<T extends Identifiable<ID>, ID> {
 
     /**
      * Retrieve one entity of the current type identifiable by its ID.
@@ -28,22 +32,14 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
      *
      * @return A {@link IRestRequest}
      */
-    @Override
-    public @NotNull IRestRequest<IItem> findById(@NotNull Integer id) {
-
-        return new FindItemByIdAction(this.xoDB, id);
-    }
+    @NotNull IRestRequest<T> findById(@NotNull ID id);
 
     /**
      * Retrieve every entities from the REST API of the current type.
      *
      * @return A {@link IRestRequest}
      */
-    @Override
-    public IRestRequest<List<IItem>> findAll() {
-
-        return new FindAllItemsAction(this.xoDB);
-    }
+    IRestRequest<List<T>> findAll();
 
     /**
      * Retrieve every entities of the current type matching the query represented by the provided map.
@@ -53,25 +49,17 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
      *
      * @return A {@link IRestRequest}.
      */
-    @Override
-    public IRestRequest<List<IItem>> findAll(Map<String, Object> meta) {
-
-        return new FindAllItemsAction(this.xoDB, meta);
-    }
+    IRestRequest<List<T>> findAll(Map<String, Object> meta);
 
     /**
      * Retrieve every entities of the current type having their identifier contained in the provided {@link Iterable}.
      *
-     * @param integers
+     * @param ids
      *         A collection of ID identifying each entity to retrieve.
      *
      * @return A {@link IRestRequest}
      */
-    @Override
-    public IRestRequest<List<IItem>> findAllByIds(Iterable<Integer> integers) {
-
-        throw new UnsupportedOperationException("Finding items by their ids isn't supported by CrossoutDB.");
-    }
+    IRestRequest<List<T>> findAllByIds(Iterable<ID> ids);
 
     /**
      * Save all provided entities of the current type. This may create entries if the identifier of an entity isn't set,
@@ -85,11 +73,7 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
      *
      * @return A {@link IRestRequest}
      */
-    @Override
-    public IRestRequest<List<IItem>> saveAll(Iterable<IItem> entities) {
-
-        throw new UnsupportedOperationException("Saving items isn't supported by CrossoutDB.");
-    }
+    IRestRequest<List<T>> saveAll(Iterable<T> entities);
 
     /**
      * Save the entity of the current type. This may create an entry if the provided entity's identifier isn't set or
@@ -103,11 +87,7 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
      *
      * @return A {@link IRestRequest}
      */
-    @Override
-    public IRestRequest<IItem> save(IItem entity) {
-
-        throw new UnsupportedOperationException("Saving an item isn't supported by CrossoutDB.");
-    }
+    IRestRequest<T> save(T entity);
 
     /**
      * Delete the provided entity. If the identifier isn't set, no request will be sent to the REST API and the promise
@@ -118,11 +98,7 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
      *
      * @return A {@link IRestRequest}
      */
-    @Override
-    public IRestRequest<Void> delete(IItem entity) {
-
-        throw new UnsupportedOperationException("Deleting an item isn't supported by CrossoutDB.");
-    }
+    IRestRequest<Void> delete(T entity);
 
     /**
      * Delete the provided entities. If one of the identifier isn't set, no request will be sent to the REST API and the
@@ -133,9 +109,6 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
      *
      * @return A {@link IRestRequest}
      */
-    @Override
-    public IRestRequest<Void> deleteAll(Iterable<IItem> entities) {
+    IRestRequest<Void> deleteAll(Iterable<T> entities);
 
-        throw new UnsupportedOperationException("Deleting items isn't supported by CrossoutDB.");
-    }
 }

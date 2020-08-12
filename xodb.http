@@ -1,0 +1,6 @@
+GET https://crossoutdb.com/api/v2/item/80
+Accept: application/json
+
+###
+GET https://crossoutdb.com/api/v2/packs
+Accept: application/json

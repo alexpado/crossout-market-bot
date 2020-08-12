@@ -1,12 +1,20 @@
 package fr.alexpado.bots.cmb.cleaning.entities.game;
 
 import fr.alexpado.bots.cmb.cleaning.XoDB;
+import fr.alexpado.bots.cmb.cleaning.XoDBBot;
+import fr.alexpado.bots.cmb.cleaning.i18n.TranslationException;
+import fr.alexpado.bots.cmb.cleaning.i18n.TranslationProvider;
 import fr.alexpado.bots.cmb.cleaning.interfaces.common.*;
 import fr.alexpado.bots.cmb.cleaning.interfaces.game.*;
 import fr.alexpado.bots.cmb.tools.Utilities;
+import fr.alexpado.jda.services.translations.Translator;
+import fr.alexpado.jda.services.translations.annotations.I18N;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -18,6 +26,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class Item implements IItem {
 
+    private final XoDB          xoDB;
     private final int           id;
     private final String        availableName;
     private final String        description;
@@ -34,6 +43,23 @@ public class Item implements IItem {
     private final ICategory     category;
     private final IFaction      faction;
 
+    @I18N(TranslationProvider.MARKET_BUY)
+    private String marketBuy;
+    @I18N(TranslationProvider.MARKET_SELL)
+    private String marketSell;
+    @I18N(TranslationProvider.MARKET_CRAFTS_BUY)
+    private String marketCraftBuy;
+    @I18N(TranslationProvider.MARKET_CRAFTS_SELL)
+    private String marketCraftSell;
+    @I18N(TranslationProvider.GENERAL_CURRENCY)
+    private String generalCurreny;
+    @I18N(TranslationProvider.GENERAL_INVITE)
+    private String generalInvite;
+    @I18N(TranslationProvider.ITEMS_REMOVED)
+    private String itemRemoved;
+    @I18N(TranslationProvider.ITEMS_UNAVAILABLE)
+    private String itemUnavailable;
+
     /**
      * Create a new {@link Item} instance.
      *
@@ -43,6 +69,8 @@ public class Item implements IItem {
      *         JSON containing all values needed to create this {@link Item}.
      */
     public Item(XoDB xoDB, JSONObject source) {
+
+        this.xoDB = xoDB;
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -67,6 +95,32 @@ public class Item implements IItem {
         // Let's put that here for reminder purpose. (
 
         //this.craftable = !(this.craftingSellSum == 0 || this.craftingBuySum == 0);
+    }
+
+    /**
+     * Retrieve the link to use to redirect to the CrossoutDB page of the {@link IItem} identified by the provided id.
+     *
+     * @param id
+     *         The {@link IItem}'s id
+     *
+     * @return An URL
+     */
+    public static String toXoDBLink(int id) {
+
+        return String.format("https://crossoutdb.com/item/%s?ref=crossoutmarketbot", id);
+    }
+
+    /**
+     * Retrieve the link retrieve the thumbnail of the {@link IItem} identified by the provided id.
+     *
+     * @param id
+     *         The {@link IItem}'s id
+     *
+     * @return An URL
+     */
+    public static String toXoDBThumbnail(int id, LocalDateTime updated) {
+
+        return String.format("https://crossoutdb.com/img/items/%s.png?ref=crossoutmarketbot&time=%s", id, updated.toEpochSecond(ZoneOffset.UTC));
     }
 
     /**
@@ -234,5 +288,49 @@ public class Item implements IItem {
     public IFaction getFaction() {
 
         return this.faction;
+    }
+
+    /**
+     * Retrieve an {@link EmbedBuilder} representation of the current {@link Embeddable} instance.
+     *
+     * @param jda
+     *         {@link JDA} instance to use to access the current bot state.
+     *
+     * @return An {@link EmbedBuilder}.
+     */
+    @Override
+    public EmbedBuilder toEmbed(JDA jda, String language) {
+
+        try {
+            Translator.translate(this.xoDB.getTranslationProvider(), language, this);
+        } catch (IllegalAccessException e) {
+            throw new TranslationException(e);
+        }
+
+        EmbedBuilder builder = new EmbedBuilder();
+
+        builder.setAuthor(this.generalInvite, XoDBBot.INVITE, jda.getSelfUser().getAvatarUrl());
+        builder.setTitle(this.availableName, Item.toXoDBLink(this.id));
+        builder.setDescription(this.description);
+
+        builder.setThumbnail(Item.toXoDBThumbnail(this.id, this.lastUpdate));
+
+        if (this.removed) {
+            builder.addField(this.itemRemoved, this.itemUnavailable, true);
+        } else {
+            builder.addField(this.marketBuy, Utilities.money(this.sellPrice, this.generalCurreny), true);
+            builder.addField(this.marketSell, Utilities.money(this.buyPrice, this.generalCurreny), true);
+
+            if (this.craftable) {
+                builder.addBlankField(true);
+                builder.addField(this.marketCraftBuy, Utilities.money(this.craftingSellSum, this.generalCurreny), true);
+                builder.addField(this.marketCraftSell, Utilities.money(this.craftingBuySum, this.generalCurreny), true);
+                builder.addBlankField(true);
+            }
+        }
+
+        builder.setColor(this.rarity.getColor());
+        builder.setImage(String.format(this.xoDB.getChartUrl(), this.lastUpdate.toEpochSecond(ZoneOffset.UTC), this.id));
+        return builder;
     }
 }

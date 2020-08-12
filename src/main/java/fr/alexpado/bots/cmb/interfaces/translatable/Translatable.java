@@ -2,8 +2,8 @@ package fr.alexpado.bots.cmb.interfaces.translatable;
 
 
 import fr.alexpado.bots.cmb.CrossoutConfiguration;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
-import fr.alexpado.bots.cmb.modules.crossout.repositories.TranslationRepository;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
+import fr.alexpado.bots.cmb.modules.crossout.repositories.OldTranslationRepository;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 
 import java.util.HashMap;
@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 
 public abstract class Translatable implements ITranslatable {
 
-    private final CrossoutConfiguration config;
-    private final TranslationRepository repository;
-    private final Map<String, String>   translations = new HashMap<>();
+    private final CrossoutConfiguration    config;
+    private final OldTranslationRepository repository;
+    private final Map<String, String>      translations = new HashMap<>();
 
     /**
      * Translatable constructor.
@@ -64,7 +64,7 @@ public abstract class Translatable implements ITranslatable {
             return;
         }
 
-        List<Translation> localeTranslations;
+        List<OldTranslation> localeTranslations;
         try {
             localeTranslations = this.fetch(translationKeys, language);
         } catch (MissingTranslationException e) {
@@ -92,14 +92,14 @@ public abstract class Translatable implements ITranslatable {
      *         and a list of loaded translations in the language provided.
      */
     @Override
-    public List<Translation> fetch(List<String> keys, String language) throws MissingTranslationException {
+    public List<OldTranslation> fetch(List<String> keys, String language) throws MissingTranslationException {
         // Fetch the translations from the database.
-        List<Translation> translationList = this.repository.getNeededFromLanguage(keys, language);
+        List<OldTranslation> translationList = this.repository.getNeededFromLanguage(keys, language);
         // Is there any translations missing ?
         if (translationList.size() != keys.size()) {
             // Prepare the list of keys that has been retrieved.
             List<String> retrievedKeys = translationList.stream()
-                                                        .map(Translation::getText)
+                                                        .map(OldTranslation::getText)
                                                         .collect(Collectors.toList());
             // Get the missing keys
             List<String> missingKeys = keys.stream()

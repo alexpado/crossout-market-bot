@@ -2,7 +2,7 @@ package fr.alexpado.bots.cmb.interfaces.translatable;
 
 import fr.alexpado.bots.cmb.CrossoutConfiguration;
 import fr.alexpado.bots.cmb.interfaces.JSONModel;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import org.json.JSONObject;
 
@@ -57,7 +57,7 @@ public abstract class TranslatableJSONModel extends JSONModel implements ITransl
     }
 
     @Override
-    public List<Translation> fetch(List<String> keys, String language) throws MissingTranslationException {
+    public List<OldTranslation> fetch(List<String> keys, String language) throws MissingTranslationException {
 
         return this.translatable.fetch(keys, language);
     }

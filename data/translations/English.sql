@@ -124,3 +124,6 @@ INSERT INTO `translation` (`language`, `translation_key`, `text`)
 VALUES ('en', 'watchers.wrong.type', 'Wrong watcher type : Valid values are `sell` and `buy`.');
 INSERT INTO `translation` (`language`, `translation_key`, `text`)
 VALUES ('en', 'watchers.wrong.value', 'Wrong watcher value : Valid values are `over` and `under`.');
+INSERT INTO `translation` (`language`, `translation_key`, `text`)
+VALUES ('en', 'xodb.offline',
+        'It seems that CrossoutDB is having some trouble right now. Please try again in few minutes.')

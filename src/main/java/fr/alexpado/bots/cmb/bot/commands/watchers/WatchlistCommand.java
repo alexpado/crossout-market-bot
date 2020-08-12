@@ -3,7 +3,7 @@ package fr.alexpado.bots.cmb.bot.commands.watchers;
 import fr.alexpado.bots.cmb.interfaces.command.WatcherCommandGroup;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import fr.alexpado.bots.cmb.tools.TranslatableWatcher;
@@ -27,7 +27,7 @@ public class WatchlistCommand extends WatcherCommandGroup {
     public List<String> getRequiredTranslation() {
 
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_NONE, Translation.WATCHERS_LIST));
+        requiredTranslations.addAll(Arrays.asList(OldTranslation.WATCHERS_NONE, OldTranslation.WATCHERS_LIST));
         return requiredTranslations;
     }
 
@@ -38,7 +38,7 @@ public class WatchlistCommand extends WatcherCommandGroup {
         List<Watcher> watchers = this.getRepository().findAllByUserId(this.getDiscordUser().getId());
 
         if (watchers.size() == 0) {
-            this.sendError(message, this.getTranslation(Translation.WATCHERS_NONE));
+            this.sendError(message, this.getTranslation(OldTranslation.WATCHERS_NONE));
         } else {
             List<TranslatableWatcher> translatableWatchers = new ArrayList<>();
             for (Watcher watcher : watchers) {
@@ -51,7 +51,7 @@ public class WatchlistCommand extends WatcherCommandGroup {
                 public EmbedBuilder getEmbed() {
 
                     EmbedBuilder builder = new EmbedBuilder();
-                    builder.setTitle(WatchlistCommand.this.getTranslation(Translation.WATCHERS_LIST));
+                    builder.setTitle(WatchlistCommand.this.getTranslation(OldTranslation.WATCHERS_LIST));
                     return builder;
                 }
             };

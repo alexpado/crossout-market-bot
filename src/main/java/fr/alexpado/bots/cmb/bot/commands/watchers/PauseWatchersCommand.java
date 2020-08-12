@@ -3,7 +3,7 @@ package fr.alexpado.bots.cmb.bot.commands.watchers;
 import fr.alexpado.bots.cmb.interfaces.command.WatcherCommandGroup;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.modules.crossout.models.settings.UserSettings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -23,7 +23,7 @@ public class PauseWatchersCommand extends WatcherCommandGroup {
     public List<String> getRequiredTranslation() {
 
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_PAUSED, Translation.WATCHERS_RESUMED));
+        requiredTranslations.addAll(Arrays.asList(OldTranslation.WATCHERS_PAUSED, OldTranslation.WATCHERS_RESUMED));
         return requiredTranslations;
     }
 
@@ -35,10 +35,10 @@ public class PauseWatchersCommand extends WatcherCommandGroup {
 
         if (settings.isWatcherPaused()) {
             settings.setWatcherPaused(false);
-            key = Translation.WATCHERS_RESUMED;
+            key = OldTranslation.WATCHERS_RESUMED;
         } else {
             settings.setWatcherPaused(true);
-            key = Translation.WATCHERS_PAUSED;
+            key = OldTranslation.WATCHERS_PAUSED;
         }
 
         this.getUserSettingsRepository().save(settings);

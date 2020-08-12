@@ -1,21 +1,28 @@
 package fr.alexpado.bots.cmb.cleaning;
 
+import fr.alexpado.bots.cmb.cleaning.i18n.TranslationProvider;
+import fr.alexpado.bots.cmb.cleaning.interfaces.configuration.CrossoutBotContext;
 import fr.alexpado.bots.cmb.cleaning.interfaces.game.*;
 import fr.alexpado.bots.cmb.cleaning.rest.interfaces.RestRepository;
 import fr.alexpado.bots.cmb.cleaning.xodb.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class XoDB {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(XoDB.class);
 
-    private final String rootUrl;
+    private final CrossoutBotContext  context;
+    private final TranslationProvider translationProvider;
+    private final String              chartUrl;
 
     private final Map<Integer, IRarity>   rarityCache   = new HashMap<>();
     private final Map<Integer, IFaction>  factionCache  = new HashMap<>();
@@ -25,12 +32,16 @@ public class XoDB {
     /**
      * Create a new instance of {@link XoDB}.
      *
-     * @param rootUrl
-     *         The root url common to all endpoints.
+     * @param context
+     *         The {@link CrossoutBotContext} instance to use when configuring this {@link XoDB}.
+     * @param translationProvider
+     * @param chartUrl
      */
-    public XoDB(String rootUrl) {
+    public XoDB(CrossoutBotContext context, TranslationProvider translationProvider, @Value("${bot.item.graph.source}") String chartUrl) {
 
-        this.rootUrl = rootUrl;
+        this.context             = context;
+        this.translationProvider = translationProvider;
+        this.chartUrl            = chartUrl;
         this.buildCaches();
     }
 
@@ -41,7 +52,17 @@ public class XoDB {
      */
     public String getRootUrl() {
 
-        return rootUrl;
+        return this.context.getCrossoutDbRootUrl();
+    }
+
+    public TranslationProvider getTranslationProvider() {
+
+        return translationProvider;
+    }
+
+    public String getChartUrl() {
+
+        return chartUrl;
     }
 
     /**
@@ -70,10 +91,7 @@ public class XoDB {
             this.types().findAll().complete().forEach(type -> this.typeCache.put(type.getId(), type));
 
             LOGGER.debug("Building categories cache...");
-            this.categories()
-                .findAll()
-                .complete()
-                .forEach(category -> this.categoryCache.put(category.getId(), category));
+            this.categories().findAll().complete().forEach(category -> this.categoryCache.put(category.getId(), category));
 
             LOGGER.info("Cache built.");
         } catch (IOException e) {

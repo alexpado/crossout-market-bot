@@ -4,7 +4,7 @@ import fr.alexpado.bots.cmb.api.PackEnpoint;
 import fr.alexpado.bots.cmb.interfaces.command.TranslatableBotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.modules.crossout.models.game.Pack;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
@@ -28,14 +28,14 @@ public class PackCommand extends TranslatableBotCommand {
     @Override
     public List<String> getRequiredTranslation() {
 
-        return Arrays.asList(Translation.PACKS_NOTFOUND, Translation.PACKS_LIST);
+        return Arrays.asList(OldTranslation.PACKS_NOTFOUND, OldTranslation.PACKS_LIST);
     }
 
     @Override
     public void execute(CommandEvent event, Message message) throws MissingTranslationException {
 
         if (event.getJDA().getPresence().getStatus() == OnlineStatus.DO_NOT_DISTURB) {
-            this.sendError(message, this.getTranslation(Translation.XODB_OFFLINE));
+            this.sendError(message, this.getTranslation(OldTranslation.XODB_OFFLINE));
             return;
         }
 
@@ -57,7 +57,7 @@ public class PackCommand extends TranslatableBotCommand {
         }
 
         if (effectivePacks.size() == 0) {
-            this.sendError(message, this.getTranslation(Translation.PACKS_NOTFOUND));
+            this.sendError(message, this.getTranslation(OldTranslation.PACKS_NOTFOUND));
         } else if (effectivePacks.size() == 1) {
             Pack pack = effectivePacks.get(0);
             pack.fetchTranslations(this.getEffectiveLanguage());
@@ -69,7 +69,7 @@ public class PackCommand extends TranslatableBotCommand {
                 public EmbedBuilder getEmbed() {
 
                     EmbedBuilder builder = new EmbedBuilder();
-                    builder.setTitle(PackCommand.this.getTranslation(Translation.PACKS_LIST));
+                    builder.setTitle(PackCommand.this.getTranslation(OldTranslation.PACKS_LIST));
                     return builder;
                 }
             };

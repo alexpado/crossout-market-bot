@@ -3,7 +3,7 @@ package fr.alexpado.bots.cmb.bot.commands.watchers;
 import fr.alexpado.bots.cmb.interfaces.command.WatcherCommandGroup;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
@@ -26,7 +26,7 @@ public class UnwatchCommand extends WatcherCommandGroup {
     public List<String> getRequiredTranslation() {
 
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_WRONG_ID, Translation.WATCHERS_UNWATCH));
+        requiredTranslations.addAll(Arrays.asList(OldTranslation.WATCHERS_WRONG_ID, OldTranslation.WATCHERS_UNWATCH));
         return requiredTranslations;
     }
 
@@ -37,7 +37,7 @@ public class UnwatchCommand extends WatcherCommandGroup {
 
         if (optionalWatcher.isPresent()) {
             this.getRepository().delete(optionalWatcher.get());
-            this.sendInfo(message, this.getTranslation(Translation.WATCHERS_UNWATCH));
+            this.sendInfo(message, this.getTranslation(OldTranslation.WATCHERS_UNWATCH));
         }
     }
 

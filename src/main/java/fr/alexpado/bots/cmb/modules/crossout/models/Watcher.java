@@ -8,6 +8,7 @@ import fr.alexpado.bots.cmb.tools.TranslatableWatcher;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
@@ -29,6 +30,9 @@ public class Watcher {
     private int itemId;
 
     private String itemName;
+
+    @Nullable
+    private String name;
 
     private int sellPrice;
 

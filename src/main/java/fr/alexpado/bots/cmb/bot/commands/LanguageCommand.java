@@ -4,13 +4,13 @@ import fr.alexpado.bots.cmb.api.ItemEndpoint;
 import fr.alexpado.bots.cmb.interfaces.command.TranslatableBotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
 import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
 import fr.alexpado.bots.cmb.modules.crossout.models.settings.ChannelSettings;
 import fr.alexpado.bots.cmb.modules.crossout.models.settings.GuildSettings;
 import fr.alexpado.bots.cmb.modules.crossout.models.settings.UserSettings;
-import fr.alexpado.bots.cmb.modules.crossout.repositories.TranslationRepository;
+import fr.alexpado.bots.cmb.modules.crossout.repositories.OldTranslationRepository;
 import fr.alexpado.bots.cmb.tools.embed.EmbedPage;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
@@ -35,7 +35,7 @@ public class LanguageCommand extends TranslatableBotCommand {
     @Override
     public List<String> getRequiredTranslation() {
 
-        return Arrays.asList(Translation.GENERAL_BAD_SYNTAX, Translation.LANGUAGES_LIST, Translation.LANGUAGES_NOTSUPPORTED, Translation.LANGUAGES_CHANNEL_UPDATED, Translation.LANGUAGES_GUILD_UPDATED, Translation.LANGUAGES_USER_UPDATED);
+        return Arrays.asList(OldTranslation.GENERAL_BAD_SYNTAX, OldTranslation.LANGUAGES_LIST, OldTranslation.LANGUAGES_NOTSUPPORTED, OldTranslation.LANGUAGES_CHANNEL_UPDATED, OldTranslation.LANGUAGES_GUILD_UPDATED, OldTranslation.LANGUAGES_USER_UPDATED);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class LanguageCommand extends TranslatableBotCommand {
                 public EmbedBuilder getEmbed() {
 
                     EmbedBuilder builder = new EmbedBuilder();
-                    builder.setTitle(LanguageCommand.this.getTranslation(Translation.LANGUAGES_LIST));
+                    builder.setTitle(LanguageCommand.this.getTranslation(OldTranslation.LANGUAGES_LIST));
                     return builder;
                 }
             };
@@ -65,13 +65,13 @@ public class LanguageCommand extends TranslatableBotCommand {
         }
 
         if (event.getArgs().size() != 2) {
-            this.sendWarn(message, String.format(this.getTranslation(Translation.GENERAL_BAD_SYNTAX), this.getLabel()));
+            this.sendWarn(message, String.format(this.getTranslation(OldTranslation.GENERAL_BAD_SYNTAX), this.getLabel()));
             return;
         }
 
         String lang = event.getArgs().get(1);
         if (!this.isLanguageSupported(lang) && !lang.equals("remove")) {
-            this.sendError(message, this.getTranslation(Translation.LANGUAGES_NOTSUPPORTED));
+            this.sendError(message, this.getTranslation(OldTranslation.LANGUAGES_NOTSUPPORTED));
             return;
         }
 
@@ -79,48 +79,48 @@ public class LanguageCommand extends TranslatableBotCommand {
             case "guild":
             case "server":
                 if (!isOwner && !isAdmin) {
-                    this.sendError(message, this.getTranslation(Translation.GENERAL_FORBIDDEN));
+                    this.sendError(message, this.getTranslation(OldTranslation.GENERAL_FORBIDDEN));
                     return;
                 }
 
                 if (lang.equals("remove")) {
-                    this.sendError(message, this.getTranslation(Translation.LANGUAGES_NOTSUPPORTED));
+                    this.sendError(message, this.getTranslation(OldTranslation.LANGUAGES_NOTSUPPORTED));
                     return;
                 }
                 this.setServerLanguage(lang);
-                this.sendInfo(message, this.getTranslation(Translation.LANGUAGES_GUILD_UPDATED));
+                this.sendInfo(message, this.getTranslation(OldTranslation.LANGUAGES_GUILD_UPDATED));
                 break;
             case "channel":
                 if (!isOwner && !isAdmin && !canManageChannel && !canManageThisChannel) {
-                    this.sendError(message, this.getTranslation(Translation.GENERAL_FORBIDDEN));
+                    this.sendError(message, this.getTranslation(OldTranslation.GENERAL_FORBIDDEN));
                     return;
                 }
 
                 this.setChannelLanguage(lang);
-                this.sendInfo(message, this.getTranslation(Translation.LANGUAGES_CHANNEL_UPDATED));
+                this.sendInfo(message, this.getTranslation(OldTranslation.LANGUAGES_CHANNEL_UPDATED));
                 break;
             case "user":
                 if (lang.equals("remove")) {
-                    this.sendError(message, this.getTranslation(Translation.LANGUAGES_NOTSUPPORTED));
+                    this.sendError(message, this.getTranslation(OldTranslation.LANGUAGES_NOTSUPPORTED));
                     return;
                 }
 
                 if (event.getJDA().getPresence().getStatus() == OnlineStatus.DO_NOT_DISTURB) {
-                    this.sendError(message, this.getTranslation(Translation.XODB_OFFLINE));
+                    this.sendError(message, this.getTranslation(OldTranslation.XODB_OFFLINE));
                     return;
                 }
 
                 this.setUserLanguage(lang);
-                this.sendInfo(message, this.getTranslation(Translation.LANGUAGES_USER_UPDATED));
+                this.sendInfo(message, this.getTranslation(OldTranslation.LANGUAGES_USER_UPDATED));
                 break;
             default:
-                this.sendWarn(message, this.getTranslation(Translation.GENERAL_BAD_SYNTAX));
+                this.sendWarn(message, this.getTranslation(OldTranslation.GENERAL_BAD_SYNTAX));
         }
     }
 
     private void loadSupportedLanguages() {
 
-        TranslationRepository repository = this.getConfig().getRepositoryAccessor().getTranslationRepository();
+        OldTranslationRepository repository = this.getConfig().getRepositoryAccessor().getTranslationRepository();
         this.supportedLanguages = repository.supportedLanguages();
     }
 

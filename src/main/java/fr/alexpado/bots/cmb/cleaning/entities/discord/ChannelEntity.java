@@ -112,4 +112,18 @@ public class ChannelEntity implements IChannelEntity {
 
         this.language = language;
     }
+
+    /**
+     * Retrieve the language to apply to this channel. If the language of the current channel is null, the guild's one
+     * will be returned.
+     *
+     * @return The effective language in this channel.
+     */
+    public String getEffectiveLanguage() {
+
+        if (this.getLanguage() == null) {
+            return this.getOwner().getLanguage();
+        }
+        return this.getLanguage();
+    }
 }

@@ -3,7 +3,7 @@ package fr.alexpado.bots.cmb.modules.crossout.models.game;
 import fr.alexpado.bots.cmb.CrossoutConfiguration;
 import fr.alexpado.bots.cmb.bot.DiscordBot;
 import fr.alexpado.bots.cmb.interfaces.translatable.TranslatableJSONModel;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.tools.Utilities;
 import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -101,24 +101,24 @@ public class Pack extends TranslatableJSONModel {
     @Override
     public List<String> getRequiredTranslation() {
 
-        return Arrays.asList(Translation.GENERAL_INVITE, Translation.MARKET_BUY, Translation.MARKET_SELL, Translation.PACKS_PRICE);
+        return Arrays.asList(OldTranslation.GENERAL_INVITE, OldTranslation.MARKET_BUY, OldTranslation.MARKET_SELL, OldTranslation.PACKS_PRICE);
     }
 
     public EmbedBuilder getAsEmbed(JDA jda) {
 
         EmbedBuilder builder = new EmbedBuilder();
 
-        builder.setAuthor(this.getTranslation(Translation.GENERAL_INVITE), DiscordBot.INVITE, jda.getSelfUser()
-                                                                                                 .getAvatarUrl());
+        builder.setAuthor(this.getTranslation(OldTranslation.GENERAL_INVITE), DiscordBot.INVITE, jda.getSelfUser()
+                                                                                                    .getAvatarUrl());
         builder.setTitle(this.name, String.format("https://crossoutdb.com/packs?ref=crossoutmarketbot#pack=%s", this.getKey()));
 
-        builder.addField(this.getTranslation(Translation.MARKET_SELL), Utilities.money(this.buySum, ""), true);
-        builder.addField(this.getTranslation(Translation.MARKET_BUY), Utilities.money(this.sellSum, ""), true);
+        builder.addField(this.getTranslation(OldTranslation.MARKET_SELL), Utilities.money(this.buySum, ""), true);
+        builder.addField(this.getTranslation(OldTranslation.MARKET_BUY), Utilities.money(this.sellSum, ""), true);
 
         builder.addField("", "", true);
 
         if (this.usdPrice != 0) {
-            builder.addField(this.getTranslation(Translation.PACKS_PRICE), String.format("%s\n%s\n%s\n%s", this.getPriceLine(this.usdPrice, "USD"), this
+            builder.addField(this.getTranslation(OldTranslation.PACKS_PRICE), String.format("%s\n%s\n%s\n%s", this.getPriceLine(this.usdPrice, "USD"), this
                     .getPriceLine(this.eurPrice, "EUR"), this.getPriceLine(this.gbpPrice, "GBP"), this.getPriceLine(this.rubPrice, "RUB")), true);
 
             float value = this.buySum / 100f + this.rawCoins;

@@ -20,6 +20,7 @@ configurations {
 repositories {
     mavenCentral()
     jcenter()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -34,7 +35,7 @@ dependencies {
     }
 
     compile group: 'org.json', name: 'json', version: '20190722'
-    compile 'net.dv8tion:JDA:4.1.1_108'
+    compile 'net.dv8tion:JDA:4.2.0_181'
     // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.5.3'
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
@@ -43,6 +44,8 @@ dependencies {
     compile group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
 
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    implementation 'com.github.alexpado:DiscordBot:1.0'
 }
 
 task copyConfigurationMetadata(type: Copy) {

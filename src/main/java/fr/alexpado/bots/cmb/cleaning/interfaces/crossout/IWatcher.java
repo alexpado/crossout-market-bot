@@ -9,7 +9,7 @@ import fr.alexpado.bots.cmb.cleaning.interfaces.game.IItem;
  *
  * @author alexpado
  */
-public interface IWatcher extends Identifiable<Integer>, Nameable, Ownable<IUserEntity>, Marchantable, Updatable<Long>, Repeatable<Long>, Priceable {
+public interface IWatcher extends Identifiable<Integer>, Nameable, Ownable<IUserEntity>, Marchantable, Repeatable<Long>, Priceable {
 
     /**
      * Retrieve this {@link IWatcher}'s {@link IItem}'s id currently being watched.

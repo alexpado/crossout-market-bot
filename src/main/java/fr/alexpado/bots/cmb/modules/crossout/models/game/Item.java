@@ -5,7 +5,7 @@ import fr.alexpado.bots.cmb.api.RarityEndpoint;
 import fr.alexpado.bots.cmb.bot.DiscordBot;
 import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.interfaces.translatable.TranslatableJSONModel;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
 import fr.alexpado.bots.cmb.tools.TranslatableWatcher;
 import fr.alexpado.bots.cmb.tools.Utilities;
@@ -76,9 +76,9 @@ public class Item extends TranslatableJSONModel {
     @Override
     public List<String> getRequiredTranslation() {
 
-        return Arrays.asList(Translation.GENERAL_INVITE, Translation.GENERAL_CURRENCY, Translation.MARKET_BUY, Translation.MARKET_CRAFTS_BUY, Translation.MARKET_SELL, Translation.MARKET_CRAFTS_SELL, WatcherType.NORMAL
+        return Arrays.asList(OldTranslation.GENERAL_INVITE, OldTranslation.GENERAL_CURRENCY, OldTranslation.MARKET_BUY, OldTranslation.MARKET_CRAFTS_BUY, OldTranslation.MARKET_SELL, OldTranslation.MARKET_CRAFTS_SELL, WatcherType.NORMAL
                 .getTranslation(), WatcherType.BUY_OVER.getTranslation(), WatcherType.BUY_UNDER.getTranslation(), WatcherType.SELL_OVER
-                .getTranslation(), WatcherType.SELL_UNDER.getTranslation(), Translation.WATCHERS_OTHER, Translation.ITEMS_REMOVED, Translation.ITEMS_UNAVAILABLE);
+                .getTranslation(), WatcherType.SELL_UNDER.getTranslation(), OldTranslation.WATCHERS_OTHER, OldTranslation.ITEMS_REMOVED, OldTranslation.ITEMS_UNAVAILABLE);
     }
 
     @Override
@@ -140,14 +140,14 @@ public class Item extends TranslatableJSONModel {
         builder.setAuthor(watcherTitle.substring(4), null, jda.getSelfUser().getAvatarUrl());
 
         if (!this.removed) {
-            String currentSellPrice = Utilities.money(this.sellPrice, this.getTranslation(Translation.GENERAL_CURRENCY));
-            String currentBuyPrice  = Utilities.money(this.buyPrice, this.getTranslation(Translation.GENERAL_CURRENCY));
+            String currentSellPrice = Utilities.money(this.sellPrice, this.getTranslation(OldTranslation.GENERAL_CURRENCY));
+            String currentBuyPrice  = Utilities.money(this.buyPrice, this.getTranslation(OldTranslation.GENERAL_CURRENCY));
 
             String diffSellPrice = Utilities.money(this.sellPrice - sellPrice, "");
             String diffBuyPrice  = Utilities.money(this.buyPrice - buyPrice, "");
 
-            builder.addField(this.getTranslation(Translation.MARKET_BUY), String.format("%s ( %s )", currentSellPrice, diffSellPrice), true);
-            builder.addField(this.getTranslation(Translation.MARKET_SELL), String.format("%s ( %s )", currentBuyPrice, diffBuyPrice), true);
+            builder.addField(this.getTranslation(OldTranslation.MARKET_BUY), String.format("%s ( %s )", currentSellPrice, diffSellPrice), true);
+            builder.addField(this.getTranslation(OldTranslation.MARKET_SELL), String.format("%s ( %s )", currentBuyPrice, diffBuyPrice), true);
         }
 
         return builder;
@@ -159,14 +159,14 @@ public class Item extends TranslatableJSONModel {
         builder.setTitle(this.availableName, String.format("https://crossoutdb.com/item/%s?ref=crossoutmarketbot", this.id));
 
         if (!this.removed) {
-            builder.addField(this.getTranslation(Translation.MARKET_BUY), Utilities.money(this.sellPrice, this.getTranslation(Translation.GENERAL_CURRENCY)), true);
-            builder.addField(this.getTranslation(Translation.MARKET_SELL), Utilities.money(this.buyPrice, this.getTranslation(Translation.GENERAL_CURRENCY)), true);
+            builder.addField(this.getTranslation(OldTranslation.MARKET_BUY), Utilities.money(this.sellPrice, this.getTranslation(OldTranslation.GENERAL_CURRENCY)), true);
+            builder.addField(this.getTranslation(OldTranslation.MARKET_SELL), Utilities.money(this.buyPrice, this.getTranslation(OldTranslation.GENERAL_CURRENCY)), true);
             if (this.craftable) {
                 builder.addField("", "", true);
-                builder.addField(this.getTranslation(Translation.MARKET_CRAFTS_BUY), Utilities.money(this.craftingSellSum, this
-                        .getTranslation(Translation.GENERAL_CURRENCY)), true);
-                builder.addField(this.getTranslation(Translation.MARKET_CRAFTS_SELL), Utilities.money(this.craftingBuySum, this
-                        .getTranslation(Translation.GENERAL_CURRENCY)), true);
+                builder.addField(this.getTranslation(OldTranslation.MARKET_CRAFTS_BUY), Utilities.money(this.craftingSellSum, this
+                        .getTranslation(OldTranslation.GENERAL_CURRENCY)), true);
+                builder.addField(this.getTranslation(OldTranslation.MARKET_CRAFTS_SELL), Utilities.money(this.craftingBuySum, this
+                        .getTranslation(OldTranslation.GENERAL_CURRENCY)), true);
                 builder.addField("", "", true);
             }
         }
@@ -179,8 +179,8 @@ public class Item extends TranslatableJSONModel {
         EmbedBuilder builder  = new EmbedBuilder();
         String       chartUrl = this.getConfig().getChartUrl();
 
-        builder.setAuthor(this.getTranslation(Translation.GENERAL_INVITE), DiscordBot.INVITE, jda.getSelfUser()
-                                                                                                 .getAvatarUrl());
+        builder.setAuthor(this.getTranslation(OldTranslation.GENERAL_INVITE), DiscordBot.INVITE, jda.getSelfUser()
+                                                                                                    .getAvatarUrl());
         builder.setTitle(this.name, String.format("https://crossoutdb.com/item/%s?ref=crossoutmarketbot", this.id));
         builder.setDescription(this.description);
 
@@ -189,7 +189,7 @@ public class Item extends TranslatableJSONModel {
         System.out.println("Using " + String.format(chartUrl, this.lastUpdate, this.id));
 
         if (this.removed) {
-            builder.addField(this.getTranslation(Translation.ITEMS_REMOVED), this.getTranslation(Translation.ITEMS_UNAVAILABLE), true);
+            builder.addField(this.getTranslation(OldTranslation.ITEMS_REMOVED), this.getTranslation(OldTranslation.ITEMS_UNAVAILABLE), true);
         }
 
         if (this.rarity == null) {

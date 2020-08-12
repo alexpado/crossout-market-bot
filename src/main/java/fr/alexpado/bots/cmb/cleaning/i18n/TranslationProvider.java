@@ -1,21 +1,15 @@
-package fr.alexpado.bots.cmb.modules.crossout.models;
+package fr.alexpado.bots.cmb.cleaning.i18n;
 
-import fr.alexpado.bots.cmb.modules.crossout.models.keys.TranslationKey;
-import lombok.Getter;
-import lombok.Setter;
+import fr.alexpado.bots.cmb.cleaning.repositories.TranslationRepository;
+import fr.alexpado.jda.services.translations.interfaces.ITranslation;
+import fr.alexpado.jda.services.translations.interfaces.ITranslationProvider;
+import org.springframework.stereotype.Service;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.validation.constraints.NotNull;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
-@Getter
-@IdClass(TranslationKey.class)
-@Setter
-public class Translation {
+@Service
+public class TranslationProvider implements ITranslationProvider {
 
     public static final String GENERAL_CURRENCY   = "general.currency";
     public static final String GENERAL_ERROR      = "general.error";
@@ -77,30 +71,40 @@ public class Translation {
 
     public static final String HELP_DESCRIPTION = "help.description";
 
-    @Id
-    @Column(length = 100)
-    private String translationKey;
+    private final TranslationRepository repository;
+    private final List<ITranslation>    translations;
 
-    @Id
-    @Column(length = 3)
-    private String language;
+    public TranslationProvider(TranslationRepository repository) {
 
-    @NotNull
-    private String text;
-
-    @Override
-    public boolean equals(Object o) {
-
-        if (this == o) { return true; }
-        if (!(o instanceof Translation)) { return false; }
-        Translation that = (Translation) o;
-        return this.translationKey.equals(that.translationKey) && this.language.equals(that.language);
+        this.repository   = repository;
+        this.translations = new ArrayList<>(repository.findAll());
     }
 
-    @Override
-    public int hashCode() {
+    public void reload() {
 
-        return Objects.hash(this.translationKey, this.language);
+        this.translations.clear();
+        this.translations.addAll(repository.findAll());
     }
 
+    /**
+     * Get the translation for the provided language and key using the list of args provided to format the raw
+     * translation value.
+     *
+     * @param language
+     *         The translation's language
+     * @param key
+     *         The translation's key
+     *
+     * @return The fully translated and formatted string corresponding to the language and key.
+     */
+    @Override
+    public String getTranslation(String language, String key) {
+
+        return this.translations.stream()
+                                .filter(x -> x.getLanguage().equals(language))
+                                .filter(x -> x.getKey().equals(key))
+                                .map(ITranslation::getValue)
+                                .findAny()
+                                .orElse(String.format("[[ERR: Missing '%s' in '%s']]", key, language));
+    }
 }

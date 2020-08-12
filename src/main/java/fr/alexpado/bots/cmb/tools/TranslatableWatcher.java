@@ -3,7 +3,7 @@ package fr.alexpado.bots.cmb.tools;
 import fr.alexpado.bots.cmb.CrossoutConfiguration;
 import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.interfaces.translatable.Translatable;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import lombok.SneakyThrows;
@@ -25,7 +25,7 @@ public class TranslatableWatcher extends Translatable {
     @Override
     public List<String> getRequiredTranslation() {
 
-        return Arrays.asList(Translation.GENERAL_CURRENCY, Translation.WATCHERS_OTHER, WatcherType.NORMAL.getTranslation(), WatcherType.SELL_UNDER
+        return Arrays.asList(OldTranslation.GENERAL_CURRENCY, OldTranslation.WATCHERS_OTHER, WatcherType.NORMAL.getTranslation(), WatcherType.SELL_UNDER
                 .getTranslation(), WatcherType.SELL_OVER.getTranslation(), WatcherType.BUY_UNDER.getTranslation(), WatcherType.BUY_OVER
                 .getTranslation());
     }
@@ -49,7 +49,8 @@ public class TranslatableWatcher extends Translatable {
             case BUY_UNDER:
                 String advancedContent = String.format(this.getTranslation(type.getTranslation()), Utilities.money(this.watcher
                         .getPrice(), ""));
-                String watcherTextContent = String.format(this.getTranslation(Translation.WATCHERS_OTHER), this.watcher.getItemName(), advancedContent, time);
+                String watcherTextContent = String.format(this.getTranslation(OldTranslation.WATCHERS_OTHER), this.watcher
+                        .getItemName(), advancedContent, time);
                 return String.format("[%s] %s", this.watcher.getId(), watcherTextContent);
             case NORMAL:
                 return String.format("[%s] %s", this.watcher.getId(), String.format(this.getTranslation(type.getTranslation()), this.watcher

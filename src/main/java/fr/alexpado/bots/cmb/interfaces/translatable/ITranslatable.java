@@ -1,7 +1,7 @@
 package fr.alexpado.bots.cmb.interfaces.translatable;
 
 
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 
 import java.util.List;
@@ -53,6 +53,6 @@ public interface ITranslatable {
      *         Thrown when at least one translation couldn't be retrieved. Contains a list of missing translation keys
      *         and a list of loaded translations in the language provided.
      */
-    List<Translation> fetch(List<String> keys, String language) throws MissingTranslationException;
+    List<OldTranslation> fetch(List<String> keys, String language) throws MissingTranslationException;
 
 }

@@ -5,7 +5,7 @@ import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.interfaces.command.WatcherCommandGroup;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
 import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
@@ -30,7 +30,7 @@ public class WatchCommand extends WatcherCommandGroup {
     public List<String> getRequiredTranslation() {
 
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_WRONG_FOR, Translation.ITEMS_NOTFOUND, Translation.ITEMS_MULTIPLE, Translation.WATCHERS_NEW));
+        requiredTranslations.addAll(Arrays.asList(OldTranslation.WATCHERS_WRONG_FOR, OldTranslation.ITEMS_NOTFOUND, OldTranslation.ITEMS_MULTIPLE, OldTranslation.WATCHERS_NEW));
         return requiredTranslations;
     }
 
@@ -39,14 +39,14 @@ public class WatchCommand extends WatcherCommandGroup {
     public void execute(CommandEvent event, Message message) {
 
         if (event.getJDA().getPresence().getStatus() == OnlineStatus.DO_NOT_DISTURB) {
-            this.sendError(message, this.getTranslation(Translation.XODB_OFFLINE));
+            this.sendError(message, this.getTranslation(OldTranslation.XODB_OFFLINE));
             return;
         }
 
         Optional<String> optionalItemName = this.getItemName(event);
 
         if (!optionalItemName.isPresent()) {
-            this.sendError(message, this.getTranslation(Translation.WATCHERS_WRONG_FOR));
+            this.sendError(message, this.getTranslation(OldTranslation.WATCHERS_WRONG_FOR));
             return;
         }
 
@@ -56,7 +56,7 @@ public class WatchCommand extends WatcherCommandGroup {
         Item item = null;
 
         if (items.size() == 0) {
-            this.sendError(message, this.getTranslation(Translation.ITEMS_NOTFOUND));
+            this.sendError(message, this.getTranslation(OldTranslation.ITEMS_NOTFOUND));
             return;
         } else if (items.size() > 1) {
             // Try to find a perfect match.
@@ -69,7 +69,7 @@ public class WatchCommand extends WatcherCommandGroup {
             }
 
             if (item == null) {
-                this.sendError(message, this.getTranslation(Translation.ITEMS_MULTIPLE));
+                this.sendError(message, this.getTranslation(OldTranslation.ITEMS_MULTIPLE));
                 return;
             }
         } else {
@@ -86,13 +86,13 @@ public class WatchCommand extends WatcherCommandGroup {
             WatcherType watcherType = optionalWatcherType.get();
 
             if (watcherType == WatcherType.UNKNOWN) {
-                this.sendError(message, Translation.WATCHERS_WRONG_TYPE);
+                this.sendError(message, OldTranslation.WATCHERS_WRONG_TYPE);
                 return;
             }
             watcher.setWatcherType(watcherType.getId());
 
             if (!optionalPrice.isPresent()) {
-                this.sendError(message, Translation.WATCHERS_WRONG_PRICE);
+                this.sendError(message, OldTranslation.WATCHERS_WRONG_PRICE);
                 return;
             }
             Float price = optionalPrice.get();
@@ -104,7 +104,7 @@ public class WatchCommand extends WatcherCommandGroup {
         optionalInterval.ifPresent(watcher::setRepeatEvery);
 
         this.getRepository().save(watcher);
-        this.sendInfo(message, this.getTranslation(Translation.WATCHERS_NEW));
+        this.sendInfo(message, this.getTranslation(OldTranslation.WATCHERS_NEW));
     }
 
     @Override

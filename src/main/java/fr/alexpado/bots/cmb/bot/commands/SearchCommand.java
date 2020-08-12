@@ -7,7 +7,7 @@ import fr.alexpado.bots.cmb.api.RarityEndpoint;
 import fr.alexpado.bots.cmb.interfaces.command.ItemBotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.modules.crossout.models.game.Category;
 import fr.alexpado.bots.cmb.modules.crossout.models.game.Faction;
 import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
@@ -37,7 +37,7 @@ public class SearchCommand extends ItemBotCommand {
     @Override
     public List<String> getRequiredTranslation() {
 
-        return Utilities.mergeList(super.getRequiredTranslation(), Translation.RARITIES_INVALID, Translation.CATEGORIES_INVALID, Translation.FACTIONS_INVALID, Translation.TYPES_INVALID);
+        return Utilities.mergeList(super.getRequiredTranslation(), OldTranslation.RARITIES_INVALID, OldTranslation.CATEGORIES_INVALID, OldTranslation.FACTIONS_INVALID, OldTranslation.TYPES_INVALID);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class SearchCommand extends ItemBotCommand {
 
 
         if (event.getJDA().getPresence().getStatus() == OnlineStatus.DO_NOT_DISTURB) {
-            this.sendError(message, this.getTranslation(Translation.XODB_OFFLINE));
+            this.sendError(message, this.getTranslation(OldTranslation.XODB_OFFLINE));
             return;
         }
 
@@ -77,7 +77,7 @@ public class SearchCommand extends ItemBotCommand {
 
                         EmbedBuilder builder = new EmbedBuilder();
                         builder.setColor(Color.ORANGE);
-                        builder.setTitle(SearchCommand.this.getTranslation(Translation.RARITIES_INVALID));
+                        builder.setTitle(SearchCommand.this.getTranslation(OldTranslation.RARITIES_INVALID));
                         return builder;
                     }
                 };
@@ -103,7 +103,7 @@ public class SearchCommand extends ItemBotCommand {
 
                         EmbedBuilder builder = new EmbedBuilder();
                         builder.setColor(Color.ORANGE);
-                        builder.setTitle(SearchCommand.this.getTranslation(Translation.CATEGORIES_INVALID));
+                        builder.setTitle(SearchCommand.this.getTranslation(OldTranslation.CATEGORIES_INVALID));
                         return builder;
                     }
                 };
@@ -128,7 +128,7 @@ public class SearchCommand extends ItemBotCommand {
 
                         EmbedBuilder builder = new EmbedBuilder();
                         builder.setColor(Color.ORANGE);
-                        builder.setTitle(SearchCommand.this.getTranslation(Translation.FACTIONS_INVALID));
+                        builder.setTitle(SearchCommand.this.getTranslation(OldTranslation.FACTIONS_INVALID));
                         return builder;
                     }
                 };

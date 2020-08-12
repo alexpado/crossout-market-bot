@@ -6,8 +6,8 @@ import fr.alexpado.bots.cmb.interfaces.command.TranslatableBotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.commands.JDACommandExecutor;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
-import fr.alexpado.bots.cmb.modules.crossout.repositories.TranslationRepository;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
+import fr.alexpado.bots.cmb.modules.crossout.repositories.OldTranslationRepository;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
@@ -26,7 +26,7 @@ public class HelpCommand extends TranslatableBotCommand {
     @Override
     public List<String> getRequiredTranslation() {
 
-        return Arrays.asList(Translation.GENERAL_INVITE, Translation.COMMANDS_NOTFOUND, Translation.COMMANDS_NOHELP, Translation.HELP_DESCRIPTION);
+        return Arrays.asList(OldTranslation.GENERAL_INVITE, OldTranslation.COMMANDS_NOTFOUND, OldTranslation.COMMANDS_NOHELP, OldTranslation.HELP_DESCRIPTION);
     }
 
     @Override
@@ -43,10 +43,10 @@ public class HelpCommand extends TranslatableBotCommand {
                     message.editMessage(optionalExecutor.get().getAdvancedHelp().build()).queue();
                     return;
                 }
-                this.sendWarn(message, this.getTranslation(Translation.COMMANDS_NOHELP));
+                this.sendWarn(message, this.getTranslation(OldTranslation.COMMANDS_NOHELP));
                 return;
             }
-            this.sendError(message, this.getTranslation(Translation.COMMANDS_NOTFOUND));
+            this.sendError(message, this.getTranslation(OldTranslation.COMMANDS_NOTFOUND));
             return;
         }
         this.showHelp(event, message);
@@ -54,14 +54,14 @@ public class HelpCommand extends TranslatableBotCommand {
 
     private void showHelp(CommandEvent event, Message message) {
 
-        CrossoutModule        crossout   = this.getCrossoutModule();
-        TranslationRepository repository = this.getConfig().getRepositoryAccessor().getTranslationRepository();
+        CrossoutModule           crossout   = this.getCrossoutModule();
+        OldTranslationRepository repository = this.getConfig().getRepositoryAccessor().getTranslationRepository();
 
         EmbedBuilder builder = new EmbedBuilder();
-        builder.setAuthor(this.getTranslation(Translation.GENERAL_INVITE), DiscordBot.INVITE, event.getJDA()
-                                                                                                   .getSelfUser()
-                                                                                                   .getAvatarUrl());
-        builder.setDescription(this.getTranslation(Translation.HELP_DESCRIPTION));
+        builder.setAuthor(this.getTranslation(OldTranslation.GENERAL_INVITE), DiscordBot.INVITE, event.getJDA()
+                                                                                                      .getSelfUser()
+                                                                                                      .getAvatarUrl());
+        builder.setDescription(this.getTranslation(OldTranslation.HELP_DESCRIPTION));
 
         HashMap<String, String> helpItems = new HashMap<>();
 
@@ -69,10 +69,10 @@ public class HelpCommand extends TranslatableBotCommand {
             helpItems.put(command.getLabel(), command.getDescription());
         }
 
-        List<Translation>       translationList = repository.getNeededFromLanguage(helpItems.values(), this.getEffectiveLanguage());
+        List<OldTranslation>    translationList = repository.getNeededFromLanguage(helpItems.values(), this.getEffectiveLanguage());
         HashMap<String, String> translationMap  = new HashMap<>();
 
-        for (Translation translation : translationList) {
+        for (OldTranslation translation : translationList) {
             translationMap.put(translation.getTranslationKey(), translation.getText());
         }
 

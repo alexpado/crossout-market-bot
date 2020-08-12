@@ -5,7 +5,7 @@ import fr.alexpado.bots.cmb.api.HealthEndpoint;
 import fr.alexpado.bots.cmb.bot.DiscordBot;
 import fr.alexpado.bots.cmb.interfaces.APIEndpoint;
 import fr.alexpado.bots.cmb.modules.crossout.models.db.HealthStat;
-import fr.alexpado.bots.cmb.modules.crossout.repositories.WatcherRepository;
+import fr.alexpado.bots.cmb.modules.crossout.repositories.OldWatcherRepository;
 import fr.alexpado.bots.cmb.modules.crossout.repositories.db.HealthStatRepository;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -21,11 +21,11 @@ public class TickerTask {
 
     private final CrossoutConfiguration configuration;
     private final HealthStatRepository  repository;
-    private final WatcherRepository     watcherRepository;
+    private final OldWatcherRepository  watcherRepository;
     private       int                   checkTimeout;
     private       int                   bannerIndex;
 
-    public TickerTask(CrossoutConfiguration configuration, HealthStatRepository repository, WatcherRepository watcherRepository) {
+    public TickerTask(CrossoutConfiguration configuration, HealthStatRepository repository, OldWatcherRepository watcherRepository) {
 
         this.configuration     = configuration;
         this.repository        = repository;

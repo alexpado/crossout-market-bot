@@ -7,7 +7,7 @@ import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
 import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
 import fr.alexpado.bots.cmb.modules.crossout.models.settings.UserSettings;
-import fr.alexpado.bots.cmb.modules.crossout.repositories.WatcherRepository;
+import fr.alexpado.bots.cmb.modules.crossout.repositories.OldWatcherRepository;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
@@ -26,10 +26,10 @@ import java.util.Optional;
 public class WatcherExecutor {
 
     private static final Logger                LOGGER = LoggerFactory.getLogger(WatcherExecutor.class);
-    private final        WatcherRepository     watcherRepository;
+    private final        OldWatcherRepository  watcherRepository;
     private final        CrossoutConfiguration config;
 
-    public WatcherExecutor(@Qualifier("crossoutConfiguration") CrossoutConfiguration config, WatcherRepository watcherRepository) {
+    public WatcherExecutor(@Qualifier("crossoutConfiguration") CrossoutConfiguration config, OldWatcherRepository watcherRepository) {
 
         this.watcherRepository = watcherRepository;
         this.config            = config;

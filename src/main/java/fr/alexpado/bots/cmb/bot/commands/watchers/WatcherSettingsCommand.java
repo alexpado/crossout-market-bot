@@ -5,7 +5,7 @@ import fr.alexpado.bots.cmb.enums.WatcherType;
 import fr.alexpado.bots.cmb.interfaces.command.WatcherCommandGroup;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
 import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
@@ -29,7 +29,7 @@ public class WatcherSettingsCommand extends WatcherCommandGroup {
     public List<String> getRequiredTranslation() {
 
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_WRONG_ID, Translation.GENERAL_ERROR, Translation.WATCHERS_REMOVED, Translation.WATCHERS_UPDATED));
+        requiredTranslations.addAll(Arrays.asList(OldTranslation.WATCHERS_WRONG_ID, OldTranslation.GENERAL_ERROR, OldTranslation.WATCHERS_REMOVED, OldTranslation.WATCHERS_UPDATED));
         return requiredTranslations;
     }
 
@@ -46,13 +46,13 @@ public class WatcherSettingsCommand extends WatcherCommandGroup {
         Optional<Item> optionalItem = endpoint.getOne(watcher.getItemId());
 
         if (!optionalItem.isPresent()) {
-            this.sendError(message, this.getTranslation(Translation.GENERAL_ERROR));
+            this.sendError(message, this.getTranslation(OldTranslation.GENERAL_ERROR));
             return;
         }
         Item item = optionalItem.get();
 
         if (item.isRemoved()) {
-            this.sendWarn(message, this.getTranslation(Translation.WATCHERS_REMOVED));
+            this.sendWarn(message, this.getTranslation(OldTranslation.WATCHERS_REMOVED));
             return;
         }
 
@@ -66,7 +66,7 @@ public class WatcherSettingsCommand extends WatcherCommandGroup {
             if (watcherType == WatcherType.NORMAL) {
                 watcher.setWatcherType(watcherType.getId());
             } else if (!optionalPrice.isPresent()) {
-                this.sendError(message, this.getTranslation(Translation.WATCHERS_WRONG_PRICE));
+                this.sendError(message, this.getTranslation(OldTranslation.WATCHERS_WRONG_PRICE));
                 return;
             } else {
                 Float price = optionalPrice.get();
@@ -78,7 +78,7 @@ public class WatcherSettingsCommand extends WatcherCommandGroup {
         optionalInterval.ifPresent(watcher::setRepeatEvery);
 
         this.getRepository().save(watcher);
-        this.sendInfo(message, this.getTranslation(Translation.WATCHERS_UPDATED));
+        this.sendInfo(message, this.getTranslation(OldTranslation.WATCHERS_UPDATED));
     }
 
     @Override

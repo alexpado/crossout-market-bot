@@ -9,7 +9,7 @@ import fr.alexpado.bots.cmb.interfaces.translatable.Translatable;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.commands.JDACommandExecutor;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.modules.crossout.models.settings.ChannelSettings;
 import fr.alexpado.bots.cmb.modules.crossout.models.settings.GuildSettings;
 import fr.alexpado.bots.cmb.modules.crossout.models.settings.UserSettings;
@@ -248,7 +248,7 @@ public abstract class TranslatableBotCommand extends JDACommandExecutor implemen
     }
 
     @Override
-    public final List<Translation> fetch(List<String> keys, String language) throws MissingTranslationException {
+    public final List<OldTranslation> fetch(List<String> keys, String language) throws MissingTranslationException {
 
         return this.translatable.fetch(keys, language);
     }

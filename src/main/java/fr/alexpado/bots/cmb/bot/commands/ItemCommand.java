@@ -4,7 +4,7 @@ import fr.alexpado.bots.cmb.api.ItemEndpoint;
 import fr.alexpado.bots.cmb.interfaces.command.ItemBotCommand;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpBuilder;
 import fr.alexpado.bots.cmb.tools.section.AdvancedHelpSection;
@@ -27,7 +27,7 @@ public class ItemCommand extends ItemBotCommand {
     public void execute(CommandEvent event, Message message) throws MissingTranslationException {
 
         if (event.getJDA().getPresence().getStatus() == OnlineStatus.DO_NOT_DISTURB) {
-            this.sendError(message, this.getTranslation(Translation.XODB_OFFLINE));
+            this.sendError(message, this.getTranslation(OldTranslation.XODB_OFFLINE));
             return;
         }
 

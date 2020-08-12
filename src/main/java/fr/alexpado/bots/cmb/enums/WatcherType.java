@@ -1,14 +1,14 @@
 package fr.alexpado.bots.cmb.enums;
 
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 
 public enum WatcherType {
 
-    SELL_OVER(1, Translation.WATCHERS_SELL_OVER),
-    SELL_UNDER(2, Translation.WATCHERS_SELL_UNDER),
-    BUY_OVER(3, Translation.WATCHERS_BUY_OVER),
-    BUY_UNDER(4, Translation.WATCHERS_BUY_UNDER),
-    NORMAL(5, Translation.WATCHERS_NORMAL),
+    SELL_OVER(1, OldTranslation.WATCHERS_SELL_OVER),
+    SELL_UNDER(2, OldTranslation.WATCHERS_SELL_UNDER),
+    BUY_OVER(3, OldTranslation.WATCHERS_BUY_OVER),
+    BUY_UNDER(4, OldTranslation.WATCHERS_BUY_UNDER),
+    NORMAL(5, OldTranslation.WATCHERS_NORMAL),
     UNKNOWN(0, "");
 
     private final int    id;

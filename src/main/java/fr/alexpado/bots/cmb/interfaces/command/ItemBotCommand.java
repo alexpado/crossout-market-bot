@@ -3,7 +3,7 @@ package fr.alexpado.bots.cmb.interfaces.command;
 import fr.alexpado.bots.cmb.libs.jda.JDAModule;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.modules.crossout.models.FakeItem;
-import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
+import fr.alexpado.bots.cmb.modules.crossout.models.OldTranslation;
 import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
 import fr.alexpado.bots.cmb.modules.crossout.repositories.FakeItemRepository;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
@@ -25,7 +25,7 @@ public abstract class ItemBotCommand extends TranslatableBotCommand {
     @Override
     public List<String> getRequiredTranslation() {
 
-        return Arrays.asList(Translation.GENERAL_ERROR, Translation.ITEMS_LIST, Translation.ITEMS_NOTFOUND, Translation.GENERAL_INVITE, Translation.XODB_OFFLINE);
+        return Arrays.asList(OldTranslation.GENERAL_ERROR, OldTranslation.ITEMS_LIST, OldTranslation.ITEMS_NOTFOUND, OldTranslation.GENERAL_INVITE, OldTranslation.XODB_OFFLINE);
     }
 
     public void manageItemList(CommandEvent event, Message message, List<Item> items, String itemName) throws MissingTranslationException {
@@ -39,12 +39,12 @@ public abstract class ItemBotCommand extends TranslatableBotCommand {
 
                 if (fakeItemOptional.isPresent()) {
                     message.editMessage(fakeItemOptional.get()
-                                                        .getAsEmbed(event.getJDA(), this.getTranslation(Translation.GENERAL_INVITE))
+                                                        .getAsEmbed(event.getJDA(), this.getTranslation(OldTranslation.GENERAL_INVITE))
                                                         .build()).queue();
                     return;
                 }
             }
-            this.sendError(message, this.getTranslation(Translation.ITEMS_NOTFOUND));
+            this.sendError(message, this.getTranslation(OldTranslation.ITEMS_NOTFOUND));
         } else if (items.size() == 1) {
             Item item = items.get(0);
             item.fetchTranslations(this.getEffectiveLanguage());
@@ -67,7 +67,7 @@ public abstract class ItemBotCommand extends TranslatableBotCommand {
                 public EmbedBuilder getEmbed() {
 
                     EmbedBuilder builder = new EmbedBuilder();
-                    builder.setTitle(ItemBotCommand.this.getTranslation(Translation.ITEMS_LIST));
+                    builder.setTitle(ItemBotCommand.this.getTranslation(OldTranslation.ITEMS_LIST));
                     return builder;
                 }
             };

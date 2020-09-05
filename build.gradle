@@ -43,16 +43,13 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-
-    compile group: 'org.json', name: 'json', version: '20190722'
-    compile 'net.dv8tion:JDA:4.2.0_181'
-    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.5.3'
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.20'
-
-    compile group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
-
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
+    compile group: 'org.json', name: 'json', version: '20200518'
+    compile 'net.dv8tion:JDA:4.2.0_204'
+    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.6.2'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
+    compile group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
     implementation 'com.github.alexpado:DiscordBot:1.0'
     implementation group: 'me.anisekai', name: 'simple-http-client', version: '1.0.0'
 }

@@ -36,3 +36,6 @@ out/
 src/main/resources/application.properties
 
 .gradle/*
+
+## Secret
+gradle.properties

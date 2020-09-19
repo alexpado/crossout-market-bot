@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 import xo.marketbot.commands.runtime.CommandRuntime;
 import xo.marketbot.entities.discord.ChannelEntity;
 import xo.marketbot.entities.discord.GuildEntity;
-import xo.marketbot.entities.discord.UserEntity;
+import xo.marketbot.entities.discord.User;
 import xo.marketbot.entities.i18n.messages.EmptyItemListMessage;
 import xo.marketbot.entities.i18n.messages.FatalErrorMessage;
 import xo.marketbot.entities.i18n.messages.XoDBUnavailableMessage;
@@ -105,7 +105,7 @@ public class ItemCommand extends DiscordCommand {
 
             GuildEntity   guild   = Providers.provideGuild(this.guildRepository, event.getGuild());
             ChannelEntity channel = Providers.provideChannel(this.channelRepository, guild, event.getChannel());
-            UserEntity    user    = Providers.provideUser(this.userRepository, event.getAuthor());
+            User          user    = Providers.provideUser(this.userRepository, event.getAuthor());
 
             CommandRuntime      runtime      = new CommandRuntime(guild, channel, user, message, flags);
             Map<String, Object> searchParams = this.createSearchParams(runtime, itemName);

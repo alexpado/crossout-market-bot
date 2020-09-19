@@ -1,11 +1,11 @@
-package xo.marketbot.auth.entities.requests;
+package xo.marketbot.web.auth.entities.requests;
 
 import fr.alexpado.lib.rest.RestAction;
 import fr.alexpado.lib.rest.enums.RequestMethod;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
-import xo.marketbot.auth.entities.responses.UserResponse;
 import xo.marketbot.configurations.interfaces.IDiscordConfiguration;
+import xo.marketbot.web.auth.entities.responses.UserResponse;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;

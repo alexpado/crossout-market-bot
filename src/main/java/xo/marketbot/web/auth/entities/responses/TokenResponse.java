@@ -1,7 +1,7 @@
-package xo.marketbot.auth.entities.responses;
+package xo.marketbot.web.auth.entities.responses;
 
 import org.json.JSONObject;
-import xo.marketbot.auth.entities.Session;
+import xo.marketbot.web.auth.entities.Session;
 
 public class TokenResponse {
 

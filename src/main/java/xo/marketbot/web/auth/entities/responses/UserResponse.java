@@ -1,8 +1,8 @@
-package xo.marketbot.auth.entities.responses;
+package xo.marketbot.web.auth.entities.responses;
 
 
 import org.json.JSONObject;
-import xo.marketbot.entities.discord.UserEntity;
+import xo.marketbot.entities.discord.User;
 
 public class UserResponse {
 
@@ -39,9 +39,9 @@ public class UserResponse {
         return this.avatar;
     }
 
-    public UserEntity toUser() {
+    public User toUser() {
 
-        UserEntity user = new UserEntity();
+        User user = new User();
 
         user.setId(this.id);
         user.setName(this.username);

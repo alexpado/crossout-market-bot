@@ -1,4 +1,4 @@
-package xo.marketbot.auth.controllers;
+package xo.marketbot.web.auth.controllers;
 
 import fr.alexpado.lib.rest.exceptions.RestException;
 import org.slf4j.Logger;
@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import xo.marketbot.auth.AuthManager;
-import xo.marketbot.auth.entities.Session;
-import xo.marketbot.auth.entities.responses.TokenResponse;
-import xo.marketbot.auth.entities.responses.UserResponse;
-import xo.marketbot.auth.repositories.SessionRepository;
-import xo.marketbot.entities.discord.UserEntity;
+import xo.marketbot.entities.discord.User;
 import xo.marketbot.repositories.UserEntityRepository;
+import xo.marketbot.web.auth.AuthManager;
+import xo.marketbot.web.auth.entities.Session;
+import xo.marketbot.web.auth.entities.responses.TokenResponse;
+import xo.marketbot.web.auth.entities.responses.UserResponse;
+import xo.marketbot.web.auth.repositories.SessionRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
@@ -59,10 +59,10 @@ public class AuthenticationController {
                 tokenResponse = this.manager.tryAuthAction(code).complete();
             }
 
-            UserResponse userResponse = this.manager.validateTokenAction(tokenResponse.getAccessToken()).complete();
-            Optional<UserEntity> optionalUser = this.userRepository.findById(userResponse.getId());
-            UserEntity           user;
-            Session              session;
+            UserResponse   userResponse = this.manager.validateTokenAction(tokenResponse.getAccessToken()).complete();
+            Optional<User> optionalUser = this.userRepository.findById(userResponse.getId());
+            User           user;
+            Session        session;
 
             if (optionalUser.isPresent()) {
                 user = optionalUser.get();

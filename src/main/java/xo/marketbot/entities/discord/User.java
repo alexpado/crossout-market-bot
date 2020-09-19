@@ -1,14 +1,13 @@
 package xo.marketbot.entities.discord;
 
-import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
-import xo.marketbot.auth.entities.responses.UserResponse;
 import xo.marketbot.interfaces.common.Identifiable;
 import xo.marketbot.interfaces.common.Imageable;
 import xo.marketbot.interfaces.common.LanguageHolder;
 import xo.marketbot.interfaces.common.Nameable;
 import xo.marketbot.interfaces.crossout.IWatcher;
 import xo.marketbot.interfaces.discord.IUserEntity;
+import xo.marketbot.web.auth.entities.responses.UserResponse;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,57 +15,57 @@ import javax.persistence.Id;
 /**
  * Entity class implementing the {@link IUserEntity} interface.
  * <p>
- * This class is simply a wrapper for the {@link User} interface, allowing it to hold some settings and to be save in a
- * database.
+ * This class is simply a wrapper for the {@link net.dv8tion.jda.api.entities.User} interface, allowing it to hold some
+ * settings and to be save in a database.
  *
  * @author alexpado
  */
 @Entity
-public class UserEntity implements IUserEntity {
+public class User implements IUserEntity {
 
     @Id
     private Long    id;
     private String  name;
     private String  discriminator;
-    private String  imageUrl;
+    private String  avatar;
     private boolean watcherPaused;
     private String  language;
 
     /**
-     * Create a new {@link UserEntity} with no data. This should not be used, and is present only for the sake of
+     * Create a new {@link User} with no data. This should not be used, and is present only for the sake of
      * hibernate.
      */
-    public UserEntity() {}
+    public User() {}
 
     /**
-     * Create a new {@link UserEntity} with Discord API's JSON response. This should be used only if the {@link
-     * IUserEntity} isn't present in the database, or it will override this {@link IUserEntity}'s settings upon saving.
+     * Create a new {@link User} with Discord API's JSON response. This should be used only if the {@link IUserEntity}
+     * isn't present in the database, or it will override this {@link IUserEntity}'s settings upon saving.
      *
      * @param source
      *         The {@link JSONObject} to use to initialize this instance.
      */
-    public UserEntity(JSONObject source) {
+    public User(JSONObject source) {
 
         this.id            = source.getLong("id");
         this.name          = source.getString("username");
         this.discriminator = source.getString("discriminator");
-        this.imageUrl      = source.getString("avatar");
+        this.avatar        = source.getString("avatar");
         this.watcherPaused = false;
         this.language      = "en";
     }
 
     /**
-     * Create a new {@link UserEntity} with predefined data.
+     * Create a new {@link User} with predefined data.
      *
      * @param user
-     *         The {@link User} to use to initialize this instance.
+     *         The {@link net.dv8tion.jda.api.entities.User} to use to initialize this instance.
      */
-    public UserEntity(User user) {
+    public User(net.dv8tion.jda.api.entities.User user) {
 
         this.id            = user.getIdLong();
         this.name          = user.getName();
         this.discriminator = user.getDiscriminator();
-        this.imageUrl      = user.getAvatarId();
+        this.avatar        = user.getAvatarId();
         this.watcherPaused = false;
         this.language      = "en";
     }
@@ -113,7 +112,7 @@ public class UserEntity implements IUserEntity {
     @Override
     public String getImageUrl() {
 
-        return this.imageUrl;
+        return this.avatar;
     }
 
     /**
@@ -125,7 +124,7 @@ public class UserEntity implements IUserEntity {
     @Override
     public void setImageUrl(String url) {
 
-        this.imageUrl = url;
+        this.avatar = url;
     }
 
     /**

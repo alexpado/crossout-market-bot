@@ -1,13 +1,13 @@
-package xo.marketbot.auth;
+package xo.marketbot.web.auth;
 
 
 import fr.alexpado.lib.rest.RestAction;
 import org.springframework.stereotype.Service;
-import xo.marketbot.auth.entities.requests.TokenRequest;
-import xo.marketbot.auth.entities.requests.UserRequest;
-import xo.marketbot.auth.entities.responses.TokenResponse;
-import xo.marketbot.auth.entities.responses.UserResponse;
 import xo.marketbot.configurations.interfaces.IDiscordConfiguration;
+import xo.marketbot.web.auth.entities.requests.TokenRequest;
+import xo.marketbot.web.auth.entities.requests.UserRequest;
+import xo.marketbot.web.auth.entities.responses.TokenResponse;
+import xo.marketbot.web.auth.entities.responses.UserResponse;
 
 @Service
 public class AuthManager {

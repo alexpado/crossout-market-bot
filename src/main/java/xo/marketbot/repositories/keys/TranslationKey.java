@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -20,4 +21,18 @@ public class TranslationKey implements Serializable {
         return key;
     }
 
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) { return true; }
+        if (!(o instanceof TranslationKey)) { return false; }
+        TranslationKey that = (TranslationKey) o;
+        return key.equals(that.key) && language.equals(that.language);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(key, language);
+    }
 }

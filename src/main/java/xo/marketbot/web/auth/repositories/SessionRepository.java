@@ -1,9 +1,9 @@
-package xo.marketbot.auth.repositories;
+package xo.marketbot.web.auth.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import xo.marketbot.auth.entities.Session;
+import xo.marketbot.web.auth.entities.Session;
 
 import java.time.LocalDateTime;
 import java.util.List;

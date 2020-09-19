@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -51,4 +52,13 @@ public class ChartManager {
 
         return new Chart(this.configuration, this.getImageCopy(), chartName);
     }
+
+    public byte[] getFailureChart() throws Exception {
+        // TODO: Add failure pic to config
+        BufferedImage         img    = ImageIO.read(new File("graph3fail.png"));
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ImageIO.write(img, "png", output);
+        return output.toByteArray();
+    }
+
 }

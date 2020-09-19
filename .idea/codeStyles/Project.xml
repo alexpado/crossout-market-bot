@@ -60,6 +60,13 @@
       <option name="USE_DOUBLE_QUOTES" value="false" />
       <option name="ENFORCE_QUOTES_ON_FORMAT" value="true" />
     </LessCodeStyleSettings>
+    <MySQLCodeStyleSettings version="2">
+      <option name="KEYWORD_CASE" value="0" />
+      <option name="TYPE_CASE" value="3" />
+      <option name="IDENTIFIER_CASE" value="1" />
+      <option name="QUOTE_IDENTIFIER" value="0" />
+      <option name="QUOTE_TYPE" value="30" />
+    </MySQLCodeStyleSettings>
     <PHPCodeStyleSettings>
       <option name="ALIGN_KEY_VALUE_PAIRS" value="true" />
       <option name="ALIGN_PHPDOC_PARAM_NAMES" value="true" />

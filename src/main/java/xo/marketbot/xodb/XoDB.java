@@ -1,11 +1,10 @@
 package xo.marketbot.xodb;
 
+import fr.alexpado.jda.services.translations.interfaces.ITranslationProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import xo.marketbot.i18n.TranslationProvider;
-import xo.marketbot.interfaces.configuration.CrossoutBotContext;
+import xo.marketbot.configurations.interfaces.IMarketConfiguration;
 import xo.marketbot.interfaces.crossout.RestRepository;
 import xo.marketbot.interfaces.game.*;
 import xo.marketbot.xodb.repositories.*;
@@ -19,9 +18,8 @@ public class XoDB {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(XoDB.class);
 
-    private final CrossoutBotContext  context;
-    private final TranslationProvider translationProvider;
-    private final String              chartUrl;
+    private final IMarketConfiguration configuration;
+    private final ITranslationProvider translationProvider;
 
     private final Map<Integer, IRarity>   rarityCache   = new HashMap<>();
     private final Map<Integer, IFaction>  factionCache  = new HashMap<>();
@@ -31,16 +29,14 @@ public class XoDB {
     /**
      * Create a new instance of {@link XoDB}.
      *
-     * @param context
-     *         The {@link CrossoutBotContext} instance to use when configuring this {@link XoDB}.
+     * @param configuration
+     *         The {@link IMarketConfiguration} instance to use when configuring this {@link XoDB}.
      * @param translationProvider
-     * @param chartUrl
      */
-    public XoDB(CrossoutBotContext context, TranslationProvider translationProvider, @Value("${bot.item.graph.source}") String chartUrl) {
+    public XoDB(IMarketConfiguration configuration, ITranslationProvider translationProvider) {
 
-        this.context             = context;
+        this.configuration       = configuration;
         this.translationProvider = translationProvider;
-        this.chartUrl            = chartUrl;
         this.buildCaches();
     }
 
@@ -51,17 +47,17 @@ public class XoDB {
      */
     public String getRootUrl() {
 
-        return this.context.getCrossoutDbRootUrl();
+        return this.configuration.getApi();
     }
 
-    public TranslationProvider getTranslationProvider() {
+    public ITranslationProvider getTranslationProvider() {
 
         return translationProvider;
     }
 
     public String getChartUrl() {
 
-        return chartUrl;
+        return "";
     }
 
     /**

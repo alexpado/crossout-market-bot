@@ -19,7 +19,7 @@ public class Watcher implements IWatcher {
 
     @OneToOne
     @NotNull
-    private UserEntity user;
+    private User user;
 
     private Integer itemId;
 
@@ -36,7 +36,7 @@ public class Watcher implements IWatcher {
     private Long repeatCron;
 
 
-    public static Watcher create(UserEntity user, IItem item) {
+    public static Watcher create(User user, IItem item) {
 
         Watcher watcher = new Watcher();
 
@@ -221,8 +221,8 @@ public class Watcher implements IWatcher {
     @Override
     public void setOwner(IUserEntity owner) {
 
-        if (owner instanceof UserEntity) {
-            this.user = ((UserEntity) owner);
+        if (owner instanceof User) {
+            this.user = ((User) owner);
         }
         throw new IllegalArgumentException("owner must be an instance of UserEntity");
     }

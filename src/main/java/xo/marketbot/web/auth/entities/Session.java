@@ -1,10 +1,10 @@
-package xo.marketbot.auth.entities;
+package xo.marketbot.web.auth.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xo.marketbot.auth.entities.responses.TokenResponse;
-import xo.marketbot.entities.discord.UserEntity;
+import xo.marketbot.entities.discord.User;
+import xo.marketbot.web.auth.entities.responses.TokenResponse;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +22,7 @@ public class Session {
     @Column(length = 64)
     private String        code;
     @OneToOne
-    private UserEntity    user;
+    private User          user;
     @JsonIgnore
     private String        ipAddress;
     @JsonIgnore
@@ -35,7 +35,7 @@ public class Session {
 
     public Session() {}
 
-    public Session(ServletRequest request, UserEntity user, TokenResponse tokenResponse, String code) {
+    public Session(ServletRequest request, User user, TokenResponse tokenResponse, String code) {
 
         this.code      = code;
         this.user      = user;
@@ -71,22 +71,22 @@ public class Session {
     }
 
     /**
-     * Retrieve this {@link Session}'s {@link UserEntity}.
+     * Retrieve this {@link Session}'s {@link User}.
      *
-     * @return The {@link UserEntity} owning this {@link Session}.
+     * @return The {@link User} owning this {@link Session}.
      */
-    public UserEntity getUser() {
+    public User getUser() {
 
         return this.user;
     }
 
     /**
-     * Define this {@link Session}'s {@link UserEntity}
+     * Define this {@link Session}'s {@link User}
      *
      * @param user
-     *         The {@link UserEntity} owning this {@link Session}.
+     *         The {@link User} owning this {@link Session}.
      */
-    public void setUser(UserEntity user) {
+    public void setUser(User user) {
 
         if (!this.user.getId().equals(user.getId())) {
             LOGGER.warn("A session owner switch occurred ! If it wasn't done on purpose, this is a major security issue.");

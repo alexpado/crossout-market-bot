@@ -33,7 +33,9 @@ out/
 .vscode/
 
 ### Spring Property file
-src/main/resources/application.properties
+src/main/resources/*.properties
+!src/main/resources/*.sample.properties
+
 
 .gradle/*
 

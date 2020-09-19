@@ -24,7 +24,7 @@ repositories {
 
     maven {
         name = "GitHubPackages"
-        url = uri('https://maven.pkg.github.com/anisekai-project/simple-http-client')
+        url = uri('https://maven.pkg.github.com/alexpado/simple-http-client')
 
         credentials {
             username = project.findProperty('gpr.user') ?: System.getenv('username')
@@ -50,8 +50,8 @@ dependencies {
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.6.2'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
     compile group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
-    implementation 'com.github.alexpado:DiscordBot:1.0'
-    implementation group: 'me.anisekai', name: 'simple-http-client', version: '1.0.0'
+    implementation 'com.github.alexpado:DiscordBot:1.1'
+    implementation group: 'fr.alexpado', name: 'simple-http-client', version: '1.0.1'
 }
 
 task copyConfigurationMetadata(type: Copy) {

@@ -5,8 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import xo.marketbot.configurations.interfaces.IMarketConfiguration;
-import xo.marketbot.interfaces.crossout.RestRepository;
-import xo.marketbot.interfaces.game.*;
+import xo.marketbot.entities.interfaces.crossout.RestRepository;
+import xo.marketbot.entities.interfaces.game.*;
 import xo.marketbot.xodb.repositories.*;
 
 import java.awt.*;

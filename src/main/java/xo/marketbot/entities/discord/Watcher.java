@@ -1,10 +1,10 @@
 package xo.marketbot.entities.discord;
 
 import org.jetbrains.annotations.NotNull;
-import xo.marketbot.interfaces.common.*;
-import xo.marketbot.interfaces.crossout.IWatcher;
-import xo.marketbot.interfaces.discord.IUserEntity;
-import xo.marketbot.interfaces.game.IItem;
+import xo.marketbot.entities.interfaces.common.*;
+import xo.marketbot.entities.interfaces.crossout.IWatcher;
+import xo.marketbot.entities.interfaces.discord.IUserEntity;
+import xo.marketbot.entities.interfaces.game.IItem;
 
 import javax.persistence.*;
 

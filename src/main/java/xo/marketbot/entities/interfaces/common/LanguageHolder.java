@@ -1,4 +1,4 @@
-package xo.marketbot.interfaces.common;
+package xo.marketbot.entities.interfaces.common;
 
 /**
  * Interface representing an object holding a language setting.

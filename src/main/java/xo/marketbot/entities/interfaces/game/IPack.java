@@ -1,8 +1,8 @@
-package xo.marketbot.interfaces.game;
+package xo.marketbot.entities.interfaces.game;
 
-import xo.marketbot.interfaces.common.Identifiable;
-import xo.marketbot.interfaces.common.Marchantable;
-import xo.marketbot.interfaces.common.Nameable;
+import xo.marketbot.entities.interfaces.common.Identifiable;
+import xo.marketbot.entities.interfaces.common.Marchantable;
+import xo.marketbot.entities.interfaces.common.Nameable;
 
 /**
  * Interface representing a Crossout's pack.

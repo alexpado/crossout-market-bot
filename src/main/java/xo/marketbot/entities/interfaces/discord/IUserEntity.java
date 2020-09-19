@@ -1,10 +1,10 @@
-package xo.marketbot.interfaces.discord;
+package xo.marketbot.entities.interfaces.discord;
 
-import xo.marketbot.interfaces.common.Identifiable;
-import xo.marketbot.interfaces.common.Imageable;
-import xo.marketbot.interfaces.common.LanguageHolder;
-import xo.marketbot.interfaces.common.Nameable;
-import xo.marketbot.interfaces.crossout.IWatcher;
+import xo.marketbot.entities.interfaces.common.Identifiable;
+import xo.marketbot.entities.interfaces.common.Imageable;
+import xo.marketbot.entities.interfaces.common.LanguageHolder;
+import xo.marketbot.entities.interfaces.common.Nameable;
+import xo.marketbot.entities.interfaces.crossout.IWatcher;
 
 /**
  * Interface representing a custom discord user.

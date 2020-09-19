@@ -1,4 +1,4 @@
-package xo.marketbot.interfaces.common;
+package xo.marketbot.entities.interfaces.common;
 
 import java.awt.*;
 

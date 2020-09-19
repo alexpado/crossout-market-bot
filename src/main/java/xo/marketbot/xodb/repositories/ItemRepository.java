@@ -2,8 +2,8 @@ package xo.marketbot.xodb.repositories;
 
 import fr.alexpado.lib.rest.interfaces.IRestAction;
 import org.jetbrains.annotations.NotNull;
-import xo.marketbot.interfaces.crossout.RestRepository;
-import xo.marketbot.interfaces.game.IItem;
+import xo.marketbot.entities.interfaces.crossout.RestRepository;
+import xo.marketbot.entities.interfaces.game.IItem;
 import xo.marketbot.xodb.XoDB;
 import xo.marketbot.xodb.repositories.item.FindAllItemsAction;
 import xo.marketbot.xodb.repositories.item.FindItemByIdAction;

@@ -1,11 +1,11 @@
 package xo.marketbot.entities.discord;
 
 import net.dv8tion.jda.api.entities.Guild;
-import xo.marketbot.interfaces.common.Identifiable;
-import xo.marketbot.interfaces.common.Imageable;
-import xo.marketbot.interfaces.common.LanguageHolder;
-import xo.marketbot.interfaces.common.Nameable;
-import xo.marketbot.interfaces.discord.IGuildEntity;
+import xo.marketbot.entities.interfaces.common.Identifiable;
+import xo.marketbot.entities.interfaces.common.Imageable;
+import xo.marketbot.entities.interfaces.common.LanguageHolder;
+import xo.marketbot.entities.interfaces.common.Nameable;
+import xo.marketbot.entities.interfaces.discord.IGuildEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -1,8 +1,8 @@
-package xo.marketbot.interfaces.crossout;
+package xo.marketbot.entities.interfaces.crossout;
 
 import fr.alexpado.lib.rest.interfaces.IRestAction;
 import org.jetbrains.annotations.NotNull;
-import xo.marketbot.interfaces.common.Identifiable;
+import xo.marketbot.entities.interfaces.common.Identifiable;
 
 import java.util.List;
 import java.util.Map;

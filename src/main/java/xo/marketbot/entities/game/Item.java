@@ -6,10 +6,10 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import org.json.JSONObject;
 import xo.marketbot.XoMarketApplication;
+import xo.marketbot.entities.interfaces.common.*;
+import xo.marketbot.entities.interfaces.game.*;
 import xo.marketbot.i18n.TranslationException;
 import xo.marketbot.i18n.TranslationProvider;
-import xo.marketbot.interfaces.common.*;
-import xo.marketbot.interfaces.game.*;
 import xo.marketbot.tools.Utilities;
 import xo.marketbot.xodb.XoDB;
 

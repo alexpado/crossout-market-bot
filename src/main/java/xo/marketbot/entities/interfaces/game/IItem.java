@@ -1,6 +1,6 @@
-package xo.marketbot.interfaces.game;
+package xo.marketbot.entities.interfaces.game;
 
-import xo.marketbot.interfaces.common.*;
+import xo.marketbot.entities.interfaces.common.*;
 
 import java.time.LocalDateTime;
 

@@ -1,8 +1,8 @@
-package xo.marketbot.interfaces.crossout;
+package xo.marketbot.entities.interfaces.crossout;
 
-import xo.marketbot.interfaces.common.*;
-import xo.marketbot.interfaces.discord.IUserEntity;
-import xo.marketbot.interfaces.game.IItem;
+import xo.marketbot.entities.interfaces.common.*;
+import xo.marketbot.entities.interfaces.discord.IUserEntity;
+import xo.marketbot.entities.interfaces.game.IItem;
 
 /**
  * Interface representing a watcher.

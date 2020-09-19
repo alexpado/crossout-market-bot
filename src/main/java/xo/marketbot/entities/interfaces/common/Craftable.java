@@ -1,6 +1,6 @@
-package xo.marketbot.interfaces.common;
+package xo.marketbot.entities.interfaces.common;
 
-import xo.marketbot.interfaces.game.IItem;
+import xo.marketbot.entities.interfaces.game.IItem;
 
 /**
  * Interface representing an object holding crafting information.

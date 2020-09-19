@@ -1,10 +1,10 @@
 package xo.marketbot.entities.game;
 
 import org.json.JSONObject;
-import xo.marketbot.interfaces.common.Identifiable;
-import xo.marketbot.interfaces.common.Nameable;
-import xo.marketbot.interfaces.game.IItem;
-import xo.marketbot.interfaces.game.IType;
+import xo.marketbot.entities.interfaces.common.Identifiable;
+import xo.marketbot.entities.interfaces.common.Nameable;
+import xo.marketbot.entities.interfaces.game.IItem;
+import xo.marketbot.entities.interfaces.game.IType;
 
 /**
  * Class implementing the {@link IType} interface representing an {@link IItem} faction.

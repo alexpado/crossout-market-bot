@@ -5,7 +5,7 @@ import fr.alexpado.lib.rest.enums.RequestMethod;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import xo.marketbot.entities.game.Category;
-import xo.marketbot.interfaces.game.ICategory;
+import xo.marketbot.entities.interfaces.game.ICategory;
 import xo.marketbot.xodb.XoDB;
 
 import java.util.ArrayList;

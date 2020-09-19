@@ -11,7 +11,7 @@ CREATE TABLE `translation`
 (
     `key`        VARCHAR(255) NOT NULL,
     `language`   VARCHAR(3)   NOT NULL,
-    `value`      VARCHAR(255) NOT NULL,
+    `value`      TEXT         NOT NULL,
     `created_at` DATETIME     NOT NULL DEFAULT NOW(),
     `updated_at` DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW(),
     PRIMARY KEY (`key`, `language`),

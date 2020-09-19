@@ -12,16 +12,16 @@ import xo.marketbot.configurations.interfaces.IDiscordConfiguration;
 
 @SpringBootApplication
 @EnableScheduling
-public class CrossoutMarketBotApplication extends DiscordBotImpl {
+public class XoMarketApplication extends DiscordBotImpl {
 
     public static final  String INVITE = "https://discordapp.com/api/oauth2/authorize?client_id=500032551977746453&permissions=59456&scope=bot";
-    private static final Logger LOGGER = LoggerFactory.getLogger(CrossoutMarketBotApplication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(XoMarketApplication.class);
 
     /**
      * Create a new instance of {@link DiscordBotImpl} using {@link GatewayIntent#DEFAULT} intents and the provided
      * prefix for the {@link ICommandHandler}.
      */
-    public CrossoutMarketBotApplication(IDiscordConfiguration configuration) {
+    public XoMarketApplication(IDiscordConfiguration configuration) {
 
         super(configuration.getPrefix());
 
@@ -34,7 +34,7 @@ public class CrossoutMarketBotApplication extends DiscordBotImpl {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(CrossoutMarketBotApplication.class, args);
+        SpringApplication.run(XoMarketApplication.class, args);
     }
 
 }

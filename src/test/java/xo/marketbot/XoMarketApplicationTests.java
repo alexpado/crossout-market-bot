@@ -2,7 +2,7 @@ package xo.marketbot;
 
 import org.junit.jupiter.api.Test;
 
-class CrossoutMarketBotApplicationTests {
+class XoMarketApplicationTests {
 
     @Test
     public void testIsUndefined() {

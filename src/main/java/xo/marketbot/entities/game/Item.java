@@ -1,12 +1,11 @@
 package xo.marketbot.entities.game;
 
-import fr.alexpado.bots.cmb.interfaces.common.*;
-import fr.alexpado.bots.cmb.interfaces.game.*;
 import fr.alexpado.jda.services.translations.Translator;
 import fr.alexpado.jda.services.translations.annotations.I18N;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import org.json.JSONObject;
+import xo.marketbot.XoMarketApplication;
 import xo.marketbot.i18n.TranslationException;
 import xo.marketbot.i18n.TranslationProvider;
 import xo.marketbot.interfaces.common.*;
@@ -310,7 +309,7 @@ public class Item implements IItem {
 
         EmbedBuilder builder = new EmbedBuilder();
 
-        builder.setAuthor(this.generalInvite, XoDBBot.INVITE, jda.getSelfUser().getAvatarUrl());
+        builder.setAuthor(this.generalInvite, XoMarketApplication.INVITE, jda.getSelfUser().getAvatarUrl());
         builder.setTitle(this.availableName, Item.toXoDBLink(this.id));
         builder.setDescription(this.description);
 

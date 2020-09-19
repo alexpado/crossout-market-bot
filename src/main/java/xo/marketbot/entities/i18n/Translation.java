@@ -4,26 +4,20 @@ import fr.alexpado.jda.services.translations.interfaces.ITranslation;
 import org.jetbrains.annotations.NotNull;
 import xo.marketbot.repositories.keys.TranslationKey;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
 
 @Entity
 @IdClass(TranslationKey.class)
 public class Translation implements ITranslation {
 
     @Id
-    @Column(length = 100)
-    @NotNull
     private String key;
 
     @Id
     @Column(length = 3)
-    @NotNull
     private String language;
 
-    @NotNull
+    @Lob
     private String value;
 
     /**

@@ -1,14 +1,10 @@
 package xo.marketbot.entities.discord;
 
 import net.dv8tion.jda.api.entities.Guild;
-import xo.marketbot.entities.interfaces.common.Identifiable;
-import xo.marketbot.entities.interfaces.common.Imageable;
-import xo.marketbot.entities.interfaces.common.LanguageHolder;
-import xo.marketbot.entities.interfaces.common.Nameable;
-import xo.marketbot.entities.interfaces.discord.IGuildEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Entity class implementing the {@link IGuildEntity} interface.
@@ -18,13 +14,14 @@ import javax.persistence.Id;
  *
  * @author alexpado
  */
+@Table(name = "guild")
 @Entity
-public class GuildEntity implements IGuildEntity {
+public class GuildEntity {
 
     @Id
     private Long   id;
     private String name;
-    private String imageUrl;
+    private String icon;
     private String language;
 
     /**
@@ -43,84 +40,45 @@ public class GuildEntity implements IGuildEntity {
 
         this.id       = guild.getIdLong();
         this.name     = guild.getName();
-        this.imageUrl = guild.getIconUrl();
+        this.icon     = guild.getIconUrl();
+        this.language = "en";
     }
 
-    /**
-     * Retrieve this {@link Identifiable}'s ID.
-     *
-     * @return An ID.
-     */
-    @Override
     public Long getId() {
 
-        return this.id;
+        return id;
     }
 
-    /**
-     * Retrieve this {@link Imageable}'s image url.
-     *
-     * @return An image url
-     */
-    @Override
-    public String getImageUrl() {
+    public void setId(Long id) {
 
-        return this.imageUrl;
+        this.id = id;
     }
 
-    /**
-     * Define this {@link Imageable}'s image url.
-     *
-     * @param url
-     *         An image url.
-     */
-    @Override
-    public void setImageUrl(String url) {
-
-        this.imageUrl = url;
-    }
-
-    /**
-     * Retrieve this {@link Nameable}'s name.
-     *
-     * @return The name.
-     */
-    @Override
     public String getName() {
 
-        return this.name;
+        return name;
     }
 
-    /**
-     * Define this {@link Nameable}'s name.
-     *
-     * @param name
-     *         The name.
-     */
-    @Override
     public void setName(String name) {
 
         this.name = name;
     }
 
-    /**
-     * Retrieve this {@link LanguageHolder}'s language. The language is usually represented by two characters.
-     *
-     * @return This {@link LanguageHolder}'s language.
-     */
-    @Override
-    public String getLanguage() {
+    public String getIcon() {
 
-        return this.language;
+        return icon;
     }
 
-    /**
-     * Define this {@link LanguageHolder}'s language. The language is usually represented by two characters.
-     *
-     * @param language
-     *         This {@link LanguageHolder}'s language.
-     */
-    @Override
+    public void setIcon(String icon) {
+
+        this.icon = icon;
+    }
+
+    public String getLanguage() {
+
+        return language;
+    }
+
     public void setLanguage(String language) {
 
         this.language = language;

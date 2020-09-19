@@ -1,42 +1,33 @@
 package xo.marketbot.entities.discord;
 
-import org.jetbrains.annotations.NotNull;
-import xo.marketbot.entities.interfaces.common.*;
-import xo.marketbot.entities.interfaces.crossout.IWatcher;
-import xo.marketbot.entities.interfaces.discord.IUserEntity;
 import xo.marketbot.entities.interfaces.game.IItem;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-public class Watcher implements IWatcher {
+public class Watcher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(length = 50)
     private String name;
 
+    @Column(length = 20)
+    private String        type;
+    private Integer       itemId;
+    private String        itemName;
+    private Double        sellPrice;
+    private Double        buyPrice;
     @OneToOne
-    @NotNull
-    private User user;
+    private UserEntity    owner;
+    private boolean       regular;
+    private long          timing;
+    private LocalDateTime lastExecution;
 
-    private Integer itemId;
-
-    private String itemName;
-
-    private Double sellPrice;
-
-    private Double buyPrice;
-
-    private Integer watcherType;
-
-    private Double price;
-
-    private Long repeatCron;
-
-
-    public static Watcher create(User user, IItem item) {
+    public static Watcher create(UserEntity user, IItem item) {
 
         Watcher watcher = new Watcher();
 
@@ -49,227 +40,113 @@ public class Watcher implements IWatcher {
         return watcher;
     }
 
-
-    /**
-     * Retrieve this {@link IWatcher}'s {@link IItem}'s id currently being watched.
-     *
-     * @return An {@link IItem}'s id.
-     */
-    @Override
-    public Integer getItemId() {
-
-        return this.itemId;
-    }
-
-    /**
-     * Define this {@link IWatcher}'s {@link IItem}'s id currently being watched.
-     *
-     * @param id
-     *         An {@link IItem}'s id.
-     */
-    @Override
-    public void setItemId(Integer id) {
-
-        this.itemId = id;
-    }
-
-    /**
-     * Retrieve this {@link IWatcher}'s {@link IItem}'s name currently being watched, in the {@link IUserEntity}'s
-     * language.
-     *
-     * @return An {@link IItem}'s name.
-     */
-    @Override
-    public String getItemName() {
-
-        return this.itemName;
-    }
-
-    /**
-     * Define this {@link IWatcher}'s {@link IItem}'s name currently being watched, in the {@link IUserEntity}'s
-     * language.
-     *
-     * @param name
-     *         An {@link IItem}'s name.
-     */
-    @Override
-    public void setItemName(String name) {
-
-        this.itemName = name;
-    }
-
-    /**
-     * Retrieve this {@link IWatcher}'s type.
-     *
-     * @return An integer
-     */
-    @Override
-    public Integer getWatcherType() {
-
-        return this.watcherType;
-    }
-
-    /**
-     * Define this {@link IWatcher}'s type.
-     *
-     * @param watcherType
-     *         An integer
-     */
-    @Override
-    public void setWatcherType(Integer watcherType) {
-
-        this.watcherType = watcherType;
-    }
-
-    /**
-     * Retrieve this {@link Identifiable}'s ID.
-     *
-     * @return An ID.
-     */
-    @Override
     public Integer getId() {
 
-        return this.id;
+        return id;
     }
 
-    /**
-     * Retrieve the amount of money needed to buy this {@link Marchantable}.
-     *
-     * @return The buy price
-     */
-    @Override
-    public double getBuyPrice() {
+    public void setId(Integer id) {
 
-        return this.buyPrice;
+        this.id = id;
     }
 
-    /**
-     * Define the amount of money needed to buy this {@link Marchantable}.
-     *
-     * @param price
-     *         The buy price.
-     */
-    @Override
-    public void setBuyPrice(double price) {
-
-        this.buyPrice = price;
-    }
-
-    /**
-     * Retrieve the amount of money obtainable by selling this {@link Marchantable}.
-     *
-     * @return The sell price
-     */
-    @Override
-    public double getSellPrice() {
-
-        return this.sellPrice;
-    }
-
-    /**
-     * Define the amount of money obtainable by selling this {@link Marchantable}
-     *
-     * @param price
-     *         The sell price
-     */
-    @Override
-    public void setSellPrice(double price) {
-
-        this.sellPrice = price;
-    }
-
-    /**
-     * Retrieve this {@link Nameable}'s name.
-     *
-     * @return The name.
-     */
-    @Override
     public String getName() {
 
-        return this.name;
+        return name;
     }
 
-    /**
-     * Define this {@link Nameable}'s name.
-     *
-     * @param name
-     *         The name.
-     */
-    @Override
     public void setName(String name) {
 
         this.name = name;
     }
 
-    /**
-     * Retrieve this {@link Ownable}'s owner.
-     *
-     * @return The owner.
-     */
-    @Override
-    public IUserEntity getOwner() {
+    public String getType() {
 
-        return this.user;
+        return type;
     }
 
-    /**
-     * Define this {@link Ownable}'s owner.
-     *
-     * @param owner
-     *         The owner.
-     */
-    @Override
-    public void setOwner(IUserEntity owner) {
+    public void setType(String type) {
 
-        if (owner instanceof User) {
-            this.user = ((User) owner);
-        }
-        throw new IllegalArgumentException("owner must be an instance of UserEntity");
+        this.type = type;
     }
 
-    /**
-     * Retrieve this {@link Priceable}'s price.
-     *
-     * @return The price.
-     */
-    @Override
-    public double getPrice() {
+    public Integer getItemId() {
 
-        return this.price;
+        return itemId;
     }
 
-    /**
-     * Define this {@link Priceable}'s price.
-     *
-     * @param price
-     *         The price.
-     */
-    @Override
-    public void setPrice(double price) {
+    public void setItemId(Integer itemId) {
 
-        this.price = price;
+        this.itemId = itemId;
     }
 
-    /**
-     * Retrieve this {@link Repeatable}'s repetition interval.
-     *
-     * @return The time.
-     */
-    @Override
-    public Long getRepeatEvery() {
+    public String getItemName() {
 
-        return this.repeatCron;
+        return itemName;
     }
 
-    /**
-     * Define this {@link Repeatable}'s repetition interval.
-     *
-     * @param aLong
-     *         The time.
-     */
-    @Override
-    public void setRepeatEvery(Long aLong) {
+    public void setItemName(String itemName) {
 
-        this.repeatCron = aLong;
+        this.itemName = itemName;
+    }
+
+    public Double getSellPrice() {
+
+        return sellPrice;
+    }
+
+    public void setSellPrice(Double sellPrice) {
+
+        this.sellPrice = sellPrice;
+    }
+
+    public Double getBuyPrice() {
+
+        return buyPrice;
+    }
+
+    public void setBuyPrice(Double buyPrice) {
+
+        this.buyPrice = buyPrice;
+    }
+
+    public UserEntity getOwner() {
+
+        return owner;
+    }
+
+    public void setOwner(UserEntity owner) {
+
+        this.owner = owner;
+    }
+
+    public boolean isRegular() {
+
+        return regular;
+    }
+
+    public void setRegular(boolean regular) {
+
+        this.regular = regular;
+    }
+
+    public long getTiming() {
+
+        return timing;
+    }
+
+    public void setTiming(long timing) {
+
+        this.timing = timing;
+    }
+
+    public LocalDateTime getLastExecution() {
+
+        return lastExecution;
+    }
+
+    public void setLastExecution(LocalDateTime lastExecution) {
+
+        this.lastExecution = lastExecution;
     }
 }

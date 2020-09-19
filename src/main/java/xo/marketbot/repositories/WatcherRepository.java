@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface WatcherRepository extends JpaRepository<Watcher, Integer> {
 
-    @Query("SELECT w FROM Watcher w WHERE w.user.watcherPaused = false")
+    @Query("SELECT w FROM Watcher w WHERE w.owner.watcherPaused = false")
     List<Watcher> getAllPotentials();
 
 }

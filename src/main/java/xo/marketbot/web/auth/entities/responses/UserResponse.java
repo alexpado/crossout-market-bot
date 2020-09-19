@@ -2,7 +2,7 @@ package xo.marketbot.web.auth.entities.responses;
 
 
 import org.json.JSONObject;
-import xo.marketbot.entities.discord.User;
+import xo.marketbot.entities.discord.UserEntity;
 
 public class UserResponse {
 
@@ -39,14 +39,14 @@ public class UserResponse {
         return this.avatar;
     }
 
-    public User toUser() {
+    public UserEntity toUser() {
 
-        User user = new User();
+        UserEntity user = new UserEntity();
 
         user.setId(this.id);
-        user.setName(this.username);
+        user.setUsername(this.username);
         user.setDiscriminator(this.discriminator);
-        user.setImageUrl(this.avatar);
+        user.setAvatar(this.avatar);
 
         return user;
     }

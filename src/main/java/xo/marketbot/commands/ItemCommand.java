@@ -22,10 +22,7 @@ import org.springframework.stereotype.Component;
 import xo.marketbot.commands.runtime.CommandRuntime;
 import xo.marketbot.entities.discord.ChannelEntity;
 import xo.marketbot.entities.discord.GuildEntity;
-import xo.marketbot.entities.discord.User;
-import xo.marketbot.entities.i18n.messages.EmptyItemListMessage;
-import xo.marketbot.entities.i18n.messages.FatalErrorMessage;
-import xo.marketbot.entities.i18n.messages.XoDBUnavailableMessage;
+import xo.marketbot.entities.discord.UserEntity;
 import xo.marketbot.entities.interfaces.game.IItem;
 import xo.marketbot.i18n.TranslationProvider;
 import xo.marketbot.repositories.ChannelEntityRepository;
@@ -105,7 +102,7 @@ public class ItemCommand extends DiscordCommand {
 
             GuildEntity   guild   = Providers.provideGuild(this.guildRepository, event.getGuild());
             ChannelEntity channel = Providers.provideChannel(this.channelRepository, guild, event.getChannel());
-            User          user    = Providers.provideUser(this.userRepository, event.getAuthor());
+            UserEntity    user    = Providers.provideUser(this.userRepository, event.getAuthor());
 
             CommandRuntime      runtime      = new CommandRuntime(guild, channel, user, message, flags);
             Map<String, Object> searchParams = this.createSearchParams(runtime, itemName);
@@ -191,18 +188,10 @@ public class ItemCommand extends DiscordCommand {
         Message message = runtime.getMessage();
 
         if (throwable instanceof RestException) { // If the request failed
-            try {
-                XoDBUnavailableMessage feedback = new XoDBUnavailableMessage(message.getJDA());
-                Translator.translate(this.translationProvider, runtime.getChannel().getEffectiveLanguage(), feedback);
-                message.getChannel().sendMessage(feedback.build()).queue();
-                return;
-            } catch (IllegalAccessException e) {
-                LOGGER.error("Unable to execute a translation.", e);
-            }
+            // TODO: XoDB unavailability
         }
 
-        FatalErrorMessage fatal = new FatalErrorMessage(message.getJDA());
-        message.getChannel().sendMessage(fatal.build()).queue();
+        // TODO: General error
     }
 
     /**
@@ -220,9 +209,9 @@ public class ItemCommand extends DiscordCommand {
      */
     private EmbedBuilder emptyItemList(JDA jda, String language) throws IllegalAccessException {
 
-        EmptyItemListMessage feedback = new EmptyItemListMessage(jda);
-        Translator.translate(this.translationProvider, language, feedback);
-        return feedback;
+        //TODO: Empty
+
+        return null;
     }
 
     /**

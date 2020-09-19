@@ -1,16 +1,12 @@
 package xo.marketbot.entities.discord;
 
 import net.dv8tion.jda.api.entities.GuildChannel;
-import xo.marketbot.entities.interfaces.common.Identifiable;
-import xo.marketbot.entities.interfaces.common.LanguageHolder;
-import xo.marketbot.entities.interfaces.common.Nameable;
-import xo.marketbot.entities.interfaces.common.Ownable;
-import xo.marketbot.entities.interfaces.discord.IChannelEntity;
-import xo.marketbot.entities.interfaces.discord.IGuildEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import java.util.Optional;
 
 /**
  * Entity class implementing the {@link IChannelEntity} interface.
@@ -20,8 +16,9 @@ import javax.persistence.OneToOne;
  *
  * @author alexpado
  */
+@Table(name = "channel")
 @Entity
-public class ChannelEntity implements IChannelEntity {
+public class ChannelEntity {
 
     @Id
     private Long        id;
@@ -51,63 +48,41 @@ public class ChannelEntity implements IChannelEntity {
         this.guild = guild;
     }
 
-    /**
-     * Retrieve this {@link Identifiable}'s ID.
-     *
-     * @return An ID.
-     */
-    @Override
     public Long getId() {
 
-        return this.id;
+        return id;
     }
 
-    /**
-     * Retrieve this {@link Nameable}'s name.
-     *
-     * @return The name.
-     */
-    @Override
+    public void setId(Long id) {
+
+        this.id = id;
+    }
+
+    public GuildEntity getGuild() {
+
+        return guild;
+    }
+
+    public void setGuild(GuildEntity guild) {
+
+        this.guild = guild;
+    }
+
     public String getName() {
 
-        return this.name;
+        return name;
     }
 
-    @Override
     public void setName(String name) {
 
         this.name = name;
     }
 
-    /**
-     * Retrieve this {@link Ownable}'s owner.
-     *
-     * @return The owner.
-     */
-    @Override
-    public IGuildEntity getOwner() {
-
-        return this.guild;
-    }
-
-    /**
-     * Retrieve this {@link LanguageHolder}'s language. The language is usually represented by two characters.
-     *
-     * @return This {@link LanguageHolder}'s language.
-     */
-    @Override
     public String getLanguage() {
 
-        return this.language;
+        return language;
     }
 
-    /**
-     * Define this {@link LanguageHolder}'s language. The language is usually represented by two characters.
-     *
-     * @param language
-     *         This {@link LanguageHolder}'s language.
-     */
-    @Override
     public void setLanguage(String language) {
 
         this.language = language;
@@ -121,9 +96,6 @@ public class ChannelEntity implements IChannelEntity {
      */
     public String getEffectiveLanguage() {
 
-        if (this.getLanguage() == null) {
-            return this.getOwner().getLanguage();
-        }
-        return this.getLanguage();
+        return Optional.ofNullable(this.getLanguage()).orElse(this.getGuild().getLanguage());
     }
 }

@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.*;
 
@@ -184,7 +185,9 @@ public class Item extends TranslatableJSONModel {
         builder.setTitle(this.name, String.format("https://crossoutdb.com/item/%s?ref=crossoutmarketbot", this.id));
         builder.setDescription(this.description);
 
-        builder.setThumbnail(String.format("https://crossoutdb.com/img/items/%s.png?ref=crossoutmarketbot", this.id));
+        builder.setThumbnail(String.format("https://crossoutdb.com/img/items/%s.png?ref=crossoutmarketbot&v=%s", this.id, LocalDateTime
+                .now()
+                .getDayOfYear()));
         builder.setImage(String.format(chartUrl, this.lastUpdate, this.id));
         System.out.println("Using " + String.format(chartUrl, this.lastUpdate, this.id));
 

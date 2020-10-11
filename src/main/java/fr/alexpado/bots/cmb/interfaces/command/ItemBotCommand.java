@@ -30,7 +30,7 @@ public abstract class ItemBotCommand extends TranslatableBotCommand {
 
     public void manageItemList(CommandEvent event, Message message, List<Item> items, String itemName) throws MissingTranslationException {
 
-        if (items.size() == 0) {
+        if (items.isEmpty()) {
             if (itemName != null) {
                 String query = "%" + itemName.toLowerCase() + "%";
 
@@ -52,7 +52,7 @@ public abstract class ItemBotCommand extends TranslatableBotCommand {
         } else {
             // Try to find a perfect match.
             for (Item item : items) {
-                if (item.getName().equalsIgnoreCase(itemName)) {
+                if (item.getAvailableName().equalsIgnoreCase(itemName)) {
                     // Perfect match !
                     item.fetchTranslations(this.getEffectiveLanguage());
                     message.editMessage(item.getAsEmbed(event.getJDA()).build()).queue();
@@ -61,7 +61,7 @@ public abstract class ItemBotCommand extends TranslatableBotCommand {
             }
 
             // Show the navigation menu.
-            new EmbedPage<Item>(message, items, 20) {
+            new EmbedPage<>(message, items, 20) {
 
                 @Override
                 public EmbedBuilder getEmbed() {

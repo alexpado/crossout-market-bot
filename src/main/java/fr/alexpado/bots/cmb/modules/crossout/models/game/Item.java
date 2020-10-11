@@ -24,7 +24,12 @@ import java.util.*;
 @Getter
 public class Item extends TranslatableJSONModel {
 
-    private int      id;
+    private int id;
+
+    /**
+     * @deprecated The field `name` is no longer updated. Use `availableName` instead.
+     */
+    @Deprecated
     private String   name;
     private String   availableName;
     private String   description;
@@ -134,10 +139,10 @@ public class Item extends TranslatableJSONModel {
     public EmbedBuilder getDiffEmbed(JDA jda, Watcher watcher, TranslatableWatcher translatableWatcher) {
 
         int sellPrice = watcher.getSellPrice();
-        int buyPrice = watcher.getBuyPrice();
+        int buyPrice  = watcher.getBuyPrice();
 
-        EmbedBuilder builder = this.getRawEmbed(jda);
-        String watcherTitle = translatableWatcher.toString();
+        EmbedBuilder builder      = this.getRawEmbed(jda);
+        String       watcherTitle = translatableWatcher.toString();
         builder.setAuthor(watcherTitle.substring(4), null, jda.getSelfUser().getAvatarUrl());
 
         if (!this.removed) {

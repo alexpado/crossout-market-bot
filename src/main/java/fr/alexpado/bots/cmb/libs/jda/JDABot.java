@@ -6,6 +6,7 @@ import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.security.auth.login.LoginException;
@@ -31,7 +32,7 @@ public abstract class JDABot extends ListenerAdapter {
 
     public JDABot(AccountType accountType, CrossoutConfiguration config) {
 
-        this.jdaBuilder     = new JDABuilder(accountType);
+        this.jdaBuilder     = JDABuilder.create(GatewayIntent.getIntents(GatewayIntent.DEFAULT));
         this.commandManager = new JDACommandManager(this, config.getDiscordPrefix());
 
         this.jdaBuilder.addEventListeners(this);

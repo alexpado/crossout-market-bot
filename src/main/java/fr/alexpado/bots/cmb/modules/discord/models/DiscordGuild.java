@@ -3,6 +3,7 @@ package fr.alexpado.bots.cmb.modules.discord.models;
 import lombok.Getter;
 import lombok.ToString;
 import net.dv8tion.jda.api.entities.Guild;
+import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -19,7 +20,7 @@ public class DiscordGuild {
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private DiscordUser owner;
+    private @Nullable DiscordUser owner;
 
     private String name;
 
@@ -33,7 +34,7 @@ public class DiscordGuild {
     public DiscordGuild refresh(Guild guild) {
 
         this.id        = guild.getIdLong();
-        this.owner     = DiscordUser.getInstance(guild.getOwner().getUser());
+        this.owner     = DiscordUser.getInstance(guild.retrieveOwner().complete().getUser());
         this.name      = guild.getName();
         this.guildIcon = guild.getIconId();
 

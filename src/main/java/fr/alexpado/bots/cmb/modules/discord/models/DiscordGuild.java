@@ -33,8 +33,15 @@ public class DiscordGuild {
 
     public DiscordGuild refresh(Guild guild) {
 
-        this.id        = guild.getIdLong();
-        this.owner     = DiscordUser.getInstance(guild.retrieveOwner().complete().getUser());
+        this.id = guild.getIdLong();
+
+        if (guild.getOwner() == null) {
+            guild.retrieveOwner().queue(); // Put the owner in cache for later use.
+            this.owner = null;
+        } else {
+            this.owner = DiscordUser.getInstance(guild.getOwner().getUser());
+        }
+
         this.name      = guild.getName();
         this.guildIcon = guild.getIconId();
 

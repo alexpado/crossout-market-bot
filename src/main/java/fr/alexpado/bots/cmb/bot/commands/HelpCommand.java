@@ -8,6 +8,7 @@ import fr.alexpado.bots.cmb.libs.jda.commands.JDACommandExecutor;
 import fr.alexpado.bots.cmb.libs.jda.events.CommandEvent;
 import fr.alexpado.bots.cmb.modules.crossout.models.Translation;
 import fr.alexpado.bots.cmb.modules.crossout.repositories.TranslationRepository;
+import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
@@ -38,9 +39,19 @@ public class HelpCommand extends TranslatableBotCommand {
                                                                 .getCommandManager()
                                                                 .getCommand(event.getArgs().get(0));
             if (optionalExecutor.isPresent()) {
-                EmbedBuilder builder = optionalExecutor.get().getAdvancedHelp();
+
+                JDACommandExecutor executor = optionalExecutor.get();
+
+                if (executor instanceof TranslatableBotCommand) {
+                    TranslatableBotCommand command = ((TranslatableBotCommand) executor);
+                    try {
+                        command.fetchTranslations(this.getEffectiveLanguage());
+                    } catch (MissingTranslationException ignore) {}
+                }
+
+                EmbedBuilder builder = executor.getAdvancedHelp();
                 if (builder != null) {
-                    message.editMessage(optionalExecutor.get().getAdvancedHelp().build()).queue();
+                    message.editMessage(builder.build()).queue();
                     return;
                 }
                 this.sendWarn(message, this.getTranslation(Translation.COMMANDS_NOHELP));

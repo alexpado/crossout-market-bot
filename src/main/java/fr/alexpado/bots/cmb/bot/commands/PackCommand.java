@@ -28,7 +28,7 @@ public class PackCommand extends TranslatableBotCommand {
     @Override
     public List<String> getRequiredTranslation() {
 
-        return Arrays.asList(Translation.PACKS_NOTFOUND, Translation.PACKS_LIST);
+        return Arrays.asList(Translation.PACKS_NOTFOUND, Translation.PACKS_LIST, this.getDescription());
     }
 
     @Override

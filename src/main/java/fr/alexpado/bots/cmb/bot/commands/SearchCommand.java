@@ -37,7 +37,8 @@ public class SearchCommand extends ItemBotCommand {
     @Override
     public List<String> getRequiredTranslation() {
 
-        return Utilities.mergeList(super.getRequiredTranslation(), Translation.RARITIES_INVALID, Translation.CATEGORIES_INVALID, Translation.FACTIONS_INVALID, Translation.TYPES_INVALID);
+        return Utilities.mergeList(super.getRequiredTranslation(), Translation.RARITIES_INVALID, Translation.CATEGORIES_INVALID, Translation.FACTIONS_INVALID, Translation.TYPES_INVALID, this
+                .getDescription());
     }
 
     @Override

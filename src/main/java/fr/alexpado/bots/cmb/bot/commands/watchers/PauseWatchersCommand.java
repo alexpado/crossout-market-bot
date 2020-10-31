@@ -23,7 +23,7 @@ public class PauseWatchersCommand extends WatcherCommandGroup {
     public List<String> getRequiredTranslation() {
 
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_PAUSED, Translation.WATCHERS_RESUMED));
+        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_PAUSED, Translation.WATCHERS_RESUMED, this.getDescription()));
         return requiredTranslations;
     }
 

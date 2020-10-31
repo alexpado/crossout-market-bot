@@ -29,7 +29,8 @@ public class WatcherSettingsCommand extends WatcherCommandGroup {
     public List<String> getRequiredTranslation() {
 
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_WRONG_ID, Translation.GENERAL_ERROR, Translation.WATCHERS_REMOVED, Translation.WATCHERS_UPDATED));
+        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_WRONG_ID, Translation.GENERAL_ERROR, Translation.WATCHERS_REMOVED, Translation.WATCHERS_UPDATED, this
+                .getDescription()));
         return requiredTranslations;
     }
 

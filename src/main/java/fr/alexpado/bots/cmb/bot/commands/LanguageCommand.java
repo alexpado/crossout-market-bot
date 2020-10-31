@@ -35,7 +35,8 @@ public class LanguageCommand extends TranslatableBotCommand {
     @Override
     public List<String> getRequiredTranslation() {
 
-        return Arrays.asList(Translation.GENERAL_BAD_SYNTAX, Translation.LANGUAGES_LIST, Translation.LANGUAGES_NOTSUPPORTED, Translation.LANGUAGES_CHANNEL_UPDATED, Translation.LANGUAGES_GUILD_UPDATED, Translation.LANGUAGES_USER_UPDATED);
+        return Arrays.asList(Translation.GENERAL_BAD_SYNTAX, Translation.LANGUAGES_LIST, Translation.LANGUAGES_NOTSUPPORTED, Translation.LANGUAGES_CHANNEL_UPDATED, Translation.LANGUAGES_GUILD_UPDATED, Translation.LANGUAGES_USER_UPDATED, this
+                .getDescription());
     }
 
     @Override

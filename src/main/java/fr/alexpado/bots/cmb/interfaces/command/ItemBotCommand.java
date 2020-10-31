@@ -25,7 +25,8 @@ public abstract class ItemBotCommand extends TranslatableBotCommand {
     @Override
     public List<String> getRequiredTranslation() {
 
-        return Arrays.asList(Translation.GENERAL_ERROR, Translation.ITEMS_LIST, Translation.ITEMS_NOTFOUND, Translation.GENERAL_INVITE, Translation.XODB_OFFLINE);
+        return Arrays.asList(Translation.GENERAL_ERROR, Translation.ITEMS_LIST, Translation.ITEMS_NOTFOUND, Translation.GENERAL_INVITE, Translation.XODB_OFFLINE, this
+                .getDescription());
     }
 
     public void manageItemList(CommandEvent event, Message message, List<Item> items, String itemName) throws MissingTranslationException {

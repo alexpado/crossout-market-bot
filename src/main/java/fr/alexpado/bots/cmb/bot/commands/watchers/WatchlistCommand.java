@@ -27,7 +27,7 @@ public class WatchlistCommand extends WatcherCommandGroup {
     public List<String> getRequiredTranslation() {
 
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_NONE, Translation.WATCHERS_LIST));
+        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_NONE, Translation.WATCHERS_LIST, this.getDescription()));
         return requiredTranslations;
     }
 

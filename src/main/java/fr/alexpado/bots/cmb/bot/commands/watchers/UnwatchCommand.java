@@ -26,7 +26,7 @@ public class UnwatchCommand extends WatcherCommandGroup {
     public List<String> getRequiredTranslation() {
 
         List<String> requiredTranslations = new ArrayList<>(super.getRequiredTranslation());
-        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_WRONG_ID, Translation.WATCHERS_UNWATCH));
+        requiredTranslations.addAll(Arrays.asList(Translation.WATCHERS_WRONG_ID, Translation.WATCHERS_UNWATCH, this.getDescription()));
         return requiredTranslations;
     }
 

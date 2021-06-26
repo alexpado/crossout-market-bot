@@ -51,13 +51,13 @@ dependencies {
     implementation group: 'org.json', name: 'json', version: '20210307'
     implementation 'net.dv8tion:JDA:4.3.0_283'
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.7.3'
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.25'
     implementation group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
     implementation 'org.flywaydb:flyway-core:7.10.0'
 
     implementation group: 'fr.alexpado', name: 'simple-http-client', version: '1.0.1'
 
-    implementation 'io.sentry:sentry-spring-boot-starter:3.2.0'
+    implementation 'io.sentry:sentry-spring-boot-starter:5.0.1'
 }
 
 task copyConfigurationMetadata(type: Copy) {

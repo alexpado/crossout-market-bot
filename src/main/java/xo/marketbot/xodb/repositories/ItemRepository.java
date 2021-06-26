@@ -74,11 +74,11 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
     }
 
     /**
-     * Save all provided entities of the current type. This may create entries if the identifier of an entity isn't set,
-     * or update one if the identifier is defined.
+     * Save all provided entities of the current type. This may create entries if the identifier of an entity isn't set, or update one if
+     * the identifier is defined.
      * <p>
-     * If the identifier is set, but doesn't have any entries, it's up to the REST API implementation to refuse the
-     * entity or to accept it as-is.
+     * If the identifier is set, but doesn't have any entries, it's up to the REST API implementation to refuse the entity or to accept it
+     * as-is.
      *
      * @param entities
      *         A collection of entities to update or create.
@@ -92,11 +92,11 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
     }
 
     /**
-     * Save the entity of the current type. This may create an entry if the provided entity's identifier isn't set or
-     * update it if the identifier is defined.
+     * Save the entity of the current type. This may create an entry if the provided entity's identifier isn't set or update it if the
+     * identifier is defined.
      * <p>
-     * If the identifier is set, but doesn't have any entry, it's up to the REST API implementation to refuse the entity
-     * or to accept it as-is.
+     * If the identifier is set, but doesn't have any entry, it's up to the REST API implementation to refuse the entity or to accept it
+     * as-is.
      *
      * @param entity
      *         An entity to update or create.
@@ -110,8 +110,8 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
     }
 
     /**
-     * Delete the provided entity. If the identifier isn't set, no request will be sent to the REST API and the promise
-     * will fail instantly.
+     * Delete the provided entity. If the identifier isn't set, no request will be sent to the REST API and the promise will fail
+     * instantly.
      *
      * @param entity
      *         An entity to remove.
@@ -125,8 +125,8 @@ public class ItemRepository implements RestRepository<IItem, Integer> {
     }
 
     /**
-     * Delete the provided entities. If one of the identifier isn't set, no request will be sent to the REST API and the
-     * promise will fail instantly.
+     * Delete the provided entities. If one of the identifier isn't set, no request will be sent to the REST API and the promise will fail
+     * instantly.
      *
      * @param entities
      *         A collection of entities to remove.

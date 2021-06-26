@@ -1,6 +1,9 @@
 package xo.marketbot.entities.discord;
 
 import xo.marketbot.entities.interfaces.game.IItem;
+import xo.marketbot.i18n.TranslationProvider;
+import xo.marketbot.library.services.translations.annotations.I18N;
+import xo.marketbot.tools.TimeConverter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,16 +19,46 @@ public class Watcher {
     private String name;
 
     @Column(length = 20)
-    private String        type;
-    private Integer       itemId;
-    private String        itemName;
-    private Double        sellPrice;
-    private Double        buyPrice;
-    @OneToOne
+    private String  type;
+    private Integer itemId;
+    private String  itemName;
+    private Double  price;
+    private Double  sellPrice;
+    private Double  buyPrice;
+
+    @ManyToOne
     private UserEntity    owner;
     private boolean       regular;
     private long          timing;
     private LocalDateTime lastExecution;
+
+    // <editor-fold desc="I18N">
+
+    @Transient
+    @I18N(TranslationProvider.WATCHERS_BUY_OVER)
+    private String watcherTypeBuyOver;
+
+    @Transient
+    @I18N(TranslationProvider.WATCHERS_BUY_UNDER)
+    private String watcherTypeBuyUnder;
+
+    @Transient
+    @I18N(TranslationProvider.WATCHERS_SELL_OVER)
+    private String watcherTypeSellOver;
+
+    @Transient
+    @I18N(TranslationProvider.WATCHERS_SELL_UNDER)
+    private String watcherTypeSellUnder;
+
+    @Transient
+    @I18N(TranslationProvider.WATCHERS_NORMAL)
+    private String watcherTypeNormal;
+
+    @Transient
+    @I18N(TranslationProvider.WATCHERS_OTHER)
+    private String watcherTypeOther;
+
+    // </editor-fold>
 
     public static Watcher create(UserEntity user, IItem item) {
 
@@ -148,5 +181,34 @@ public class Watcher {
     public void setLastExecution(LocalDateTime lastExecution) {
 
         this.lastExecution = lastExecution;
+    }
+
+    public Double getPrice() {
+
+        return price;
+    }
+
+    public void setPrice(Double price) {
+
+        this.price = price;
+    }
+
+    public String getDescription() {
+
+        switch (this.type) {
+            case "SELL_UNDER":
+                return String.format(this.watcherTypeOther, this.itemName, String.format(this.watcherTypeSellUnder, this.price), new TimeConverter(this.timing));
+            case "SELL_OVER":
+                return String.format(this.watcherTypeOther, this.itemName, String.format(this.watcherTypeSellOver, this.price), new TimeConverter(this.timing));
+            case "BUY_UNDER":
+                return String.format(this.watcherTypeOther, this.itemName, String.format(this.watcherTypeBuyUnder, this.price), new TimeConverter(this.timing));
+            case "BUY_OVER":
+                return String.format(this.watcherTypeOther, this.itemName, String.format(this.watcherTypeBuyOver, this.price), new TimeConverter(this.timing));
+            case "NORMAL":
+                return String.format(this.watcherTypeNormal, this.itemName, new TimeConverter(this.timing));
+            default:
+                return "??? :(";
+        }
+
     }
 }

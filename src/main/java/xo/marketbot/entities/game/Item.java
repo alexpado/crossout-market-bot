@@ -1,15 +1,13 @@
 package xo.marketbot.entities.game;
 
-import fr.alexpado.jda.services.translations.Translator;
-import fr.alexpado.jda.services.translations.annotations.I18N;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import org.json.JSONObject;
 import xo.marketbot.XoMarketApplication;
 import xo.marketbot.entities.interfaces.common.*;
 import xo.marketbot.entities.interfaces.game.*;
-import xo.marketbot.i18n.TranslationException;
 import xo.marketbot.i18n.TranslationProvider;
+import xo.marketbot.library.services.translations.annotations.I18N;
 import xo.marketbot.tools.Utilities;
 import xo.marketbot.xodb.XoDB;
 
@@ -89,7 +87,7 @@ public class Item implements IItem {
         this.rarity   = xoDB.fromRarityCache(source.getInt("rarityId"));
         this.type     = xoDB.fromTypeCache(source.getInt("typeId"));
         this.category = xoDB.fromCategoryCache(source.getInt("categoryId"));
-        this.faction  = xoDB.fromFactionCache(source.getInt("factionId"));
+        this.faction  = xoDB.fromFactionCache(source.getInt("factionNumber"));
 
         // Strange Line: The JSON already contains "craftable" key. Was it made because of a bug, inconsistent data or ignorance ?
         // Let's put that here for reminder purpose. (
@@ -135,8 +133,8 @@ public class Item implements IItem {
     }
 
     /**
-     * Retrieve the amount of money needed to buy every {@link IItem} of this {@link Craftable}'s crafting recipe. The
-     * value returned by this method should be ignored if {@link #isCraftable()} returns false.
+     * Retrieve the amount of money needed to buy every {@link IItem} of this {@link Craftable}'s crafting recipe. The value returned by
+     * this method should be ignored if {@link #isCraftable()} returns false.
      *
      * @return Amount of money needed to craft.
      */
@@ -147,8 +145,8 @@ public class Item implements IItem {
     }
 
     /**
-     * Retrieve the amount of money obtainable by selling every {@link IItem} of this {@link Craftable}'s crafting
-     * recipe. The value returned by this method should be ignored if {@link #isCraftable()} returns false.
+     * Retrieve the amount of money obtainable by selling every {@link IItem} of this {@link Craftable}'s crafting recipe. The value
+     * returned by this method should be ignored if {@link #isCraftable()} returns false.
      *
      * @return Amount of money obtainable.
      */
@@ -299,13 +297,7 @@ public class Item implements IItem {
      * @return An {@link EmbedBuilder}.
      */
     @Override
-    public EmbedBuilder toEmbed(JDA jda, String language) {
-
-        try {
-            Translator.translate(this.xoDB.getTranslationProvider(), language, this);
-        } catch (IllegalAccessException e) {
-            throw new TranslationException(e);
-        }
+    public EmbedBuilder toEmbed(JDA jda) {
 
         EmbedBuilder builder = new EmbedBuilder();
 
@@ -333,4 +325,5 @@ public class Item implements IItem {
         builder.setImage(String.format(this.xoDB.getChartUrl(), this.lastUpdate.toEpochSecond(ZoneOffset.UTC), this.id));
         return builder;
     }
+
 }

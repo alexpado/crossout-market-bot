@@ -40,11 +40,20 @@ public class TimeConverter {
 
     @Override
     public String toString() {
-        // TODO remove 0 values
+
         if (this.hours != 0) {
-            return String.format("%02dh%02dm%02ds", this.hours, this.minutes, this.seconds);
+            if (this.seconds != 0) {
+                return String.format("%sh%02dm%02ds", this.hours, this.minutes, this.seconds);
+            } else if (this.minutes != 0) {
+                return String.format("%sh%02dm", this.hours, this.minutes);
+            } else {
+                return String.format("%sh", this.hours);
+            }
         } else if (this.minutes != 0) {
-            return String.format("%02dm%02ds", this.minutes, this.seconds);
+            if (this.seconds != 0) {
+                return String.format("%02dm%02ds", this.minutes, this.seconds);
+            }
+            return String.format("%sm", this.minutes);
         }
         return String.format("%02ds", this.seconds);
     }

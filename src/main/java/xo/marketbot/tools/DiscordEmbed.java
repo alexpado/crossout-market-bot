@@ -10,8 +10,6 @@ import java.util.regex.Pattern;
 
 public class DiscordEmbed extends EmbedBuilder {
 
-    private static final String DISCORD_ICON = "https://cdn.discordapp.com/icons/467736507336097814/52bc61342744c81a7122e899500d27f6.webp";
-
     private static final Pattern EMBED_TITLE       = Pattern.compile("@title\\(\"(?<value>.*)\"\\)", Pattern.MULTILINE);
     private static final Pattern EMBED_DESCRIPTION = Pattern.compile("@description\\(\"(?<value>.*)\"\\)", Pattern.MULTILINE);
     private static final Pattern EMBED_THUMBNAIL   = Pattern.compile("@thumbnail\\(\"(?<value>.*)\"\\)", Pattern.MULTILINE);
@@ -26,7 +24,7 @@ public class DiscordEmbed extends EmbedBuilder {
         this.jda = jda;
 
         // Define the default footer
-        super.setFooter(String.format("%s // Official CrossoutDB Bot", jda.getSelfUser().getName()), DISCORD_ICON);
+        super.setFooter(String.format("%s • Powered by CrossoutDB", jda.getSelfUser().getName()));
     }
 
     public JDA getJda() {
@@ -53,7 +51,7 @@ public class DiscordEmbed extends EmbedBuilder {
         }
 
         if (descriptionMatcher.find()) {
-            super.setDescription(descriptionMatcher.group("value"));
+            super.setDescription(descriptionMatcher.group("value").replace("\\n", "\n"));
         }
 
         if (thumbnailMatcher.find()) {
@@ -69,7 +67,7 @@ public class DiscordEmbed extends EmbedBuilder {
         }
 
         while (fieldMatcher.find()) {
-            super.addField(fieldMatcher.group("name"), fieldMatcher.group("value"), false);
+            super.addField(fieldMatcher.group("name"), fieldMatcher.group("value").replace("\\n", "\n"), false);
         }
 
     }

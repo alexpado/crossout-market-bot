@@ -1,12 +1,14 @@
 package xo.marketbot.xodb;
 
-import fr.alexpado.jda.services.translations.interfaces.ITranslationProvider;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import xo.marketbot.configurations.interfaces.IMarketConfiguration;
 import xo.marketbot.entities.interfaces.crossout.RestRepository;
 import xo.marketbot.entities.interfaces.game.*;
+import xo.marketbot.library.services.translations.annotations.I18N;
+import xo.marketbot.library.services.translations.interfaces.ITranslationProvider;
 import xo.marketbot.xodb.repositories.*;
 
 import java.awt.*;
@@ -32,6 +34,7 @@ public class XoDB {
      * @param configuration
      *         The {@link IMarketConfiguration} instance to use when configuring this {@link XoDB}.
      * @param translationProvider
+     *         The {@link ITranslationProvider} instance to use when dealing with {@link I18N} translation
      */
     public XoDB(IMarketConfiguration configuration, ITranslationProvider translationProvider) {
 
@@ -57,12 +60,11 @@ public class XoDB {
 
     public String getChartUrl() {
 
-        return "";
+        return "https://i.imgur.com/OvMZBs9.jpeg";
     }
 
     /**
-     * Fill the cache with almost constant value from the API. Calling this method more than once will just rebuild the
-     * cache.
+     * Fill the cache with almost constant value from the API. Calling this method more than once will just rebuild the cache.
      */
     public void buildCaches() {
 
@@ -86,10 +88,7 @@ public class XoDB {
             this.types().findAll().complete().forEach(type -> this.typeCache.put(type.getId(), type));
 
             LOGGER.debug("Building categories cache...");
-            this.categories()
-                .findAll()
-                .complete()
-                .forEach(category -> this.categoryCache.put(category.getId(), category));
+            this.categories().findAll().complete().forEach(category -> this.categoryCache.put(category.getId(), category));
 
             LOGGER.info("Cache built.");
         } catch (Exception e) {

@@ -52,4 +52,9 @@ public class Category implements ICategory {
         return this.name;
     }
 
+    @Override
+    public String toString() {
+
+        return this.getName();
+    }
 }

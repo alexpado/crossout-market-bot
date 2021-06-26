@@ -19,6 +19,11 @@ public class Utilities {
         return String.format("%,.2f %s", amount, currency);
     }
 
+    public static String money(double amount, String currency) {
+
+        return String.format("%,.2f %s", amount, currency);
+    }
+
     public static String removeHTML(String text) {
 
         Source   htmlSource = new Source(text);

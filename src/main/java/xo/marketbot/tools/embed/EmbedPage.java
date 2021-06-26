@@ -1,7 +1,9 @@
 package xo.marketbot.tools.embed;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import xo.marketbot.tools.reaction.ReactionListener;
 
 import java.util.ArrayList;
@@ -9,22 +11,25 @@ import java.util.List;
 
 public abstract class EmbedPage<T> extends ReactionListener {
 
-    private final ArrayList<String> items       = new ArrayList<>();
-    private final List<T>           origin;
-    private final int               count       = 10;
-    private       int               currentPage = 1;
-    private       int               totalPage   = 1;
+    private final List<T> origin;
+    private final int     count       = 6;
+    private       int     currentPage = 1;
+    private       int     totalPage   = 1;
 
-    protected EmbedPage(Message message, List<T> items, int timeout) {
+    protected EmbedPage(List<T> items, int timeout) {
 
-        super(message, timeout);
+        super(null, timeout);
         this.origin = items;
+    }
 
-        items.forEach(o -> this.items.add(this.asString(o)));
+    @Override
+    public void setMessage(Message message) {
+
+        super.setMessage(message);
         this.currentPage = 1;
 
-        float a = (float) items.size() / 10f;
-        int   b = items.size() / 10;
+        float a = (float) origin.size() / (float) count;
+        int   b = origin.size() / count;
 
         if (a > b) {
             this.totalPage = b + 1;
@@ -33,15 +38,15 @@ public abstract class EmbedPage<T> extends ReactionListener {
         }
         this.totalPage = this.totalPage == 0 ? 1 : this.totalPage;
 
-        if (items.size() > 10) {
+        if (origin.size() > count) {
 
             this.addAction("◀", reactionAction -> {
-                this.previousPage();
+                this.previousPage(reactionAction.getReaction().getJDA());
                 reactionAction.getReaction().removeReaction(reactionAction.getUser()).queue();
             });
 
             this.addAction("▶", reactionAction -> {
-                this.nextPage();
+                this.nextPage(reactionAction.getReaction().getJDA());
                 reactionAction.getReaction().removeReaction(reactionAction.getUser()).queue();
             });
 
@@ -49,72 +54,77 @@ public abstract class EmbedPage<T> extends ReactionListener {
                 this.timeout(message);
                 reactionAction.getReaction().removeReaction(reactionAction.getUser()).queue();
             });
-            this.refreshEmbed();
+            this.refreshEmbed(message.getJDA());
             this.start();
         } else {
-            this.refreshEmbed();
+            this.refreshEmbed(message.getJDA());
         }
     }
 
-    protected void reloadList() {
+    public abstract EmbedBuilder getEmbed(JDA jda);
 
-        this.items.clear();
-        this.origin.forEach(o -> this.items.add(this.asString(o)));
-    }
+    public abstract MessageEmbed.Field getFieldFor(int index, T item);
 
-    public String asString(T obj) {
-
-        return obj.toString();
-    }
-
-    public abstract EmbedBuilder getEmbed();
-
-    protected void refreshEmbed() {
+    protected void refreshEmbed(JDA jda) {
 
         this.resetTimer();
-        this.getMessage()
-            .editMessage(this.getEmbed()
-                             .setDescription(this.getPageText())
-                             .setFooter("Page " + this.currentPage + "/" + this.totalPage, null)
-                             .build())
-            .queue();
+
+        EmbedBuilder embed = this.getEmbed(jda);
+
+        for (MessageEmbed.Field field : this.getPageContent()) {
+            embed.addField(field);
+        }
+
+        embed.setThumbnail("https://crossoutdb.com/img/crossoutdb_logo_compact.png");
+
+        if (this.totalPage > 1) {
+            embed.setFooter(String.format("Page %s / %s • Powered by CrossoutDB", this.currentPage, this.totalPage));
+        } else {
+            embed.setFooter("Powered by CrossoutDB");
+        }
+
+        this.getMessage().editMessage(embed.build()).queue();
     }
 
     private boolean isPageValid() {
 
-        int[] pageBound = this.getPageBound(this.items.size(), this.currentPage, this.count);
-        return pageBound != null;
+        return this.currentPage > 0 && this.currentPage <= this.totalPage;
     }
 
-    private String getPageText() {
+    private List<MessageEmbed.Field> getPageContent() {
 
-        int[] pageBound = this.getPageBound(this.items.size(), this.currentPage, this.count);
-        if (pageBound == null) { return ""; }
-        StringBuilder builder = new StringBuilder();
-        for (int i = pageBound[0] ; i < pageBound[1] ; i++) {
-            builder.append(this.items.get(i)).append("\n");
+        List<MessageEmbed.Field> fields = new ArrayList<>();
+
+        int[] pageBound = this.getPageBound(this.origin.size(), this.currentPage, this.count);
+
+        if (pageBound == null) {
+            return fields;
         }
 
-        return builder.toString();
+        for (int i = pageBound[0] ; i < pageBound[1] ; i++) {
+            fields.add(this.getFieldFor((i + 1) - pageBound[0], this.origin.get(i)));
+        }
+
+        return fields;
     }
 
-    private void nextPage() {
+    private void nextPage(JDA jda) {
 
         this.currentPage++;
 
         if (this.isPageValid()) {
-            this.refreshEmbed();
+            this.refreshEmbed(jda);
         } else {
             this.currentPage--;
         }
     }
 
-    private void previousPage() {
+    private void previousPage(JDA jda) {
 
         this.currentPage--;
 
         if (this.isPageValid()) {
-            this.refreshEmbed();
+            this.refreshEmbed(jda);
         } else {
             this.currentPage++;
         }

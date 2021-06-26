@@ -10,11 +10,10 @@ import java.util.Map;
 /**
  * Interface representing a REST Repository, allowing to request a remote REST API to retrieve entities.
  * <p>
- * The targeted entity must implement the interface {@link Identifiable} to ensure that every entity can be obtained
- * separately.
+ * The targeted entity must implement the interface {@link Identifiable} to ensure that every entity can be obtained separately.
  * <p>
- * Every requests may fail if two or more entity share the same identifier, meaning that serious bug could occur in any
- * program using the API and requiring identifiable entities.
+ * Every requests may fail if two or more entity share the same identifier, meaning that serious bug could occur in any program using the
+ * API and requiring identifiable entities.
  *
  * @param <T>
  *         Type of the entity that will be retrieved from the REST API
@@ -63,11 +62,11 @@ public interface RestRepository<T extends Identifiable<ID>, ID> {
     IRestAction<List<T>> findAllByIds(Iterable<ID> ids);
 
     /**
-     * Save all provided entities of the current type. This may create entries if the identifier of an entity isn't set,
-     * or update one if the identifier is defined.
+     * Save all provided entities of the current type. This may create entries if the identifier of an entity isn't set, or update one if
+     * the identifier is defined.
      * <p>
-     * If the identifier is set, but doesn't have any entries, it's up to the REST API implementation to refuse the
-     * entity or to accept it as-is.
+     * If the identifier is set, but doesn't have any entries, it's up to the REST API implementation to refuse the entity or to accept it
+     * as-is.
      *
      * @param entities
      *         A collection of entities to update or create.
@@ -77,11 +76,11 @@ public interface RestRepository<T extends Identifiable<ID>, ID> {
     IRestAction<List<T>> saveAll(Iterable<T> entities);
 
     /**
-     * Save the entity of the current type. This may create an entry if the provided entity's identifier isn't set or
-     * update it if the identifier is defined.
+     * Save the entity of the current type. This may create an entry if the provided entity's identifier isn't set or update it if the
+     * identifier is defined.
      * <p>
-     * If the identifier is set, but doesn't have any entry, it's up to the REST API implementation to refuse the entity
-     * or to accept it as-is.
+     * If the identifier is set, but doesn't have any entry, it's up to the REST API implementation to refuse the entity or to accept it
+     * as-is.
      *
      * @param entity
      *         An entity to update or create.
@@ -91,8 +90,8 @@ public interface RestRepository<T extends Identifiable<ID>, ID> {
     IRestAction<T> save(T entity);
 
     /**
-     * Delete the provided entity. If the identifier isn't set, no request will be sent to the REST API and the promise
-     * will fail instantly.
+     * Delete the provided entity. If the identifier isn't set, no request will be sent to the REST API and the promise will fail
+     * instantly.
      *
      * @param entity
      *         An entity to remove.
@@ -102,8 +101,8 @@ public interface RestRepository<T extends Identifiable<ID>, ID> {
     IRestAction<Void> delete(T entity);
 
     /**
-     * Delete the provided entities. If one of the identifier isn't set, no request will be sent to the REST API and the
-     * promise will fail instantly.
+     * Delete the provided entities. If one of the identifier isn't set, no request will be sent to the REST API and the promise will fail
+     * instantly.
      *
      * @param entities
      *         A collection of entities to remove.

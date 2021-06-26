@@ -10,11 +10,9 @@ public interface Embeddable {
      *
      * @param jda
      *         {@link JDA} instance to use to access the current bot state.
-     * @param language
-     *         The language to use when translating the embed.
      *
      * @return An {@link EmbedBuilder}.
      */
-    EmbedBuilder toEmbed(JDA jda, String language);
+    EmbedBuilder toEmbed(JDA jda);
 
 }

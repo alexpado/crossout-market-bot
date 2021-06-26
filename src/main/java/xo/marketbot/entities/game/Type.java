@@ -52,4 +52,9 @@ public class Type implements IType {
         return this.name;
     }
 
+    @Override
+    public String toString() {
+
+        return this.getName();
+    }
 }

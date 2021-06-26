@@ -7,10 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Entity class implementing the {@link IGuildEntity} interface.
+ * Entity class implementing the {@link GuildEntity} interface.
  * <p>
- * This class is simply a wrapper for the {@link Guild} interface, allowing it to hold some settings and to be save in a
- * database.
+ * This class is simply a wrapper for the {@link Guild} interface, allowing it to hold some settings and to be save in a database.
  *
  * @author alexpado
  */
@@ -25,8 +24,7 @@ public class GuildEntity {
     private String language;
 
     /**
-     * Create a new {@link GuildEntity} with no data. This should not be used, and is present only for the sake of
-     * hibernate.
+     * Create a new {@link GuildEntity} with no data. This should not be used, and is present only for the sake of hibernate.
      */
     public GuildEntity() {}
 

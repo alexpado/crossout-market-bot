@@ -15,8 +15,8 @@ public class ReactionListener extends ListenerAdapter {
 
     private final EditorTimer                               editorTimer;
     private final Timer                                     timer           = new Timer();
-    private final Message                                   message;
     private final HashMap<String, Consumer<ReactionAction>> reactionActions = new HashMap<>();
+    private       Message                                   message;
     private       boolean                                   resetTimer      = false;
 
     public ReactionListener(Message message, int timeout) {
@@ -39,6 +39,11 @@ public class ReactionListener extends ListenerAdapter {
     public Message getMessage() {
 
         return this.message;
+    }
+
+    public void setMessage(Message message) {
+
+        this.message = message;
     }
 
     public void start() {

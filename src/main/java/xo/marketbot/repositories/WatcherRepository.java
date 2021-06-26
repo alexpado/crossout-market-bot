@@ -11,6 +11,8 @@ import java.util.List;
 public interface WatcherRepository extends JpaRepository<Watcher, Integer> {
 
     @Query("SELECT w FROM Watcher w WHERE w.owner.watcherPaused = false")
-    List<Watcher> getAllPotentials();
+    List<Watcher> findAllPotentials();
+
+    List<Watcher> findAllByOwnerId(long owner_id);
 
 }

@@ -9,6 +9,8 @@ import xo.marketbot.entities.game.Item;
 import xo.marketbot.entities.interfaces.game.IItem;
 import xo.marketbot.xodb.XoDB;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +32,7 @@ public class FindAllItemsAction extends RestAction<List<IItem>> {
         this.xoDB         = xoDB;
         this.searchParams = new HashMap<>();
 
-        searchParams.forEach((k, v) -> this.searchParams.put(k, v.toString()));
+        searchParams.forEach((k, v) -> this.searchParams.put(k, URLEncoder.encode(v.toString(), StandardCharsets.UTF_8)));
     }
 
     @Override

@@ -13,25 +13,25 @@ import xo.marketbot.configurations.interfaces.IDiscordConfiguration;
 })
 public class DiscordConfiguration implements IDiscordConfiguration {
 
-    @Value("${discord.application.client-id")
+    @Value("${discord.application.client-id}")
     private String clientId;
 
-    @Value("${discord.application.client-secret")
+    @Value("${discord.application.client-secret}")
     private String clientSecret;
 
-    @Value("${discord.application.grant-type")
+    @Value("${discord.application.grant-type}")
     private String grantType;
 
-    @Value("${discord.application.redirect-uri")
+    @Value("${discord.application.redirect-uri}")
     private String redirectUri;
 
-    @Value("${discord.application.scope")
+    @Value("${discord.application.scope}")
     private String scope;
 
     @Value("${discord.bot.token}")
     private String token;
 
-    @Value("${discord.bot.prefix")
+    @Value("${discord.bot.prefix}")
     private String prefix;
 
     @Value("${discord.bot.enabled:true}")

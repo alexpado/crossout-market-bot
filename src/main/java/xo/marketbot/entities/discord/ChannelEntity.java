@@ -9,10 +9,9 @@ import javax.persistence.Table;
 import java.util.Optional;
 
 /**
- * Entity class implementing the {@link IChannelEntity} interface.
+ * Entity class implementing the {@link ChannelEntity} interface.
  * <p>
- * This class is simply a wrapper for the {@link GuildChannel} interface, allowing it to hold some settings and to be
- * save in a database.
+ * This class is simply a wrapper for the {@link GuildChannel} interface, allowing it to hold some settings and to be save in a database.
  *
  * @author alexpado
  */
@@ -28,8 +27,7 @@ public class ChannelEntity {
     private String      language;
 
     /**
-     * Create a new {@link ChannelEntity} with no data. This should not be used, and is present only for the sake of
-     * hibernate.
+     * Create a new {@link ChannelEntity} with no data. This should not be used, and is present only for the sake of hibernate.
      */
     public ChannelEntity() {}
 
@@ -89,8 +87,7 @@ public class ChannelEntity {
     }
 
     /**
-     * Retrieve the language to apply to this channel. If the language of the current channel is null, the guild's one
-     * will be returned.
+     * Retrieve the language to apply to this channel. If the language of the current channel is null, the guild's one will be returned.
      *
      * @return The effective language in this channel.
      */

@@ -2,17 +2,16 @@ package xo.marketbot.entities.discord;
 
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
-import xo.marketbot.web.auth.entities.responses.UserResponse;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Entity class implementing the {@link IUserEntity} interface.
+ * Entity class implementing the {@link UserEntity} interface.
  * <p>
- * This class is simply a wrapper for the {@link net.dv8tion.jda.api.entities.User} interface, allowing it to hold some
- * settings and to be save in a database.
+ * This class is simply a wrapper for the {@link net.dv8tion.jda.api.entities.User} interface, allowing it to hold some settings and to be
+ * save in a database.
  *
  * @author alexpado
  */
@@ -21,7 +20,7 @@ import javax.persistence.Table;
 public class UserEntity {
 
     @Id
-    private Long    id;
+    private long    id;
     private String  username;
     private String  discriminator;
     private String  avatar;
@@ -29,14 +28,13 @@ public class UserEntity {
     private String  language;
 
     /**
-     * Create a new {@link UserEntity} with no data. This should not be used, and is present only for the sake of
-     * hibernate.
+     * Create a new {@link UserEntity} with no data. This should not be used, and is present only for the sake of hibernate.
      */
     public UserEntity() {}
 
     /**
-     * Create a new {@link UserEntity} with Discord API's JSON response. This should be used only if the {@link
-     * IUserEntity} isn't present in the database, or it will override this {@link IUserEntity}'s settings upon saving.
+     * Create a new {@link UserEntity} with Discord API's JSON response. This should be used only if the {@link UserEntity} isn't present in
+     * the database, or it will override this {@link UserEntity}'s settings upon saving.
      *
      * @param source
      *         The {@link JSONObject} to use to initialize this instance.
@@ -126,13 +124,5 @@ public class UserEntity {
 
         this.language = language;
     }
-
-    public void merge(UserResponse userResponse) {
-
-        this.setUsername(userResponse.getUsername());
-        this.setDiscriminator(userResponse.getDiscriminator());
-        this.setAvatar(userResponse.getAvatar());
-    }
-
 
 }

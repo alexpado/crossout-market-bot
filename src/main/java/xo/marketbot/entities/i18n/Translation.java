@@ -1,10 +1,13 @@
 package xo.marketbot.entities.i18n;
 
-import fr.alexpado.jda.services.translations.interfaces.ITranslation;
 import org.jetbrains.annotations.NotNull;
+import xo.marketbot.library.services.translations.interfaces.ITranslation;
 import xo.marketbot.repositories.keys.TranslationKey;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 
 @Entity
 @IdClass(TranslationKey.class)
@@ -17,7 +20,7 @@ public class Translation implements ITranslation {
     @Column(length = 3)
     private String language;
 
-    @Lob
+    @Column(length = 2048)
     private String value;
 
     /**

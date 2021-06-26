@@ -17,8 +17,8 @@ public interface Craftable {
     boolean isCraftable();
 
     /**
-     * Retrieve the amount of money needed to buy every {@link IItem} of this {@link Craftable}'s crafting recipe. The
-     * value returned by this method should be ignored if {@link #isCraftable()} returns false.
+     * Retrieve the amount of money needed to buy every {@link IItem} of this {@link Craftable}'s crafting recipe. The value returned by
+     * this method should be ignored if {@link #isCraftable()} returns false.
      *
      * @return Amount of money needed to craft.
      */
@@ -36,16 +36,15 @@ public interface Craftable {
     }
 
     /**
-     * Retrieve the amount of money obtainable by selling every {@link IItem} of this {@link Craftable}'s crafting
-     * recipe. The value returned by this method should be ignored if {@link #isCraftable()} returns false.
+     * Retrieve the amount of money obtainable by selling every {@link IItem} of this {@link Craftable}'s crafting recipe. The value
+     * returned by this method should be ignored if {@link #isCraftable()} returns false.
      *
      * @return Amount of money obtainable.
      */
     double getSellCraftPrice();
 
     /**
-     * Define the amount of money obtainable by selling every {@link IItem} of this {@link Craftable}'s crafting
-     * recipe.
+     * Define the amount of money obtainable by selling every {@link IItem} of this {@link Craftable}'s crafting recipe.
      *
      * @param price
      *         Amount of money obtainable.

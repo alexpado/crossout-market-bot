@@ -9,11 +9,11 @@ CREATE TABLE `language`
 
 CREATE TABLE `translation`
 (
-    `key`        VARCHAR(255) NOT NULL,
-    `language`   VARCHAR(3)   NOT NULL,
-    `value`      TEXT         NOT NULL,
-    `created_at` DATETIME     NOT NULL DEFAULT NOW(),
-    `updated_at` DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    `key`        VARCHAR(255)  NOT NULL,
+    `language`   VARCHAR(3)    NOT NULL,
+    `value`      VARCHAR(2048) NOT NULL,
+    `created_at` DATETIME      NOT NULL DEFAULT NOW(),
+    `updated_at` DATETIME      NOT NULL DEFAULT NOW() ON UPDATE NOW(),
     PRIMARY KEY (`key`, `language`),
     CONSTRAINT `FK_TRANSLATION_LANGUAGE` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE
 );
@@ -21,14 +21,14 @@ CREATE TABLE `translation`
 
 CREATE TABLE `user`
 (
-    `id`            BIGINT       NOT NULL PRIMARY KEY,
-    `username`      VARCHAR(255) NOT NULL,
-    `discriminator` VARCHAR(255) NOT NULL,
-    `avatar`        VARCHAR(255),
-    `watcherPaused` BOOLEAN      NOT NULL,
-    `language`      VARCHAR(3)   NOT NULL,
-    `created_at`    DATETIME     NOT NULL DEFAULT NOW(),
-    `updated_at`    DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    `id`             BIGINT       NOT NULL PRIMARY KEY,
+    `username`       VARCHAR(255) NOT NULL,
+    `discriminator`  VARCHAR(255) NOT NULL,
+    `avatar`         VARCHAR(255),
+    `watcher_paused` BOOLEAN      NOT NULL,
+    `language`       VARCHAR(3)   NOT NULL,
+    `created_at`     DATETIME     NOT NULL DEFAULT NOW(),
+    `updated_at`     DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW(),
     CONSTRAINT `FK_USER_LANGUAGE` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE RESTRICT
 );
 
@@ -51,19 +51,6 @@ CREATE TABLE `user_roles`
     CONSTRAINT `FK_ASSOC_ROLE_ID` FOREIGN KEY (`roles_id`) REFERENCES `role` (`id`) ON DELETE CASCADE
 );
 
-CREATE TABLE `session`
-(
-    `code`          VARCHAR(64)  NOT NULL PRIMARY KEY,
-    `user_id`       BIGINT       NOT NULL,
-    `ip_address`    VARCHAR(50)  NOT NULL,
-    `token`         VARCHAR(255) NOT NULL,
-    `refresh_token` VARCHAR(255) NOT NULL,
-    `expires_at`    DATETIME     NOT NULL,
-    `last_used_at`  DATETIME     NOT NULL,
-    `created_at`    DATETIME     NOT NULL DEFAULT NOW(),
-    `updated_at`    DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW(),
-    CONSTRAINT `FK_SESSION_USER` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
-);
 
 CREATE TABLE `guild`
 (

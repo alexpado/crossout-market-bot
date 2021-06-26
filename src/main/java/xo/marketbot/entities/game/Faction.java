@@ -51,4 +51,10 @@ public class Faction implements IFaction {
 
         return this.name;
     }
+
+    @Override
+    public String toString() {
+
+        return this.getName();
+    }
 }

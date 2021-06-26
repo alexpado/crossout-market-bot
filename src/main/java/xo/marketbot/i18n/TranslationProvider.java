@@ -1,8 +1,9 @@
 package xo.marketbot.i18n;
 
-import fr.alexpado.jda.services.translations.interfaces.ITranslation;
-import fr.alexpado.jda.services.translations.interfaces.ITranslationProvider;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import xo.marketbot.library.services.translations.interfaces.ITranslation;
+import xo.marketbot.library.services.translations.interfaces.ITranslationProvider;
 import xo.marketbot.repositories.TranslationRepository;
 
 import java.util.ArrayList;
@@ -74,12 +75,21 @@ public class TranslationProvider implements ITranslationProvider {
     private final TranslationRepository repository;
     private final List<ITranslation>    translations;
 
+    /**
+     * Create a new instance of this {@link ITranslationProvider} implementation.
+     *
+     * @param repository
+     *         The {@link JpaRepository} to access {@link ITranslation}.
+     */
     public TranslationProvider(TranslationRepository repository) {
 
         this.repository   = repository;
         this.translations = new ArrayList<>(repository.findAll());
     }
 
+    /**
+     * Reload all {@link ITranslation} from the database.
+     */
     public void reload() {
 
         this.translations.clear();
@@ -87,8 +97,7 @@ public class TranslationProvider implements ITranslationProvider {
     }
 
     /**
-     * Get the translation for the provided language and key using the list of args provided to format the raw
-     * translation value.
+     * Get the translation for the provided language and key using the list of args provided to format the raw translation value.
      *
      * @param language
      *         The translation's language
@@ -100,11 +109,14 @@ public class TranslationProvider implements ITranslationProvider {
     @Override
     public String getTranslation(String language, String key) {
 
+        // Retrieve a list of missing translations
+
+
         return this.translations.stream()
                                 .filter(x -> x.getLanguage().equals(language))
                                 .filter(x -> x.getKey().equals(key))
                                 .map(ITranslation::getValue)
                                 .findAny()
-                                .orElse(String.format("[[ERR: Missing '%s' in '%s']]", key, language));
+                                .orElse(null);
     }
 }

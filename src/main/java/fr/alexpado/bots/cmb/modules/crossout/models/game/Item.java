@@ -143,7 +143,9 @@ public class Item extends TranslatableJSONModel {
 
         EmbedBuilder builder      = this.getRawEmbed(jda);
         String       watcherTitle = translatableWatcher.toString();
-        builder.setAuthor(watcherTitle.substring(4), null, jda.getSelfUser().getAvatarUrl());
+
+        int idCutSize = String.valueOf(this.getId()).length() + 2;
+        builder.setAuthor(watcherTitle.substring(idCutSize), null, jda.getSelfUser().getAvatarUrl());
 
         if (!this.removed) {
             String currentSellPrice = Utilities.money(this.sellPrice, this.getTranslation(Translation.GENERAL_CURRENCY));

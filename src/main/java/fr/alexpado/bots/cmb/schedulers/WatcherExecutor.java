@@ -74,10 +74,13 @@ public class WatcherExecutor {
                 continue;
             }
 
+            LOGGER.debug("{} | The watcher is executable.", watcher.getId());
+
             UserSettings   settings     = optionalSettings.get();
             Optional<Item> optionalItem = endpoint.getOne(watcher.getItemId(), settings.getLanguage());
 
             if (optionalItem.isEmpty()) {
+                LOGGER.warn("{} | Item {} not found.", watcher.getId(), watcher.getItemId());
                 continue;
             }
 
@@ -91,6 +94,7 @@ public class WatcherExecutor {
                 User user = DiscordBot.jda.getUserById(watcher.getUser().getId());
 
                 if (user == null) {
+                    LOGGER.warn("{} | The associated user was not found.", watcher.getId());
                     continue;
                 }
 

@@ -194,7 +194,6 @@ public class Item extends TranslatableJSONModel {
                 .now()
                 .getDayOfYear()));
         builder.setImage(String.format(chartUrl, this.lastUpdate, this.id));
-        System.out.println("Using " + String.format(chartUrl, this.lastUpdate, this.id));
 
         if (this.removed) {
             builder.addField(this.getTranslation(Translation.ITEMS_REMOVED), this.getTranslation(Translation.ITEMS_UNAVAILABLE), true);

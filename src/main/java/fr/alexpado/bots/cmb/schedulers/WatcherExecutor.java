@@ -136,6 +136,8 @@ public class WatcherExecutor {
                 }
             } catch (MissingTranslationException e) {
                 LOGGER.error("One or more translations are missing !", e);
+            } catch (Exception e) {
+                LOGGER.error("Oof", e);
             }
         }
 
@@ -149,7 +151,7 @@ public class WatcherExecutor {
     private void sendWatcher(User user, EmbedBuilder builder) {
 
         PrivateChannel channel = user.openPrivateChannel().complete();
-        channel.sendMessage(builder.build()).complete();
+        channel.sendMessageEmbeds(builder.build()).complete();
     }
 
 }

@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -85,7 +84,6 @@ public class Translation {
     @Column(length = 3)
     private String language;
 
-    @NotNull
     private String text;
 
     @Override

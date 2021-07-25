@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Getter
@@ -25,11 +24,9 @@ public class UserSettings {
     private DiscordUser user;
 
     @Column(length = 3)
-    @NotNull(message = "Missing language on UserSettings")
     private String language = "en";
 
-    @NotNull(message = "Missing watcherPaused on UserSettings")
-    private Boolean watcherPaused = false;
+    private boolean watcherPaused = false;
 
     public static UserSettings getInstance(DiscordUser user) {
 

@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -22,10 +21,8 @@ public class Watcher {
     private Integer id;
 
     @OneToOne
-    @NotNull
     private DiscordUser user;
 
-    @NotNull
     private int itemId;
 
     private String itemName;
@@ -69,7 +66,7 @@ public class Watcher {
     public void loadItem(Item item) {
 
         this.setItemId(item.getId());
-        this.setItemName(item.getName());
+        this.setItemName(item.getAvailableName());
         this.setSellPrice(item.getSellPrice());
         this.setBuyPrice(item.getBuyPrice());
     }

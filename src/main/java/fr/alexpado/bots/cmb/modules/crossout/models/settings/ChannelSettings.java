@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -26,8 +25,7 @@ public class ChannelSettings {
     @Column(length = 3)
     private String language = null;
 
-    @NotNull(message = "Missing announcement on ChannelSettings")
-    private Boolean announcement = false;
+    private boolean announcement = false;
 
     public static ChannelSettings getInstance(DiscordChannel channel) {
 

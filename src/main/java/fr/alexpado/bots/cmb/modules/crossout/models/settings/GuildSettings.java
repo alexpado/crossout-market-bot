@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -25,10 +24,8 @@ public class GuildSettings {
     private DiscordGuild guild;
 
     @Column(length = 3)
-    @NotNull(message = "Missing language on GuildSetting")
     private String language = "en";
 
-    @NotNull(message = "Missing itemGraphInterval on GuildSetting")
     private Integer itemGraphInterval = 18000;
 
     public static GuildSettings getInstance(DiscordGuild guild) {

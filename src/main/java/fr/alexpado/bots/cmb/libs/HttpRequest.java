@@ -23,7 +23,7 @@ public class HttpRequest {
         this.connection = urlInstance.openConnection();
 
         Logger log = LoggerFactory.getLogger(HttpRequest.class);
-        log.info(url);
+        log.debug(url);
 
         this.connection.setRequestProperty("X-RequestedBy", "DiscordBot");
         this.connection.setRequestProperty("X-DiscordBot", "CrossoutMarketBot");

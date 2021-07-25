@@ -8,6 +8,7 @@ import fr.alexpado.bots.cmb.modules.crossout.models.Watcher;
 import fr.alexpado.bots.cmb.modules.crossout.models.game.Item;
 import fr.alexpado.bots.cmb.modules.crossout.models.settings.UserSettings;
 import fr.alexpado.bots.cmb.modules.crossout.repositories.WatcherRepository;
+import fr.alexpado.bots.cmb.modules.crossout.repositories.settings.UserSettingsRepository;
 import fr.alexpado.bots.cmb.throwables.MissingTranslationException;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
@@ -25,42 +26,55 @@ import java.util.Optional;
 @Component
 public class WatcherExecutor {
 
-    private static final Logger                LOGGER = LoggerFactory.getLogger(WatcherExecutor.class);
-    private final        WatcherRepository     watcherRepository;
-    private final        CrossoutConfiguration config;
+    private static final Logger                 LOGGER = LoggerFactory.getLogger(WatcherExecutor.class);
+    private final        WatcherRepository      watcherRepository;
+    private final        UserSettingsRepository userSettingsRepository;
+    private final        CrossoutConfiguration  config;
 
-    public WatcherExecutor(@Qualifier("crossoutConfiguration") CrossoutConfiguration config, WatcherRepository watcherRepository) {
+    public WatcherExecutor(@Qualifier("crossoutConfiguration") CrossoutConfiguration config, WatcherRepository watcherRepository, UserSettingsRepository userSettingsRepository) {
 
-        this.watcherRepository = watcherRepository;
-        this.config            = config;
+        this.watcherRepository      = watcherRepository;
+        this.config                 = config;
+        this.userSettingsRepository = userSettingsRepository;
     }
 
     @Scheduled(fixedDelayString = "${watchers.timeout}")
     public void runWatchers() {
 
         if (DiscordBot.jda == null || DiscordBot.jda.getUsers().isEmpty()) {
+            LOGGER.warn("No valid JDA instance found.");
             return; // Cancel the execution as having JDA is required.
         }
 
         ItemEndpoint endpoint = new ItemEndpoint(this.config);
 
-        List<Watcher> watchers = this.watcherRepository.getExecutables(System.currentTimeMillis());
+        List<Watcher> watchers = this.watcherRepository.findAll();
         List<Watcher> toRemove = new ArrayList<>();
         List<Watcher> toSave   = new ArrayList<>();
 
+        LOGGER.info("Found {} watchers in database.", watchers.size());
+
         for (Watcher watcher : watchers) {
-            LOGGER.debug("Executing watcher {} ...", watcher.getId());
+            LOGGER.debug("{} | Checking watchers executable state...", watcher.getId());
 
-            Optional<UserSettings> optionalUserSettings = this.config.getRepositoryAccessor()
-                                                                     .getUserSettingsRepository()
-                                                                     .findByUser(watcher.getUser());
-
-            if (optionalUserSettings.isEmpty()) {
-                // WUT ?!
+            if (watcher.getLastExecution() + watcher.getRepeatEvery() > System.currentTimeMillis()) {
+                LOGGER.debug("{} | The watcher is not currently executable (time)", watcher.getId());
                 continue;
             }
 
-            UserSettings   settings     = optionalUserSettings.get();
+            Optional<UserSettings> optionalSettings = this.userSettingsRepository.findByUser(watcher.getUser());
+
+            if (optionalSettings.isEmpty()) {
+                LOGGER.debug("{} | The watcher is not currently executable (missing user settings)", watcher.getId());
+                continue;
+            }
+
+            if (optionalSettings.get().isWatcherPaused()) {
+                LOGGER.debug("{} | The watcher is not currently executable (paused)", watcher.getId());
+                continue;
+            }
+
+            UserSettings   settings     = optionalSettings.get();
             Optional<Item> optionalItem = endpoint.getOne(watcher.getItemId(), settings.getLanguage());
 
             if (optionalItem.isEmpty()) {
@@ -84,6 +98,7 @@ public class WatcherExecutor {
                 this.watcherRepository.save(watcher);
 
                 WatcherType type = WatcherType.getFromId(watcher.getWatcherType());
+                LOGGER.debug("{} | Resolved watcher type: {}", watcher.getId(), type);
 
                 boolean send = false;
 
@@ -109,6 +124,7 @@ public class WatcherExecutor {
                 if (send) {
 
                     try {
+                        LOGGER.info("{} | Sending to user {}...", watcher.getId(), user.getId());
                         this.sendWatcher(user, builder);
                         toSave.add(watcher);
                     } catch (Exception e) {

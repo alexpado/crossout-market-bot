@@ -144,7 +144,7 @@ public class Item extends TranslatableJSONModel {
         EmbedBuilder builder      = this.getRawEmbed(jda);
         String       watcherTitle = translatableWatcher.toString();
 
-        int idCutSize = String.valueOf(this.getId()).length() + 2;
+        int idCutSize = String.valueOf(this.getId()).length() + 3;
         builder.setAuthor(watcherTitle.substring(idCutSize), null, jda.getSelfUser().getAvatarUrl());
 
         if (!this.removed) {

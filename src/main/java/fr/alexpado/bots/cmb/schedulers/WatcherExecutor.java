@@ -91,7 +91,7 @@ public class WatcherExecutor {
 
                 EmbedBuilder builder = item.getDiffEmbed(DiscordBot.jda, watcher, watcher.getTranslatableWatcher(this.config, settings.getLanguage()));
 
-                User user = DiscordBot.jda.getUserById(watcher.getUser().getId());
+                User user = DiscordBot.jda.retrieveUserById(watcher.getUser().getId()).complete();
 
                 if (user == null) {
                     LOGGER.warn("{} | The associated user was not found.", watcher.getId());

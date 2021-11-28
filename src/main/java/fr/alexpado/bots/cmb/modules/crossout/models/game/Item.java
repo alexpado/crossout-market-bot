@@ -45,6 +45,8 @@ public class Item extends TranslatableJSONModel {
     private Rarity   rarity;
     private Type     type;
 
+    private boolean dupe = false;
+
     public Item(CrossoutConfiguration config, JSONObject dataSource) throws Exception {
 
         super(config, dataSource);
@@ -82,9 +84,20 @@ public class Item extends TranslatableJSONModel {
     @Override
     public List<String> getRequiredTranslation() {
 
-        return Arrays.asList(Translation.GENERAL_INVITE, Translation.GENERAL_CURRENCY, Translation.MARKET_BUY, Translation.MARKET_CRAFTS_BUY, Translation.MARKET_SELL, Translation.MARKET_CRAFTS_SELL, WatcherType.NORMAL
-                .getTranslation(), WatcherType.BUY_OVER.getTranslation(), WatcherType.BUY_UNDER.getTranslation(), WatcherType.SELL_OVER
-                .getTranslation(), WatcherType.SELL_UNDER.getTranslation(), Translation.WATCHERS_OTHER, Translation.ITEMS_REMOVED, Translation.ITEMS_UNAVAILABLE);
+        return Arrays.asList(Translation.GENERAL_INVITE, Translation.GENERAL_CURRENCY, Translation.MARKET_BUY, Translation.MARKET_CRAFTS_BUY, Translation.MARKET_SELL, Translation.MARKET_CRAFTS_SELL, WatcherType.NORMAL.getTranslation(), WatcherType.BUY_OVER.getTranslation(), WatcherType.BUY_UNDER.getTranslation(), WatcherType.SELL_OVER.getTranslation(), WatcherType.SELL_UNDER.getTranslation(), Translation.WATCHERS_OTHER, Translation.ITEMS_REMOVED, Translation.ITEMS_UNAVAILABLE);
+    }
+
+    public void markAsDupe() {
+        this.dupe = true;
+    }
+
+    public String getAvailableName() {
+
+        if (this.dupe) {
+            return String.format("%s (%s)", this.availableName, this.rarity.getName());
+        } else {
+            return this.availableName;
+        }
     }
 
     @Override
@@ -171,10 +184,8 @@ public class Item extends TranslatableJSONModel {
             builder.addField(this.getTranslation(Translation.MARKET_SELL), Utilities.money(this.buyPrice, this.getTranslation(Translation.GENERAL_CURRENCY)), true);
             if (this.craftable) {
                 builder.addField("", "", true);
-                builder.addField(this.getTranslation(Translation.MARKET_CRAFTS_BUY), Utilities.money(this.craftingSellSum, this
-                        .getTranslation(Translation.GENERAL_CURRENCY)), true);
-                builder.addField(this.getTranslation(Translation.MARKET_CRAFTS_SELL), Utilities.money(this.craftingBuySum, this
-                        .getTranslation(Translation.GENERAL_CURRENCY)), true);
+                builder.addField(this.getTranslation(Translation.MARKET_CRAFTS_BUY), Utilities.money(this.craftingSellSum, this.getTranslation(Translation.GENERAL_CURRENCY)), true);
+                builder.addField(this.getTranslation(Translation.MARKET_CRAFTS_SELL), Utilities.money(this.craftingBuySum, this.getTranslation(Translation.GENERAL_CURRENCY)), true);
                 builder.addField("", "", true);
             }
         }
@@ -192,9 +203,8 @@ public class Item extends TranslatableJSONModel {
         builder.setTitle(this.name, String.format("https://crossoutdb.com/item/%s?ref=crossoutmarketbot", this.id));
         builder.setDescription(this.description);
 
-        builder.setThumbnail(String.format("https://crossoutdb.com/img/items/%s.png?ref=crossoutmarketbot&v=%s", this.id, LocalDateTime
-                .now()
-                .getDayOfYear()));
+        builder.setThumbnail(String.format("https://crossoutdb.com/img/items/%s.png?ref=crossoutmarketbot&v=%s", this.id, LocalDateTime.now()
+                                                                                                                                       .getDayOfYear()));
         builder.setImage(String.format(chartUrl, this.lastUpdate, this.id));
 
         if (this.removed) {
@@ -213,7 +223,7 @@ public class Item extends TranslatableJSONModel {
     @Override
     public String toString() {
 
-        return this.availableName;
+        return this.getAvailableName();
     }
 
 }

@@ -44,8 +44,9 @@ public class ItemCommand extends ItemBotCommand {
             event.getArgs().remove("-m");
         }
 
-        String itemName = String.join(" ", event.getArgs());
-        params.put("query", itemName);
+        String itemName    = String.join(" ", event.getArgs());
+        String rawItemName = itemName.replaceAll("\\s\\(.*\\)$", "");
+        params.put("query", rawItemName);
         params.put("language", this.getEffectiveLanguage());
 
         this.manageItemList(event, message, endpoint.search(params), itemName);

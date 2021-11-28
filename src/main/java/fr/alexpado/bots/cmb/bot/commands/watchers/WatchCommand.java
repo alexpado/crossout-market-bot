@@ -52,7 +52,8 @@ public class WatchCommand extends WatcherCommandGroup {
         }
 
         ItemEndpoint itemEndpoint = new ItemEndpoint(this.getConfig());
-        List<Item> items = itemEndpoint.searchByName(optionalItemName.get(), this.getUserSettings().getLanguage());
+        String rawItemName = optionalItemName.get().replaceAll("\\s\\(.*\\)$", "");
+        List<Item> items = itemEndpoint.searchByName(rawItemName, this.getUserSettings().getLanguage());
 
         Item item = null;
 
@@ -62,7 +63,7 @@ public class WatchCommand extends WatcherCommandGroup {
         } else if (items.size() > 1) {
             // Try to find a perfect match.
             for (Item el : items) {
-                if (el.getAvailableName().equalsIgnoreCase(optionalItemName.get()) || el.getName().equalsIgnoreCase(optionalItemName.get())) {
+                if (el.getAvailableName().equalsIgnoreCase(optionalItemName.get()) || el.getAvailableName().equalsIgnoreCase(optionalItemName.get())) {
                     // Perfect match !
                     item = el;
                     break;

@@ -99,7 +99,7 @@ public abstract class Translatable implements ITranslatable {
         if (translationList.size() != keys.size()) {
             // Prepare the list of keys that has been retrieved.
             List<String> retrievedKeys = translationList.stream()
-                                                        .map(Translation::getText)
+                                                        .map(Translation::getTranslationKey)
                                                         .collect(Collectors.toList());
             // Get the missing keys
             List<String> missingKeys = keys.stream()

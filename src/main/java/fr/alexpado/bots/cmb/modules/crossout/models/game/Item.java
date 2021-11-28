@@ -222,7 +222,7 @@ public class Item extends TranslatableJSONModel {
     @Override
     public String toString() {
 
-        return this.availableName;
+        return this.getAvailableName();
     }
 
 }

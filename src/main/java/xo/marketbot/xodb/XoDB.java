@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import xo.marketbot.configurations.interfaces.IMarketConfiguration;
 import xo.marketbot.entities.interfaces.crossout.RestRepository;
 import xo.marketbot.entities.interfaces.game.*;
-import xo.marketbot.library.services.translations.annotations.I18N;
-import xo.marketbot.library.services.translations.interfaces.ITranslationProvider;
 import xo.marketbot.xodb.repositories.*;
 
 import java.awt.*;
@@ -21,7 +19,6 @@ public class XoDB {
     private final static Logger LOGGER = LoggerFactory.getLogger(XoDB.class);
 
     private final IMarketConfiguration configuration;
-    private final ITranslationProvider translationProvider;
 
     private final Map<Integer, IRarity>   rarityCache   = new HashMap<>();
     private final Map<Integer, IFaction>  factionCache  = new HashMap<>();
@@ -33,13 +30,10 @@ public class XoDB {
      *
      * @param configuration
      *         The {@link IMarketConfiguration} instance to use when configuring this {@link XoDB}.
-     * @param translationProvider
-     *         The {@link ITranslationProvider} instance to use when dealing with {@link I18N} translation
      */
-    public XoDB(IMarketConfiguration configuration, ITranslationProvider translationProvider) {
+    public XoDB(IMarketConfiguration configuration) {
 
-        this.configuration       = configuration;
-        this.translationProvider = translationProvider;
+        this.configuration = configuration;
         this.buildCaches();
     }
 
@@ -53,14 +47,9 @@ public class XoDB {
         return this.configuration.getApi();
     }
 
-    public ITranslationProvider getTranslationProvider() {
-
-        return translationProvider;
-    }
-
     public String getChartUrl() {
 
-        return "https://i.imgur.com/OvMZBs9.jpeg";
+        return "http://xomarket.akio.ovh:8282/chart/%s/%s.png";
     }
 
     /**

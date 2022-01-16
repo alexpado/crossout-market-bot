@@ -3,6 +3,7 @@ package xo.marketbot.tools;
 import net.htmlparser.jericho.Renderer;
 import net.htmlparser.jericho.Source;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +43,24 @@ public class Utilities {
         result.addAll(array);
         result.addAll(Arrays.asList(elements));
         return result;
+    }
+
+    public static int ceilDiv(int a, int b) {
+
+        return (a / b) + Math.min(a % b, 1);
+    }
+
+
+    public static LocalDateTime toNormalizedDateTime(LocalDateTime other, long seconds) {
+
+        long minutes      = seconds / 60;
+        long unnormalized = (other.getHour() * 60) + other.getMinute();
+
+        long normalizedMinutes = unnormalized % minutes;
+
+        return other.minusMinutes(normalizedMinutes)
+                    .withSecond(0)
+                    .withNano(0);
     }
 
 }

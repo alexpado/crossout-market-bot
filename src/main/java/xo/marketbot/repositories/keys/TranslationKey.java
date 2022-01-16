@@ -1,13 +1,8 @@
 package xo.marketbot.repositories.keys;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-@Getter
-@Setter
 public class TranslationKey implements Serializable {
 
     private String key;
@@ -24,9 +19,8 @@ public class TranslationKey implements Serializable {
     @Override
     public boolean equals(Object o) {
 
-        if (this == o) { return true; }
-        if (!(o instanceof TranslationKey)) { return false; }
-        TranslationKey that = (TranslationKey) o;
+        if (this == o) {return true;}
+        if (!(o instanceof TranslationKey that)) {return false;}
         return key.equals(that.key) && language.equals(that.language);
     }
 
@@ -34,5 +28,25 @@ public class TranslationKey implements Serializable {
     public int hashCode() {
 
         return Objects.hash(key, language);
+    }
+
+    public String getKey() {
+
+        return key;
+    }
+
+    public void setKey(String key) {
+
+        this.key = key;
+    }
+
+    public String getLanguage() {
+
+        return language;
+    }
+
+    public void setLanguage(String language) {
+
+        this.language = language;
     }
 }

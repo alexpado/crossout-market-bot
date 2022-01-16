@@ -1,13 +1,9 @@
 package xo.marketbot.entities.game;
 
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.json.JSONObject;
-import xo.marketbot.XoMarketApplication;
 import xo.marketbot.entities.interfaces.common.*;
 import xo.marketbot.entities.interfaces.game.*;
-import xo.marketbot.i18n.TranslationProvider;
-import xo.marketbot.library.services.translations.annotations.I18N;
 import xo.marketbot.tools.Utilities;
 import xo.marketbot.xodb.XoDB;
 
@@ -24,15 +20,14 @@ import java.time.format.DateTimeFormatter;
  */
 public class Item implements IItem {
 
-    private final XoDB          xoDB;
     private final int           id;
     private final String        availableName;
     private final String        description;
     private final boolean       removed;
     private final boolean       meta;
     private final boolean       craftable;
-    private final int           sellPrice;
-    private final int           buyPrice;
+    private final int           marketBuy;
+    private final int           marketSell;
     private final int           craftingSellSum;
     private final int           craftingBuySum;
     private final LocalDateTime lastUpdate;
@@ -40,23 +35,6 @@ public class Item implements IItem {
     private final IType         type;
     private final ICategory     category;
     private final IFaction      faction;
-
-    @I18N(TranslationProvider.MARKET_BUY)
-    private String marketBuy;
-    @I18N(TranslationProvider.MARKET_SELL)
-    private String marketSell;
-    @I18N(TranslationProvider.MARKET_CRAFTS_BUY)
-    private String marketCraftBuy;
-    @I18N(TranslationProvider.MARKET_CRAFTS_SELL)
-    private String marketCraftSell;
-    @I18N(TranslationProvider.GENERAL_CURRENCY)
-    private String generalCurreny;
-    @I18N(TranslationProvider.GENERAL_INVITE)
-    private String generalInvite;
-    @I18N(TranslationProvider.ITEMS_REMOVED)
-    private String itemRemoved;
-    @I18N(TranslationProvider.ITEMS_UNAVAILABLE)
-    private String itemUnavailable;
 
     /**
      * Create a new {@link Item} instance.
@@ -68,15 +46,13 @@ public class Item implements IItem {
      */
     public Item(XoDB xoDB, JSONObject source) {
 
-        this.xoDB = xoDB;
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         this.id              = source.getInt("id");
         this.availableName   = source.getString("availableName");
         this.description     = Utilities.removeHTML(source.get("description") == JSONObject.NULL ? "" : source.getString("description"));
-        this.sellPrice       = source.getInt("sellPrice");
-        this.buyPrice        = source.getInt("buyPrice");
+        this.marketBuy       = source.getInt("buyPrice");
+        this.marketSell      = source.getInt("sellPrice");
         this.craftingSellSum = source.getInt("craftingSellSum");
         this.craftingBuySum  = source.getInt("craftingBuySum");
         this.removed         = source.getInt("removed") == 1;
@@ -88,11 +64,6 @@ public class Item implements IItem {
         this.type     = xoDB.fromTypeCache(source.getInt("typeId"));
         this.category = xoDB.fromCategoryCache(source.getInt("categoryId"));
         this.faction  = xoDB.fromFactionCache(source.getInt("factionNumber"));
-
-        // Strange Line: The JSON already contains "craftable" key. Was it made because of a bug, inconsistent data or ignorance ?
-        // Let's put that here for reminder purpose. (
-
-        //this.craftable = !(this.craftingSellSum == 0 || this.craftingBuySum == 0);
     }
 
     /**
@@ -141,7 +112,7 @@ public class Item implements IItem {
     @Override
     public double getBuyCraftPrice() {
 
-        return this.craftingSellSum;
+        return this.craftingBuySum;
     }
 
     /**
@@ -153,7 +124,7 @@ public class Item implements IItem {
     @Override
     public double getSellCraftPrice() {
 
-        return this.craftingBuySum;
+        return this.craftingSellSum;
     }
 
     /**
@@ -184,9 +155,9 @@ public class Item implements IItem {
      * @return The buy price
      */
     @Override
-    public double getBuyPrice() {
+    public double getMarketSell() {
 
-        return this.sellPrice;
+        return this.marketSell;
     }
 
     /**
@@ -195,15 +166,15 @@ public class Item implements IItem {
      * @return The sell price
      */
     @Override
-    public double getSellPrice() {
+    public double getMarketBuy() {
 
-        return this.buyPrice;
+        return this.marketBuy;
     }
 
     /**
      * Retrieve this {@link Nameable}'s name.
      *
-     * @return The name (language dependent).
+     * @return The name.
      */
     @Override
     public String getName() {
@@ -288,42 +259,12 @@ public class Item implements IItem {
         return this.faction;
     }
 
-    /**
-     * Retrieve an {@link EmbedBuilder} representation of the current {@link Embeddable} instance.
-     *
-     * @param jda
-     *         {@link JDA} instance to use to access the current bot state.
-     *
-     * @return An {@link EmbedBuilder}.
-     */
     @Override
-    public EmbedBuilder toEmbed(JDA jda) {
+    public MessageEmbed.Field toField() {
 
-        EmbedBuilder builder = new EmbedBuilder();
+        String factionName = this.getFaction().getName();
+        String rarityName  = this.getRarity().getName();
 
-        builder.setAuthor(this.generalInvite, XoMarketApplication.INVITE, jda.getSelfUser().getAvatarUrl());
-        builder.setTitle(this.availableName, Item.toXoDBLink(this.id));
-        builder.setDescription(this.description);
-
-        builder.setThumbnail(Item.toXoDBThumbnail(this.id, this.lastUpdate));
-
-        if (this.removed) {
-            builder.addField(this.itemRemoved, this.itemUnavailable, true);
-        } else {
-            builder.addField(this.marketBuy, Utilities.money(this.sellPrice, this.generalCurreny), true);
-            builder.addField(this.marketSell, Utilities.money(this.buyPrice, this.generalCurreny), true);
-
-            if (this.craftable) {
-                builder.addBlankField(true);
-                builder.addField(this.marketCraftBuy, Utilities.money(this.craftingSellSum, this.generalCurreny), true);
-                builder.addField(this.marketCraftSell, Utilities.money(this.craftingBuySum, this.generalCurreny), true);
-                builder.addBlankField(true);
-            }
-        }
-
-        builder.setColor(this.rarity.getColor());
-        builder.setImage(String.format(this.xoDB.getChartUrl(), this.lastUpdate.toEpochSecond(ZoneOffset.UTC), this.id));
-        return builder;
+        return new MessageEmbed.Field(this.getName(), String.format("%s • %s", factionName, rarityName), false);
     }
-
 }

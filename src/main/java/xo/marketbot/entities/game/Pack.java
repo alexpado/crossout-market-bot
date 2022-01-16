@@ -1,20 +1,13 @@
 package xo.marketbot.entities.game;
 
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import xo.marketbot.XoMarketApplication;
 import xo.marketbot.entities.interfaces.common.Identifiable;
 import xo.marketbot.entities.interfaces.common.Marchantable;
 import xo.marketbot.entities.interfaces.common.Nameable;
 import xo.marketbot.entities.interfaces.game.IPack;
-import xo.marketbot.i18n.TranslationProvider;
-import xo.marketbot.library.services.translations.annotations.I18N;
 import xo.marketbot.tools.Utilities;
-
-import javax.persistence.Embeddable;
-import java.awt.*;
 
 public class Pack implements IPack {
 
@@ -28,21 +21,6 @@ public class Pack implements IPack {
     private       Double  priceEur;
     private       Double  priceGbp;
     private       Double  priceRub;
-
-    @I18N(TranslationProvider.MARKET_BUY)
-    private String marketBuy;
-    @I18N(TranslationProvider.MARKET_SELL)
-    private String marketSell;
-    @I18N(TranslationProvider.MARKET_CRAFTS_BUY)
-    private String marketCraftBuy;
-    @I18N(TranslationProvider.MARKET_CRAFTS_SELL)
-    private String marketCraftSell;
-    @I18N(TranslationProvider.GENERAL_CURRENCY)
-    private String generalCurreny;
-    @I18N(TranslationProvider.GENERAL_INVITE)
-    private String generalInvite;
-    @I18N(TranslationProvider.PACKS_PRICE)
-    private String packPrice;
 
     public Pack(JSONObject source) {
 
@@ -60,21 +38,24 @@ public class Pack implements IPack {
             JSONObject priceSource = array.getJSONObject(i);
             double     value       = priceSource.getDouble("final");
 
-            switch (priceSource.getString("currencyabbriviation")) {
-                case "usd":
-                    this.priceUsd = value;
-                    break;
-                case "eur":
-                    this.priceEur = value;
-                    break;
-                case "gbp":
-                    this.priceGbp = value;
-                    break;
-                case "rub":
-                    this.priceRub = value;
+            switch (priceSource.getString("currencyabbriviation").toLowerCase()) {
+                case "usd" -> this.priceUsd = value;
+                case "eur" -> this.priceEur = value;
+                case "gbp" -> this.priceGbp = value;
+                case "rub" -> this.priceRub = value;
             }
         }
 
+    }
+
+    public static String toXoDBLink(String key) {
+
+        return String.format("https://crossoutdb.com/packs?ref=crossoutmarketbot#pack=%s", key);
+    }
+
+    public static String toXoDBThumbnail(String key) {
+
+        return String.format("https://crossoutdb.com/img/premiumpackages/%s.jpg", key);
     }
 
     /**
@@ -160,7 +141,7 @@ public class Pack implements IPack {
      * @return The buy price
      */
     @Override
-    public double getBuyPrice() {
+    public double getMarketSell() {
 
         return this.sellPrice;
     }
@@ -171,7 +152,7 @@ public class Pack implements IPack {
      * @return The sell price
      */
     @Override
-    public double getSellPrice() {
+    public double getMarketBuy() {
 
         return this.buyPrice;
     }
@@ -187,52 +168,14 @@ public class Pack implements IPack {
         return this.name;
     }
 
-    /**
-     * Retrieve an {@link EmbedBuilder} representation of the current {@link Embeddable} instance.
-     *
-     * @param jda
-     *         {@link JDA} instance to use to access the current bot state.
-     *
-     * @return An {@link EmbedBuilder}.
-     */
-    @Override
-    public EmbedBuilder toEmbed(JDA jda) {
-
-        EmbedBuilder builder = new EmbedBuilder();
-
-        builder.setAuthor(this.generalInvite, XoMarketApplication.INVITE, jda.getSelfUser().getAvatarUrl());
-        builder.setTitle(this.name, String.format("https://crossoutdb.com/packs?ref=crossoutmarketbot#pack=%s", this.getKey()));
-
-        builder.addField(this.marketBuy, Utilities.money(this.sellPrice, this.generalCurreny), true);
-        builder.addField(this.marketSell, Utilities.money(this.buyPrice, this.generalCurreny), true);
-
-        builder.addBlankField(true);
-
-        if (this.priceUsd != 0) {
-
-            builder.addField(this.packPrice, String.format("%s\n%s\n%s\n%s", this.getPriceLine(this.priceUsd, "USD"), this.getPriceLine(this.priceEur, "EUR"), this
-                    .getPriceLine(this.priceGbp, "GBP"), this.getPriceLine(this.priceRub, "RUB")), true);
-
-            double value = this.buyPrice + this.rawCoins;
-
-            builder.addField("", String.format("%s\n%s\n%s\n%s", Utilities.money(value / (this.priceUsd / 100f), "Coins/USD"), Utilities.money(value / (this.priceEur / 100f), "Coins/EUR"), Utilities
-                    .money(value / (this.priceGbp / 100f), "Coins/GBP"), Utilities.money(value / (this.priceRub / 100f), "Coins/RUB")), true);
-            builder.addField("", "", true);
-        }
-
-        builder.setImage(this.getPackPicture());
-        builder.setColor(Color.WHITE);
-
-        return builder;
-    }
-
     private String getPriceLine(double price, String currency) {
 
         return Utilities.money((price / 100), " " + currency);
     }
 
-    private String getPackPicture() {
+    @Override
+    public MessageEmbed.Field toField() {
 
-        return String.format("https://crossoutdb.com/img/premiumpackages/%s.jpg", this.getKey());
+        return new MessageEmbed.Field(this.getName(), String.format("%s • %s • %s • %s", this.getPriceLine(this.priceUsd, "USD"), this.getPriceLine(this.priceEur, "EUR"), this.getPriceLine(this.priceGbp, "GBP"), this.getPriceLine(this.priceRub, "RUB")), true);
     }
 }

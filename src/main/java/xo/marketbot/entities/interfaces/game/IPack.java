@@ -1,6 +1,6 @@
 package xo.marketbot.entities.interfaces.game;
 
-import xo.marketbot.entities.interfaces.common.Embeddable;
+import xo.marketbot.entities.interfaces.common.Fieldable;
 import xo.marketbot.entities.interfaces.common.Identifiable;
 import xo.marketbot.entities.interfaces.common.Marchantable;
 import xo.marketbot.entities.interfaces.common.Nameable;
@@ -10,7 +10,7 @@ import xo.marketbot.entities.interfaces.common.Nameable;
  *
  * @author alexpado
  */
-public interface IPack extends Identifiable<Integer>, Nameable, Marchantable, Embeddable {
+public interface IPack extends Identifiable<Integer>, Nameable, Marchantable, Fieldable {
 
     /**
      * Retrieve this {@link IPack}'s key identifier.

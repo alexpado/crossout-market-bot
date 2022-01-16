@@ -12,7 +12,7 @@ public interface Marchantable {
      *
      * @return The buy price
      */
-    double getBuyPrice();
+    double getMarketSell();
 
     /**
      * Define the amount of money needed to buy this {@link Marchantable}.
@@ -20,7 +20,7 @@ public interface Marchantable {
      * @param price
      *         The buy price.
      */
-    default void setBuyPrice(double price) {
+    default void setMarketSell(double price) {
 
         throw new UnsupportedOperationException("Unable to set value: This value is read-only.");
     }
@@ -30,7 +30,7 @@ public interface Marchantable {
      *
      * @return The sell price
      */
-    double getSellPrice();
+    double getMarketBuy();
 
     /**
      * Define the amount of money obtainable by selling this {@link Marchantable}
@@ -38,7 +38,7 @@ public interface Marchantable {
      * @param price
      *         The sell price
      */
-    default void setSellPrice(double price) {
+    default void setMarketBuy(double price) {
 
         throw new UnsupportedOperationException("Unable to set value: This value is read-only.");
     }

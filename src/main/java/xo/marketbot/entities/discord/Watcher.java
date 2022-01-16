@@ -1,214 +1,356 @@
 package xo.marketbot.entities.discord;
 
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import xo.marketbot.entities.interfaces.common.Identifiable;
+import xo.marketbot.entities.interfaces.common.Marchantable;
+import xo.marketbot.entities.interfaces.common.Nameable;
+import xo.marketbot.entities.interfaces.crossout.IWatcher;
 import xo.marketbot.entities.interfaces.game.IItem;
-import xo.marketbot.i18n.TranslationProvider;
-import xo.marketbot.library.services.translations.annotations.I18N;
+import xo.marketbot.enums.WatcherTrigger;
 import xo.marketbot.tools.TimeConverter;
+import xo.marketbot.tools.Utilities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class Watcher {
+public class Watcher implements IWatcher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(length = 50)
-    private String name;
-
-    @Column(length = 20)
-    private String  type;
-    private Integer itemId;
-    private String  itemName;
-    private Double  price;
-    private Double  sellPrice;
-    private Double  buyPrice;
-
+    private Integer        id;
+    private String         name;
+    @Enumerated(EnumType.STRING)
+    private WatcherTrigger trigger;
+    private Integer        itemId;
+    private Double         priceReference;
+    private Double         marketSell;
+    private Double         marketBuy;
     @ManyToOne
-    private UserEntity    owner;
-    private boolean       regular;
-    private long          timing;
-    private LocalDateTime lastExecution;
+    private UserEntity     owner;
+    private boolean        regular;
+    private long           timing;
+    private LocalDateTime  lastExecution;
+    private int            failureCount;
 
-    // <editor-fold desc="I18N">
-
-    @Transient
-    @I18N(TranslationProvider.WATCHERS_BUY_OVER)
-    private String watcherTypeBuyOver;
-
-    @Transient
-    @I18N(TranslationProvider.WATCHERS_BUY_UNDER)
-    private String watcherTypeBuyUnder;
-
-    @Transient
-    @I18N(TranslationProvider.WATCHERS_SELL_OVER)
-    private String watcherTypeSellOver;
-
-    @Transient
-    @I18N(TranslationProvider.WATCHERS_SELL_UNDER)
-    private String watcherTypeSellUnder;
-
-    @Transient
-    @I18N(TranslationProvider.WATCHERS_NORMAL)
-    private String watcherTypeNormal;
-
-    @Transient
-    @I18N(TranslationProvider.WATCHERS_OTHER)
-    private String watcherTypeOther;
-
-    // </editor-fold>
-
-    public static Watcher create(UserEntity user, IItem item) {
-
-        Watcher watcher = new Watcher();
-
-        watcher.setOwner(user);
-        watcher.setItemId(item.getId());
-        watcher.setItemName(item.getName());
-        watcher.setSellPrice(item.getSellPrice());
-        watcher.setBuyPrice(item.getBuyPrice());
-
-        return watcher;
+    public Watcher() {
+        // Default constructor
     }
 
+    public Watcher(UserEntity user, IItem item, WatcherTrigger trigger, Double priceReference, long timing, boolean regular) {
+
+        this.trigger        = trigger;
+        this.itemId         = item.getId();
+        this.priceReference = priceReference;
+        this.marketSell     = item.getMarketSell();
+        this.marketBuy      = item.getMarketBuy();
+        this.owner          = user;
+        this.regular        = regular;
+        this.timing         = timing;
+
+        if (this.getTrigger() != WatcherTrigger.EVERYTIME && this.getPriceReference() == null) {
+            throw new IllegalStateException("The trigger type requires a price reference.");
+        }
+
+        if (this.regular) {
+            this.lastExecution = Utilities.toNormalizedDateTime(LocalDateTime.now(), this.getTiming());
+        } else {
+            this.lastExecution = LocalDateTime.now().withSecond(0).withNano(0);
+        }
+
+        this.name = switch (this.getTrigger()) {
+            case SELL_UNDER -> String.format("%s when sell price under %s every %s", item.getName(), this.priceReference, new TimeConverter(this.timing));
+            case SELL_OVER -> String.format("%s when sell price over %s every %s", item.getName(), this.priceReference, new TimeConverter(this.timing));
+            case BUY_UNDER -> String.format("%s when buy price under %s every %s", item.getName(), this.priceReference, new TimeConverter(this.timing));
+            case BUY_OVER -> String.format("%s when buy price over %s every %s", item.getName(), this.priceReference, new TimeConverter(this.timing));
+            case EVERYTIME -> String.format("%s every %s", item.getName(), new TimeConverter(this.timing));
+        };
+    }
+
+    /**
+     * Retrieve this {@link Identifiable}'s ID.
+     *
+     * @return An ID.
+     */
+    @Override
     public Integer getId() {
 
-        return id;
+        return this.id;
     }
 
-    public void setId(Integer id) {
+    /**
+     * Retrieve the amount of money needed to buy this {@link Marchantable}.
+     *
+     * @return The buy price
+     */
+    @Override
+    public double getMarketSell() {
 
-        this.id = id;
+        return this.marketSell;
     }
 
+    /**
+     * Define the amount of money needed to buy this {@link Marchantable}.
+     *
+     * @param price
+     *         The buy price.
+     */
+    @Override
+    public void setMarketSell(double price) {
+
+        this.marketSell = price;
+    }
+
+    /**
+     * Retrieve the amount of money obtainable by selling this {@link Marchantable}.
+     *
+     * @return The sell price
+     */
+    @Override
+    public double getMarketBuy() {
+
+        return this.marketBuy;
+    }
+
+    /**
+     * Define the amount of money obtainable by selling this {@link Marchantable}
+     *
+     * @param price
+     *         The sell price
+     */
+    @Override
+    public void setMarketBuy(double price) {
+
+        this.marketBuy = price;
+    }
+
+    /**
+     * Retrieve this {@link Nameable}'s name.
+     *
+     * @return The name.
+     */
+    @Override
     public String getName() {
 
-        return name;
+        return this.name;
     }
 
+    /**
+     * Define this {@link Nameable}'s name.
+     *
+     * @param name
+     *         The name.
+     */
+    @Override
     public void setName(String name) {
 
         this.name = name;
     }
 
-    public String getType() {
+    /**
+     * Retrieve this {@link IWatcher} trigger.
+     *
+     * @return A {@link WatcherTrigger}.
+     */
+    @Override
+    public WatcherTrigger getTrigger() {
 
-        return type;
+        return this.trigger;
     }
 
-    public void setType(String type) {
+    /**
+     * Define this {@link IWatcher} trigger.
+     *
+     * @param trigger
+     *         A {@link WatcherTrigger}.
+     */
+    @Override
+    public void setTrigger(WatcherTrigger trigger) {
 
-        this.type = type;
+        this.trigger = trigger;
+
+        if (this.trigger == WatcherTrigger.EVERYTIME) {
+            this.setPriceReference(null);
+        }
     }
 
-    public Integer getItemId() {
+    /**
+     * Retrieve the {@link IItem}'s ID that this {@link IWatcher} is set to.
+     *
+     * @return An {@link IItem}'s ID.
+     */
+    @Override
+    public int getItemId() {
 
-        return itemId;
+        return this.itemId;
     }
 
-    public void setItemId(Integer itemId) {
+    /**
+     * Define the {@link IItem}'s ID that this {@link IWatcher} is set to.
+     *
+     * @param id
+     *         An {@link IItem}'s ID.
+     */
+    @Override
+    public void setItemId(int id) {
 
-        this.itemId = itemId;
+        this.itemId = id;
     }
 
-    public String getItemName() {
+    /**
+     * Retrieve the price limit which will trigger this {@link IWatcher} depending on its {@link #getTrigger()}. This will most likely
+     * return null when {@link #getTrigger()} is set to {@link WatcherTrigger#EVERYTIME}.
+     *
+     * @return The price reference.
+     */
+    @Override
+    public Double getPriceReference() {
 
-        return itemName;
+        return this.priceReference;
     }
 
-    public void setItemName(String itemName) {
+    /**
+     * Define the price limit which will trigger this {@link IWatcher}. If {@link #getTrigger()} is {@link WatcherTrigger#EVERYTIME}, this
+     * will most likely have any effect.
+     *
+     * @param price
+     *         The price reference.
+     */
+    @Override
+    public void setPriceReference(Double price) {
 
-        this.itemName = itemName;
+        this.priceReference = price;
     }
 
-    public Double getSellPrice() {
-
-        return sellPrice;
-    }
-
-    public void setSellPrice(Double sellPrice) {
-
-        this.sellPrice = sellPrice;
-    }
-
-    public Double getBuyPrice() {
-
-        return buyPrice;
-    }
-
-    public void setBuyPrice(Double buyPrice) {
-
-        this.buyPrice = buyPrice;
-    }
-
+    /**
+     * Retrieve the {@link UserEntity} owner of this {@link IWatcher}.
+     *
+     * @return The {@link UserEntity}.
+     */
+    @Override
     public UserEntity getOwner() {
 
-        return owner;
+        return this.owner;
     }
 
+    /**
+     * Define the {@link UserEntity} owner of this {@link IWatcher}.
+     *
+     * @param owner
+     *         The {@link UserEntity}.
+     */
+    @Override
     public void setOwner(UserEntity owner) {
 
         this.owner = owner;
     }
 
+    /**
+     * Check if this {@link IWatcher} will be run on a regular basis.
+     *
+     * @return True if regular, false otherwise.
+     */
+    @Override
     public boolean isRegular() {
 
-        return regular;
+        return this.regular;
     }
 
+    /**
+     * Define if this {@link IWatcher} should be run on a regular basis.
+     *
+     * @param regular
+     *         True if regular, false otherwise.
+     */
+    @Override
     public void setRegular(boolean regular) {
 
-        this.regular = regular;
+        this.regular = true;
     }
 
+    /**
+     * Retrieve the timing (interval) of this {@link IWatcher}.
+     *
+     * @return The timing (interval) in seconds.
+     */
+    @Override
     public long getTiming() {
 
-        return timing;
+        return this.timing;
     }
 
+    /**
+     * Define the timing (interval) of this {@link IWatcher}.
+     *
+     * @param timing
+     *         The timing (interval) in seconds.
+     */
+    @Override
     public void setTiming(long timing) {
 
         this.timing = timing;
     }
 
+    /**
+     * Retrieve the last execution date of this {@link IWatcher}.
+     *
+     * @return The last execution date.
+     */
+    @Override
     public LocalDateTime getLastExecution() {
 
-        return lastExecution;
+        return this.lastExecution;
     }
 
+    /**
+     * Define the last execution date of this {@link IWatcher}.
+     *
+     * @param lastExecution
+     *         The last execution date.
+     */
+    @Override
     public void setLastExecution(LocalDateTime lastExecution) {
 
         this.lastExecution = lastExecution;
     }
 
-    public Double getPrice() {
+    /**
+     * Retrieve the failure count encountered during this watcher execution.
+     *
+     * @return The failure count.
+     */
+    @Override
+    public int getFailureCount() {
 
-        return price;
+        return this.failureCount;
     }
 
-    public void setPrice(Double price) {
+    /**
+     * Define this failure count encountered during this watcher execution.
+     *
+     * @param failureCount
+     *         The failure count.
+     */
+    @Override
+    public void setFailureCount(int failureCount) {
 
-        this.price = price;
+        this.failureCount = failureCount;
     }
 
-    public String getDescription() {
+    public void refresh(Marchantable marchantable) {
 
-        switch (this.type) {
-            case "SELL_UNDER":
-                return String.format(this.watcherTypeOther, this.itemName, String.format(this.watcherTypeSellUnder, this.price), new TimeConverter(this.timing));
-            case "SELL_OVER":
-                return String.format(this.watcherTypeOther, this.itemName, String.format(this.watcherTypeSellOver, this.price), new TimeConverter(this.timing));
-            case "BUY_UNDER":
-                return String.format(this.watcherTypeOther, this.itemName, String.format(this.watcherTypeBuyUnder, this.price), new TimeConverter(this.timing));
-            case "BUY_OVER":
-                return String.format(this.watcherTypeOther, this.itemName, String.format(this.watcherTypeBuyOver, this.price), new TimeConverter(this.timing));
-            case "NORMAL":
-                return String.format(this.watcherTypeNormal, this.itemName, new TimeConverter(this.timing));
-            default:
-                return "??? :(";
+        this.setMarketSell(marchantable.getMarketSell());
+        this.setMarketBuy(marchantable.getMarketBuy());
+    }
+
+    @Override
+    public MessageEmbed.Field toField() {
+
+        boolean isFailed = this.getFailureCount() >= 3;
+
+        if (isFailed) {
+            return new MessageEmbed.Field(this.getName(), "[FAILURE] ID " + this.getId(), false);
         }
-
+        return new MessageEmbed.Field(this.getName(), "ID " + this.getId(), false);
     }
 }

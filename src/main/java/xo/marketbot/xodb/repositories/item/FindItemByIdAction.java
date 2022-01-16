@@ -3,7 +3,7 @@ package xo.marketbot.xodb.repositories.item;
 import fr.alexpado.lib.rest.RestAction;
 import fr.alexpado.lib.rest.enums.RequestMethod;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
+import org.json.JSONArray;
 import xo.marketbot.entities.game.Item;
 import xo.marketbot.entities.interfaces.game.IItem;
 import xo.marketbot.xodb.XoDB;
@@ -47,7 +47,8 @@ public class FindItemByIdAction extends RestAction<IItem> {
     @Override
     public IItem convert(byte[] requestBody) {
 
-        return new Item(this.xoDB, new JSONObject(new String(requestBody)));
+        JSONArray array = new JSONArray(new String(requestBody));
+        return new Item(this.xoDB, array.getJSONObject(0));
     }
 
 }

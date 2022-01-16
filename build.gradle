@@ -1,18 +1,30 @@
+import java.nio.charset.StandardCharsets
+
 plugins {
-    id 'org.springframework.boot' version '2.5.2'
+    id 'org.springframework.boot' version '2.6.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
-    id 'com.github.ben-manes.versions' version '0.39.0'
+    id 'com.github.ben-manes.versions' version '0.41.0'
+    id 'org.ajoberstar.reckon' version '0.13.1'
 }
 
+def generalCharset = StandardCharsets.UTF_8.name();
+
 group = 'fr.alexpado.bots'
-version = '3.0.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+compileJava.options.encoding = generalCharset
+compileTestJava.options.encoding = generalCharset
+javadoc.options.encoding = generalCharset
+
+reckon {
+    scopeFromProp()
+    stageFromProp('dev', 'beta', 'rc', 'final')
+}
 
 configurations {
-    developmentOnly
-    runtimeClasspath {
-        extendsFrom developmentOnly
-    }
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -20,19 +32,14 @@ configurations {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven {
         name 'm2-dv8tion'
         url 'https://m2.dv8tion.net/releases'
     }
-    maven { url 'https://jitpack.io' }
     maven {
-        name = "GitHubPackages"
-        url = uri('https://maven.pkg.github.com/alexpado/simple-http-client')
-
-        credentials {
-            username = project.findProperty('gpr.user') ?: System.getenv('username')
-            password = project.findProperty('gpr.key') ?: System.getenv('token')
-        }
+        name 'oss'
+        url 'https://s01.oss.sonatype.org/content/groups/public'
     }
 }
 
@@ -40,24 +47,25 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-    implementation group: 'org.json', name: 'json', version: '20210307'
-    implementation 'net.dv8tion:JDA:4.3.0_283'
-    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.7.3'
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.25'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '7.15.0'
+
+    implementation group: 'org.json', name: 'json', version: '20211205'
+    implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.4'
     implementation group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
-    implementation 'org.flywaydb:flyway-core:7.10.0'
 
-    implementation group: 'fr.alexpado', name: 'simple-http-client', version: '1.0.1'
+    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.7.4'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.27'
 
-    implementation 'io.sentry:sentry-spring-boot-starter:5.0.1'
+    implementation group: 'fr.alexpado', name: 'simple-http-client', version: '1.0.2'
+    implementation group: 'fr.alexpado', name: 'jda-interactions-extension', version: '0.1.0-beta.0.0+20220115T161733Z'
+
+    implementation group: 'io.sentry', name: 'sentry-spring-boot-starter', version: '5.5.2'
 }
 
 task copyConfigurationMetadata(type: Copy) {
@@ -66,6 +74,7 @@ task copyConfigurationMetadata(type: Copy) {
     }
     into "out/production/classes"
 }
+
 compileJava {
     dependsOn processResources
     finalizedBy copyConfigurationMetadata

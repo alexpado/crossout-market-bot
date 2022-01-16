@@ -61,11 +61,6 @@ public class ChannelEntity {
         return guild;
     }
 
-    public void setGuild(GuildEntity guild) {
-
-        this.guild = guild;
-    }
-
     public String getName() {
 
         return name;

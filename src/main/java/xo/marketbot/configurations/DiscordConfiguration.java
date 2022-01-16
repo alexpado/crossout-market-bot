@@ -2,15 +2,9 @@ package xo.marketbot.configurations;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import xo.marketbot.configurations.interfaces.IDiscordConfiguration;
 
 @Configuration
-@PropertySources({
-        @PropertySource(value = "file:./discord.properties", ignoreResourceNotFound = true),
-        @PropertySource(value = "classpath:discord.properties", ignoreResourceNotFound = true)
-})
 public class DiscordConfiguration implements IDiscordConfiguration {
 
     @Value("${discord.application.client-id}")

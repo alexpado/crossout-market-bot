@@ -55,10 +55,11 @@ public class Item implements IItem {
         this.marketSell      = source.getInt("sellPrice");
         this.craftingSellSum = source.getInt("craftingSellSum");
         this.craftingBuySum  = source.getInt("craftingBuySum");
-        this.removed         = source.getInt("removed") == 1;
-        this.meta            = source.getInt("meta") == 1;
-        this.craftable       = source.getInt("craftable") == 1;
-        this.lastUpdate      = LocalDateTime.parse(source.getString("lastUpdateTime"), formatter);
+        //this.removed         = source.getInt("removed") == 1;
+        this.removed    = true;
+        this.meta       = source.getInt("meta") == 1;
+        this.craftable  = source.getInt("craftable") == 1;
+        this.lastUpdate = LocalDateTime.parse(source.getString("lastUpdateTime"), formatter);
 
         this.rarity   = xoDB.fromRarityCache(source.getInt("rarityId"));
         this.type     = xoDB.fromTypeCache(source.getInt("typeId"));
@@ -104,8 +105,8 @@ public class Item implements IItem {
     }
 
     /**
-     * Retrieve the amount of money needed to buy every {@link IItem} of this {@link Craftable}'s crafting recipe. The value returned by
-     * this method should be ignored if {@link #isCraftable()} returns false.
+     * Retrieve the amount of money needed to buy every {@link IItem} of this {@link Craftable}'s crafting recipe. The
+     * value returned by this method should be ignored if {@link #isCraftable()} returns false.
      *
      * @return Amount of money needed to craft.
      */
@@ -116,8 +117,8 @@ public class Item implements IItem {
     }
 
     /**
-     * Retrieve the amount of money obtainable by selling every {@link IItem} of this {@link Craftable}'s crafting recipe. The value
-     * returned by this method should be ignored if {@link #isCraftable()} returns false.
+     * Retrieve the amount of money obtainable by selling every {@link IItem} of this {@link Craftable}'s crafting
+     * recipe. The value returned by this method should be ignored if {@link #isCraftable()} returns false.
      *
      * @return Amount of money obtainable.
      */
@@ -267,4 +268,5 @@ public class Item implements IItem {
 
         return new MessageEmbed.Field(this.getName(), String.format("%s • %s", factionName, rarityName), false);
     }
+
 }

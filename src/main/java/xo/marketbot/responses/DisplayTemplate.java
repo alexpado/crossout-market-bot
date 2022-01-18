@@ -5,23 +5,28 @@ import net.dv8tion.jda.api.JDA;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xo.marketbot.XoMarketApplication;
+import xo.marketbot.services.i18n.TranslationContext;
+import xo.marketbot.services.i18n.TranslationService;
 
 public class DisplayTemplate extends EmbedBuilder {
 
-    private final JDA    jda;
-    private final String title;
+    private final TranslationContext context;
+    private final JDA                jda;
+    private final String             title;
 
-    public DisplayTemplate(JDA jda) {
+    public DisplayTemplate(TranslationContext context, JDA jda) {
 
-        this.jda   = jda;
-        this.title = null;
+        this.context = context;
+        this.jda     = jda;
+        this.title   = null;
         this.makeDefaults();
     }
 
-    public DisplayTemplate(JDA jda, String title) {
+    public DisplayTemplate(TranslationContext context, JDA jda, String title) {
 
-        this.jda   = jda;
-        this.title = title;
+        this.context = context;
+        this.jda     = jda;
+        this.title   = title;
         this.makeDefaults();
     }
 
@@ -31,8 +36,12 @@ public class DisplayTemplate extends EmbedBuilder {
             this.setDescription(this.title + "\n──────────────────────────────\n");
         }
         this.setThumbnail("https://crossoutdb.com/img/crossoutdb_logo_compact.png");
-        this.setAuthor("Click here to invite the bot", XoMarketApplication.INVITE, jda.getSelfUser().getAvatarUrl());
-        this.setFooter("Developed by Akio Nakao#0001");
+        this.setAuthor(
+                context.getTranslation(TranslationService.TR_EMBED__INVITE),
+                XoMarketApplication.INVITE,
+                jda.getSelfUser().getAvatarUrl()
+        );
+        this.setFooter(null);
     }
 
     @NotNull
@@ -40,9 +49,25 @@ public class DisplayTemplate extends EmbedBuilder {
     public EmbedBuilder setFooter(@Nullable String text) {
 
         if (text == null) {
-            super.setFooter("Powered by CrossoutDB");
+            return super.setFooter(
+                    String.format(
+                            "%s • %s",
+                            context.getTranslation(TranslationService.TR_EMBED__FOOTER_XODB),
+                            context.getTranslation(TranslationService.TR_EMBED__FOOTER_DEVELOPER
+                            )
+                    )
+            );
         }
-        return super.setFooter(String.format("%s • Powered by CrossoutDB", text));
+
+        return super.setFooter(
+                String.format(
+                        "%s • %s • %s",
+                        text,
+                        context.getTranslation(TranslationService.TR_EMBED__FOOTER_XODB),
+                        context.getTranslation(TranslationService.TR_EMBED__FOOTER_DEVELOPER
+                        )
+                )
+        );
     }
 
 }

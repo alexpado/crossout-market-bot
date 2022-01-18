@@ -1,4 +1,4 @@
-package xo.marketbot.tasks;
+package xo.marketbot.services;
 
 import io.sentry.Sentry;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -9,11 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import xo.marketbot.JdaStore;
 import xo.marketbot.entities.discord.Watcher;
 import xo.marketbot.entities.interfaces.game.IItem;
 import xo.marketbot.repositories.WatcherRepository;
 import xo.marketbot.responses.EntityDisplay;
+import xo.marketbot.services.i18n.TranslationContext;
+import xo.marketbot.services.i18n.TranslationService;
 import xo.marketbot.tools.Utilities;
 import xo.marketbot.xodb.XoDB;
 
@@ -24,16 +25,18 @@ import java.util.Optional;
 @Service
 public class WatcherTask implements Runnable {
 
-    private final static Logger            LOGGER = LoggerFactory.getLogger(WatcherTask.class);
-    private final        WatcherRepository repository;
-    private final        JdaStore          store;
-    private final        XoDB              xoDB;
+    private final static Logger             LOGGER = LoggerFactory.getLogger(WatcherTask.class);
+    private final        TranslationService translationService;
+    private final        WatcherRepository  repository;
+    private final        JdaStore           store;
+    private final        XoDB               xoDB;
 
-    public WatcherTask(WatcherRepository repository, JdaStore store, XoDB xoDB) {
+    public WatcherTask(TranslationService translationService, WatcherRepository repository, JdaStore store, XoDB xoDB) {
 
-        this.repository = repository;
-        this.store      = store;
-        this.xoDB       = xoDB;
+        this.translationService = translationService;
+        this.repository         = repository;
+        this.store              = store;
+        this.xoDB               = xoDB;
     }
 
     @Override
@@ -54,6 +57,7 @@ public class WatcherTask implements Runnable {
 
         for (Watcher watcher : watchers) {
             if (watcher.getLastExecution().plusSeconds(watcher.getTiming()).isBefore(timeReference)) {
+                TranslationContext context = this.translationService.getContext(watcher.getOwner().getLanguage());
                 try {
                     IItem item = this.xoDB.items().findById(watcher.getItemId()).complete();
 
@@ -66,18 +70,16 @@ public class WatcherTask implements Runnable {
                     };
 
                     if (maySend) {
-                        EmbedBuilder builder = new EntityDisplay(jda, this.xoDB, watcher, item);
-
+                        EmbedBuilder builder = new EntityDisplay(context, jda, this.xoDB, watcher, item);
                         // Retrieve the user
                         User           user    = jda.retrieveUserById(watcher.getOwner().getId()).complete();
                         PrivateChannel channel = user.openPrivateChannel().complete();
                         channel.sendMessageEmbeds(builder.build()).complete();
 
                         watcher.refresh(item);
-                        watcher.setLastExecution(Utilities.toNormalizedDateTime(LocalDateTime.now(), watcher.getTiming()));
                     }
 
-
+                    watcher.setLastExecution(Utilities.toNormalizedDateTime(LocalDateTime.now(), watcher.getTiming()));
                     break; // Only execute one every 3 seconds
                 } catch (Exception e) {
                     watcher.setFailureCount(watcher.getFailureCount() + 1);
@@ -88,6 +90,6 @@ public class WatcherTask implements Runnable {
                 }
             }
         }
-
     }
+
 }

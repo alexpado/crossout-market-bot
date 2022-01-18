@@ -9,13 +9,13 @@ CREATE TABLE `language`
 
 CREATE TABLE `translation`
 (
-    `key`        VARCHAR(255)  NOT NULL,
-    `language`   VARCHAR(3)    NOT NULL,
-    `value`      VARCHAR(2048) NOT NULL,
-    `created_at` DATETIME      NOT NULL DEFAULT NOW(),
-    `updated_at` DATETIME      NOT NULL DEFAULT NOW() ON UPDATE NOW(),
-    PRIMARY KEY (`key`, `language`),
-    CONSTRAINT `FK_TRANSLATION_LANGUAGE` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE CASCADE
+    `key`         VARCHAR(255)  NOT NULL,
+    `language_id` VARCHAR(3)    NOT NULL,
+    `value`       VARCHAR(2048) NOT NULL,
+    `created_at`  DATETIME      NOT NULL DEFAULT NOW(),
+    `updated_at`  DATETIME      NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    PRIMARY KEY (`key`, `language_id`),
+    CONSTRAINT `FK_TRANSLATION_LANGUAGE` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE
 );
 
 
@@ -26,37 +26,33 @@ CREATE TABLE `user`
     `discriminator`  VARCHAR(255) NOT NULL,
     `avatar`         VARCHAR(255),
     `watcher_paused` BOOLEAN      NOT NULL,
-    `language`       VARCHAR(3)   NOT NULL DEFAULT 'en',
+    `language_id`    VARCHAR(3)   NOT NULL DEFAULT 'en',
     `created_at`     DATETIME     NOT NULL DEFAULT NOW(),
     `updated_at`     DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW(),
-    CONSTRAINT `FK_USER_LANGUAGE` FOREIGN KEY (`language`) REFERENCES `language` (`id`) ON DELETE RESTRICT
+    CONSTRAINT `FK_USER_LANGUAGE` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE RESTRICT
 );
 
 CREATE TABLE `guild`
 (
-    `id`         BIGINT       NOT NULL PRIMARY KEY,
-    `name`       VARCHAR(255) NOT NULL,
-    `icon`       VARCHAR(255) NULL,
-    `language`   VARCHAR(3)   NOT NULL DEFAULT 'en',
-    `created_at` DATETIME     NOT NULL DEFAULT NOW(),
-    `updated_at` DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW()
+    `id`          BIGINT       NOT NULL PRIMARY KEY,
+    `name`        VARCHAR(255) NOT NULL,
+    `icon`        VARCHAR(255) NULL,
+    `language_id` VARCHAR(3)   NOT NULL DEFAULT 'en',
+    `created_at`  DATETIME     NOT NULL DEFAULT NOW(),
+    `updated_at`  DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    CONSTRAINT `FK_GUILD_LANGUAGE` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE RESTRICT
 );
 
 CREATE TABLE `channel`
 (
-    `id`         BIGINT       NOT NULL PRIMARY KEY,
-    `name`       VARCHAR(255) NOT NULL,
-    `guild_id`   BIGINT       NOT NULL,
-    `language`   VARCHAR(3)   NULL,
-    `created_at` DATETIME     NOT NULL DEFAULT NOW(),
-    `updated_at` DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW(),
-    CONSTRAINT `FK_CHANNEL_GUILD` FOREIGN KEY (`guild_id`) REFERENCES `guild` (`id`) ON DELETE CASCADE
-);
-
-CREATE TABLE `health`
-(
-    `run_at`        DATETIME NOT NULL DEFAULT NOW() PRIMARY KEY,
-    `response_time` INTEGER  NOT NULL
+    `id`          BIGINT       NOT NULL PRIMARY KEY,
+    `name`        VARCHAR(255) NOT NULL,
+    `guild_id`    BIGINT       NOT NULL,
+    `language_id` VARCHAR(3)   NULL,
+    `created_at`  DATETIME     NOT NULL DEFAULT NOW(),
+    `updated_at`  DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    CONSTRAINT `FK_CHANNEL_GUILD` FOREIGN KEY (`guild_id`) REFERENCES `guild` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_CHANNEL_LANGUAGE` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE RESTRICT
 );
 
 CREATE TABLE `watcher`

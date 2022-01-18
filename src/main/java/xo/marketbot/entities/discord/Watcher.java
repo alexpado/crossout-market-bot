@@ -7,11 +7,13 @@ import xo.marketbot.entities.interfaces.common.Nameable;
 import xo.marketbot.entities.interfaces.crossout.IWatcher;
 import xo.marketbot.entities.interfaces.game.IItem;
 import xo.marketbot.enums.WatcherTrigger;
+import xo.marketbot.services.i18n.TranslationContext;
 import xo.marketbot.tools.TimeConverter;
 import xo.marketbot.tools.Utilities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class Watcher implements IWatcher {
@@ -37,7 +39,7 @@ public class Watcher implements IWatcher {
         // Default constructor
     }
 
-    public Watcher(UserEntity user, IItem item, WatcherTrigger trigger, Double priceReference, long timing, boolean regular) {
+    public Watcher(TranslationContext context, UserEntity user, IItem item, WatcherTrigger trigger, Double priceReference, long timing, boolean regular) {
 
         this.trigger        = trigger;
         this.itemId         = item.getId();
@@ -59,10 +61,8 @@ public class Watcher implements IWatcher {
         }
 
         this.name = switch (this.getTrigger()) {
-            case SELL_UNDER -> String.format("%s when sell price under %s every %s", item.getName(), this.priceReference, new TimeConverter(this.timing));
-            case SELL_OVER -> String.format("%s when sell price over %s every %s", item.getName(), this.priceReference, new TimeConverter(this.timing));
-            case BUY_UNDER -> String.format("%s when buy price under %s every %s", item.getName(), this.priceReference, new TimeConverter(this.timing));
-            case BUY_OVER -> String.format("%s when buy price over %s every %s", item.getName(), this.priceReference, new TimeConverter(this.timing));
+            case SELL_UNDER, SELL_OVER, BUY_OVER, BUY_UNDER -> String.format(context.getTranslation(this.getTrigger()
+                    .getTranslationKey()), item.getName(), this.priceReference, new TimeConverter(this.timing));
             case EVERYTIME -> String.format("%s every %s", item.getName(), new TimeConverter(this.timing));
         };
     }
@@ -198,8 +198,8 @@ public class Watcher implements IWatcher {
     }
 
     /**
-     * Retrieve the price limit which will trigger this {@link IWatcher} depending on its {@link #getTrigger()}. This will most likely
-     * return null when {@link #getTrigger()} is set to {@link WatcherTrigger#EVERYTIME}.
+     * Retrieve the price limit which will trigger this {@link IWatcher} depending on its {@link #getTrigger()}. This
+     * will most likely return null when {@link #getTrigger()} is set to {@link WatcherTrigger#EVERYTIME}.
      *
      * @return The price reference.
      */
@@ -210,8 +210,8 @@ public class Watcher implements IWatcher {
     }
 
     /**
-     * Define the price limit which will trigger this {@link IWatcher}. If {@link #getTrigger()} is {@link WatcherTrigger#EVERYTIME}, this
-     * will most likely have any effect.
+     * Define the price limit which will trigger this {@link IWatcher}. If {@link #getTrigger()} is {@link
+     * WatcherTrigger#EVERYTIME}, this will most likely have any effect.
      *
      * @param price
      *         The price reference.
@@ -337,6 +337,12 @@ public class Watcher implements IWatcher {
         this.failureCount = failureCount;
     }
 
+    /**
+     * Merge data from the provided {@link Marchantable} into this {@link Watcher}.
+     *
+     * @param marchantable
+     *         The {@link Marchantable}.
+     */
     public void refresh(Marchantable marchantable) {
 
         this.setMarketSell(marchantable.getMarketSell());
@@ -349,8 +355,24 @@ public class Watcher implements IWatcher {
         boolean isFailed = this.getFailureCount() >= 3;
 
         if (isFailed) {
-            return new MessageEmbed.Field(this.getName(), "[FAILURE] ID " + this.getId(), false);
+            return new MessageEmbed.Field(this.getName(), "*[FAILURE]* ID " + this.getId(), false);
         }
         return new MessageEmbed.Field(this.getName(), "ID " + this.getId(), false);
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o instanceof Watcher watcher) {
+            return this.getId().equals(watcher.getId());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(this.getId());
+    }
+
 }

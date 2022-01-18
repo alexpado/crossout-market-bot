@@ -10,16 +10,18 @@ import net.dv8tion.jda.api.interactions.components.Component;
 import xo.marketbot.entities.interfaces.common.Fieldable;
 import xo.marketbot.entities.interfaces.common.InteractionTarget;
 import xo.marketbot.entities.interfaces.common.Nameable;
+import xo.marketbot.services.i18n.TranslationContext;
+import xo.marketbot.services.i18n.TranslationService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EntitiesDisplay<T extends Fieldable & Nameable> extends PaginatedResponse<T> {
 
-    public EntitiesDisplay(JDA jda, List<T> items) {
+    public EntitiesDisplay(TranslationContext context, JDA jda, List<T> items) {
 
         super(
-                () -> new DisplayTemplate(jda, "Search Results:"),
+                () -> new DisplayTemplate(context, jda, context.getTranslation(TranslationService.TR_SEARCH__RESULTS)),
                 items,
                 5
         );
@@ -38,7 +40,8 @@ public class EntitiesDisplay<T extends Fieldable & Nameable> extends PaginatedRe
 
         for (T pageItem : this.getPageItems()) {
             if (pageItem instanceof InteractionTarget target) {
-                components.add(Button.of(ButtonStyle.SECONDARY, target.getInteractionPath().toString(), pageItem.getName()));
+                components.add(Button.of(ButtonStyle.SECONDARY, target.getInteractionPath()
+                        .toString(), pageItem.getName()));
             }
         }
 

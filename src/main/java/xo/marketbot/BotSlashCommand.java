@@ -20,9 +20,11 @@ import xo.marketbot.entities.interfaces.game.IItem;
 import xo.marketbot.entities.interfaces.game.IPack;
 import xo.marketbot.enums.WatcherTrigger;
 import xo.marketbot.repositories.WatcherRepository;
-import xo.marketbot.responses.EmptySearchEmbed;
 import xo.marketbot.responses.EntitiesDisplay;
 import xo.marketbot.responses.EntityDisplay;
+import xo.marketbot.responses.SimpleMessageEmbed;
+import xo.marketbot.services.i18n.TranslationContext;
+import xo.marketbot.services.i18n.TranslationService;
 import xo.marketbot.tools.TimeConverter;
 import xo.marketbot.xodb.XoDB;
 
@@ -32,18 +34,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static xo.marketbot.services.i18n.TranslationService.*;
 
 @Component
 public class BotSlashCommand {
 
-    private static final Logger            LOGGER = LoggerFactory.getLogger(BotSlashCommand.class);
-    private final        XoDB              xoDB;
-    private final        WatcherRepository watcherRepository;
+    private static final Logger             LOGGER = LoggerFactory.getLogger(BotSlashCommand.class);
+    private final        XoDB               xoDB;
+    private final        TranslationService translationService;
+    private final        WatcherRepository  watcherRepository;
 
-    public BotSlashCommand(XoDB xoDB, WatcherRepository watcherRepository) {
+    public BotSlashCommand(XoDB xoDB, TranslationService translationService, WatcherRepository watcherRepository) {
 
-        this.xoDB              = xoDB;
-        this.watcherRepository = watcherRepository;
+        this.xoDB               = xoDB;
+        this.translationService = translationService;
+        this.watcherRepository  = watcherRepository;
     }
 
     @Interact(
@@ -71,7 +76,8 @@ public class BotSlashCommand {
     )
     public InteractionResponse searchItem(JDA jda, ChannelEntity channel, @Param("name") String itemNameParam, @Param("meta") Boolean metaParam, @Param("removed") Boolean removedParam) throws Exception {
 
-        String itemName = Optional.ofNullable(itemNameParam).orElse("");
+        String             itemName = Optional.ofNullable(itemNameParam).orElse("");
+        TranslationContext context  = this.translationService.getContext(channel.getEffectiveLanguage());
 
         Map<String, Object> searchParams = new HashMap<>();
         searchParams.put("query", itemName);
@@ -79,25 +85,26 @@ public class BotSlashCommand {
         searchParams.put("removedItems", removedParam != null && removedParam);
         searchParams.put("language", channel.getEffectiveLanguage());
 
-        List<IItem> items         = this.xoDB.items().findAll(searchParams).complete();
-        List<IItem> startingItems = items.stream().filter(item -> item.getName().toLowerCase().startsWith(itemName.toLowerCase())).toList();
-        List<IItem> equalItems    = items.stream().filter(item -> item.getName().equalsIgnoreCase(itemName)).toList();
+        List<IItem> items = this.xoDB.items().findAll(searchParams).complete();
+        List<IItem> startingItems = items.stream()
+                .filter(item -> item.getName().toLowerCase().startsWith(itemName.toLowerCase())).toList();
+        List<IItem> equalItems = items.stream().filter(item -> item.getName().equalsIgnoreCase(itemName)).toList();
 
         if (equalItems.size() == 1) {
             IItem item = equalItems.get(0);
-            return new SimpleInteractionResponse(new EntityDisplay(jda, this.xoDB, item));
+            return new SimpleInteractionResponse(new EntityDisplay(context, jda, this.xoDB, item));
         }
 
         if (startingItems.size() == 1) {
             IItem item = startingItems.get(0);
-            return new SimpleInteractionResponse(new EntityDisplay(jda, this.xoDB, item));
+            return new SimpleInteractionResponse(new EntityDisplay(context, jda, this.xoDB, item));
         }
 
         if (!startingItems.isEmpty()) {
-            return new EntitiesDisplay<>(jda, startingItems);
+            return new EntitiesDisplay<>(context, jda, startingItems);
         }
 
-        return new SimpleInteractionResponse(new EmptySearchEmbed(jda));
+        return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.ORANGE, TR_SEARCH__EMPTY));
     }
 
     @Interact(
@@ -115,25 +122,28 @@ public class BotSlashCommand {
     )
     public InteractionResponse searchPack(JDA jda, ChannelEntity channel, @Param("name") String packName) throws Exception {
 
-        List<IPack> packs         = this.xoDB.packs().findAll().complete();
-        List<IPack> startingPacks = packs.stream().filter(item -> item.getName().toLowerCase().startsWith(packName.toLowerCase())).toList();
-        List<IPack> equalPacks    = packs.stream().filter(item -> item.getName().equalsIgnoreCase(packName)).toList();
+        TranslationContext context = this.translationService.getContext(channel.getEffectiveLanguage());
+
+        List<IPack> packs = this.xoDB.packs().findAll().complete();
+        List<IPack> startingPacks = packs.stream()
+                .filter(item -> item.getName().toLowerCase().startsWith(packName.toLowerCase())).toList();
+        List<IPack> equalPacks = packs.stream().filter(item -> item.getName().equalsIgnoreCase(packName)).toList();
 
         if (equalPacks.size() == 1) {
             IPack pack = equalPacks.get(0);
-            return new SimpleInteractionResponse(new EntityDisplay(jda, pack));
+            return new SimpleInteractionResponse(new EntityDisplay(context, jda, pack));
         }
 
         if (startingPacks.size() == 1) {
             IPack pack = startingPacks.get(0);
-            return new SimpleInteractionResponse(new EntityDisplay(jda, pack));
+            return new SimpleInteractionResponse(new EntityDisplay(context, jda, pack));
         }
 
         if (!startingPacks.isEmpty()) {
-            return new EntitiesDisplay<>(jda, startingPacks);
+            return new EntitiesDisplay<>(context, jda, startingPacks);
         }
 
-        return new SimpleInteractionResponse(new EmptySearchEmbed(jda));
+        return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.ORANGE, TR_SEARCH__EMPTY));
     }
 
     @Interact(
@@ -190,26 +200,26 @@ public class BotSlashCommand {
     )
     public InteractionResponse createWatcher(JDA jda, UserEntity user, ChannelEntity channel, @Param("item") String itemName, @Param("trigger") String triggerName, @Param("price") String priceParam, @Param("frequency") String frequencyParam) throws Exception {
 
+        TranslationContext context     = this.translationService.getContext(channel.getEffectiveLanguage());
+        TranslationContext userContext = this.translationService.getContext(user.getLanguage());
+
         // Doing checks right here allow to not send an HTTP request if we already know that the command will fail.
 
-        WatcherTrigger trigger = Optional.ofNullable(triggerName).map(WatcherTrigger::from).orElse(WatcherTrigger.EVERYTIME);
-        Double         price   = Optional.ofNullable(priceParam).map(Double::parseDouble).orElse(null);
-        long           timing  = TimeConverter.fromString(Optional.ofNullable(frequencyParam).orElse("5m")) / 1000;
+        WatcherTrigger trigger = Optional.ofNullable(triggerName).map(WatcherTrigger::from)
+                .orElse(WatcherTrigger.EVERYTIME);
+        Double price  = Optional.ofNullable(priceParam).map(Double::parseDouble).orElse(null);
+        long   timing = TimeConverter.fromString(Optional.ofNullable(frequencyParam).orElse("5m")) / 1000;
 
         if (timing < 300) {
-            EmbedBuilder result = new EmbedBuilder().setColor(Color.RED).setDescription("Please provide a frequency of at least 5m.");
-            return new SimpleInteractionResponse(result);
+            return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__INVALID_PARAM__FREQUENCY));
         }
 
         if (trigger.isRequiringPrice() && price == null) {
-            EmbedBuilder result = new EmbedBuilder().setColor(Color.RED)
-                                                    .setDescription("Please provide a price when using the provided trigger.");
-            return new SimpleInteractionResponse(result);
+            return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__INVALID_PARAM__PRICE_TRIGGER));
         }
 
         if (price != null && price < 0d) {
-            EmbedBuilder result = new EmbedBuilder().setColor(Color.RED).setDescription("Please provide a non-negative price.");
-            return new SimpleInteractionResponse(result);
+            return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__INVALID_PARAM__PRICE));
         }
 
         Map<String, Object> searchParams = new HashMap<>();
@@ -220,23 +230,18 @@ public class BotSlashCommand {
         List<IItem> equalItems = items.stream().filter(item -> item.getName().equalsIgnoreCase(itemName)).toList();
 
         if (equalItems.size() > 1) {
-            EmbedBuilder result = new EmbedBuilder().setColor(Color.RED).setDescription("No item.");
-            return new SimpleInteractionResponse(result);
+            return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__ITEM__TOO_MANY));
         }
 
         if (equalItems.isEmpty()) {
-            EmbedBuilder result = new EmbedBuilder().setColor(Color.RED).setDescription("Too many items.");
-            return new SimpleInteractionResponse(result);
+            return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__ITEM__NONE));
         }
 
         IItem   item    = equalItems.get(0);
-        Watcher watcher = new Watcher(user, item, trigger, price, timing, true);
+        Watcher watcher = new Watcher(userContext, user, item, trigger, price, timing, true);
 
         watcher = this.watcherRepository.save(watcher);
-
-        EmbedBuilder result = new EmbedBuilder().setColor(Color.GREEN)
-                                                .setDescription("Your watcher as been created with the id " + watcher.getId() + ".");
-        return new SimpleInteractionResponse(result);
+        return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_WATCHER__CREATED, watcher.getId()));
     }
 
     @Interact(
@@ -246,14 +251,14 @@ public class BotSlashCommand {
     )
     public InteractionResponse listWatchers(UserEntity user, ChannelEntity channel, JDA jda) {
 
-        List<Watcher> watchers = this.watcherRepository.findAllByOwnerId(user.getId());
+        TranslationContext context  = this.translationService.getContext(channel.getEffectiveLanguage());
+        List<Watcher>      watchers = this.watcherRepository.findAllByOwnerId(user.getId());
 
         if (watchers.isEmpty()) {
-            EmbedBuilder result = new EmbedBuilder().setColor(Color.BLACK).setDescription("No watchers.");
-            return new SimpleInteractionResponse(result);
+            return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.ORANGE, TR_WATCHER__LIST_EMPTY));
         }
 
-        return new EntitiesDisplay<>(jda, watchers);
+        return new EntitiesDisplay<>(context, jda, watchers);
     }
 
     @Interact(
@@ -269,27 +274,25 @@ public class BotSlashCommand {
                     )
             }
     )
-    public InteractionResponse removeWatcher(UserEntity user, ChannelEntity channel, @Param("id") Long idParam) {
+    public InteractionResponse removeWatcher(UserEntity user, ChannelEntity channel, JDA jda, @Param("id") Long idParam) {
 
+        TranslationContext context = this.translationService.getContext(channel.getEffectiveLanguage());
         // Convert long to int
         int               id              = idParam.intValue();
         Optional<Watcher> optionalWatcher = this.watcherRepository.findById(id);
 
         if (optionalWatcher.isEmpty()) {
-            EmbedBuilder result = new EmbedBuilder().setColor(Color.ORANGE).setDescription("No watcher found.");
-            return new SimpleInteractionResponse(result);
+            return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__NOT_FOUND));
         }
 
         Watcher watcher = optionalWatcher.get();
 
         if (!watcher.getOwner().getId().equals(user.getId())) {
-            EmbedBuilder result = new EmbedBuilder().setColor(Color.RED).setDescription("This is not your watcher.");
-            return new SimpleInteractionResponse(result);
+            return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.ORANGE, TR_WATCHER__OWNERSHIP));
         }
 
         this.watcherRepository.delete(watcher);
-        EmbedBuilder result = new EmbedBuilder().setColor(Color.GREEN).setDescription("The watcher has been removed.");
-        return new SimpleInteractionResponse(result);
+        return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_WATCHER__DELETED));
     }
 
     @Interact(
@@ -343,12 +346,11 @@ public class BotSlashCommand {
             })
     public InteractionResponse changeWatcherBehavior(JDA jda, UserEntity user, ChannelEntity channel, @Param("id") Long watcherId, @Param("trigger") String triggerName, @Param("price") String priceParam, @Param("frequency") String frequencyParam) {
 
-
-        Optional<Watcher> optionalWatcher = this.watcherRepository.findById(watcherId.intValue());
+        TranslationContext context         = this.translationService.getContext(channel.getEffectiveLanguage());
+        Optional<Watcher>  optionalWatcher = this.watcherRepository.findById(watcherId.intValue());
 
         if (optionalWatcher.isEmpty() || !optionalWatcher.get().getOwner().equals(user)) {
-            EmbedBuilder result = new EmbedBuilder().setColor(Color.RED).setDescription("Unable to find the requested watcher.");
-            return new SimpleInteractionResponse(result);
+            return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__NOT_FOUND));
         }
 
         Watcher watcher = optionalWatcher.get();
@@ -358,7 +360,7 @@ public class BotSlashCommand {
             WatcherTrigger trigger = WatcherTrigger.from(triggerName);
             if (trigger.isRequiringPrice() && price == null) {
                 EmbedBuilder result = new EmbedBuilder().setColor(Color.RED)
-                                                        .setDescription("Please provide a price when using the provided trigger.");
+                        .setDescription("Please provide a price when using the provided trigger.");
                 return new SimpleInteractionResponse(result);
             }
 
@@ -372,8 +374,7 @@ public class BotSlashCommand {
             long timing = TimeConverter.fromString(frequencyParam) / 1000;
 
             if (timing < 300) {
-                EmbedBuilder result = new EmbedBuilder().setColor(Color.RED).setDescription("Please provide a frequency of at least 5m.");
-                return new SimpleInteractionResponse(result);
+                return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__INVALID_PARAM__PRICE_TRIGGER));
             }
 
             watcher.setTiming(timing);
@@ -381,9 +382,7 @@ public class BotSlashCommand {
 
         watcher.setFailureCount(0);
         this.watcherRepository.save(watcher);
-
-        EmbedBuilder result = new EmbedBuilder().setColor(Color.GREEN).setDescription("Your watcher has been updated.");
-        return new SimpleInteractionResponse(result);
+        return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_WATCHER__UPDATED));
     }
 
     @Interact(
@@ -391,16 +390,15 @@ public class BotSlashCommand {
             description = "Pause your watchers",
             type = InteractionType.SLASH
     )
-    public InteractionResponse pauseWatchers(JDA jda, UserEntity user) {
+    public InteractionResponse pauseWatchers(ChannelEntity channel, JDA jda, UserEntity user) {
 
+        TranslationContext context = this.translationService.getContext(channel.getEffectiveLanguage());
         if (user.isWatcherPaused()) {
-            EmbedBuilder result = new EmbedBuilder().setColor(Color.ORANGE).setDescription("Your watchers are already paused.");
-            return new SimpleInteractionResponse(result);
+            return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.ORANGE, TR_WATCHER__ALREADY_PAUSED));
         }
 
         user.setWatcherPaused(true);
-        EmbedBuilder result = new EmbedBuilder().setColor(Color.GREEN).setDescription("Your watchers are now resumed.");
-        return new SimpleInteractionResponse(result);
+        return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_WATCHER__STATUS_PAUSED));
     }
 
     @Interact(
@@ -408,16 +406,16 @@ public class BotSlashCommand {
             description = "Resume your watchers",
             type = InteractionType.SLASH
     )
-    public InteractionResponse resumeWatchers(JDA jda, UserEntity user) {
+    public InteractionResponse resumeWatchers(ChannelEntity channel, JDA jda, UserEntity user) {
 
+        TranslationContext context = this.translationService.getContext(channel.getEffectiveLanguage());
         if (!user.isWatcherPaused()) {
-            EmbedBuilder result = new EmbedBuilder().setColor(Color.ORANGE).setDescription("Your watchers are already running.");
-            return new SimpleInteractionResponse(result);
+            return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.ORANGE, TR_WATCHER__ALREADY_RESUMED));
+
         }
 
         user.setWatcherPaused(true);
-        EmbedBuilder result = new EmbedBuilder().setColor(Color.GREEN).setDescription("Your watchers are now paused.");
-        return new SimpleInteractionResponse(result);
+        return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_WATCHER__STATUS_RESUMED));
     }
 
 }

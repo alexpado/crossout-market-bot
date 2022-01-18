@@ -1,4 +1,4 @@
-package xo.marketbot;
+package xo.marketbot.services;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.GenericEvent;

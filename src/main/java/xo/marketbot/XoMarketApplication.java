@@ -23,10 +23,9 @@ import xo.marketbot.entities.discord.ChannelEntity;
 import xo.marketbot.entities.discord.GuildEntity;
 import xo.marketbot.entities.discord.UserEntity;
 import xo.marketbot.entities.discord.Watcher;
-import xo.marketbot.repositories.ChannelEntityRepository;
-import xo.marketbot.repositories.GuildEntityRepository;
-import xo.marketbot.repositories.UserEntityRepository;
 import xo.marketbot.repositories.WatcherRepository;
+import xo.marketbot.services.EntitySynchronization;
+import xo.marketbot.services.JdaStore;
 import xo.marketbot.tools.Utilities;
 
 import javax.security.auth.login.LoginException;
@@ -42,28 +41,21 @@ public class XoMarketApplication extends ListenerAdapter implements InteractionE
     public static final long   BOT_OFFICIAL_SERVER_ID = 508012982287073280L;
     public static final String INVITE                 = "https://discordapp.com/api/oauth2/authorize?client_id=500032551977746453&permissions=59456&scope=bot";
 
-    private static final Logger                  LOGGER = LoggerFactory.getLogger(XoMarketApplication.class);
-    public static        String                  NOTICE = null;
-    private static       List<String>            APP_ARGS;
-    private final        GuildEntityRepository   guildRepository;
-    private final        UserEntityRepository    userRepository;
-    private final        ChannelEntityRepository channelRepository;
-    private final        InteractionManager      manager;
+    private static final Logger             LOGGER = LoggerFactory.getLogger(XoMarketApplication.class);
+    public static        String             NOTICE = null;
+    private static       List<String>       APP_ARGS;
+    private final        InteractionManager manager;
 
-    public XoMarketApplication(IDiscordConfiguration configuration, BotSlashCommand slash, JdaStore store, WatcherRepository watcherRepository, GuildEntityRepository guildRepository, UserEntityRepository userRepository, ChannelEntityRepository channelRepository) throws LoginException {
-
-        this.guildRepository   = guildRepository;
-        this.userRepository    = userRepository;
-        this.channelRepository = channelRepository;
+    public XoMarketApplication(IDiscordConfiguration configuration, EntitySynchronization entitySynchronization, BotSlashCommand slash, JdaStore store, WatcherRepository watcherRepository) throws LoginException {
 
         if (!configuration.getToken().isEmpty() && configuration.isEnabled()) {
             JDABuilder builder = JDABuilder.createLight(configuration.getToken());
             this.manager = InteractionManager.using(builder, this);
             this.manager.registerInteraction(slash);
 
-            this.manager.registerMapping(GuildEntity.class, this::guildEntityMapper);
-            this.manager.registerMapping(ChannelEntity.class, this::channelEntityMapper);
-            this.manager.registerMapping(UserEntity.class, this::userEntityMapper);
+            this.manager.registerMapping(GuildEntity.class, entitySynchronization::mapGuild);
+            this.manager.registerMapping(ChannelEntity.class, entitySynchronization::mapChannel);
+            this.manager.registerMapping(UserEntity.class, entitySynchronization::mapUser);
 
             builder.addEventListeners(this);
             builder.addEventListeners(store);
@@ -181,55 +173,4 @@ public class XoMarketApplication extends ListenerAdapter implements InteractionE
         }
     }
 
-    /**
-     * Retrieve the {@link GuildEntity} associated with the provided {@link Interaction}
-     *
-     * @param interaction
-     *         The {@link Interaction} instance.
-     *
-     * @return The {@link GuildEntity}
-     */
-    private GuildEntity guildEntityMapper(Interaction interaction) {
-
-        if (!interaction.isFromGuild() || interaction.getGuild() == null) {
-            return null;
-        }
-
-        return this.guildRepository.findById(interaction.getGuild().getIdLong())
-                                   .orElseGet(() -> this.guildRepository.save(new GuildEntity(interaction.getGuild())));
-    }
-
-    /**
-     * Retrieve the {@link ChannelEntity} associated with the provided {@link Interaction}.
-     *
-     * @param interaction
-     *         The {@link Interaction} instance.
-     *
-     * @return The {@link ChannelEntity}.
-     */
-    private ChannelEntity channelEntityMapper(Interaction interaction) {
-
-        if (!interaction.isFromGuild() || interaction.getGuild() == null) {
-            return null;
-        }
-
-        return this.channelRepository.findById(interaction.getGuildChannel().getIdLong()).orElseGet(() -> {
-            GuildEntity guildEntity = this.guildEntityMapper(interaction);
-            return this.channelRepository.save(new ChannelEntity(interaction.getGuildChannel(), guildEntity));
-        });
-    }
-
-    /**
-     * Retrieve the {@link UserEntity} associated with the provided {@link Interaction}.
-     *
-     * @param interaction
-     *         The {@link Interaction} instance.
-     *
-     * @return The {@link UserEntity}.
-     */
-    private UserEntity userEntityMapper(Interaction interaction) {
-
-        return this.userRepository.findById(interaction.getUser().getIdLong())
-                                  .orElseGet(() -> this.userRepository.save(new UserEntity(interaction.getUser())));
-    }
 }

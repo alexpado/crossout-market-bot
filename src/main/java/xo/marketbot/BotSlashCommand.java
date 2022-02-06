@@ -76,11 +76,12 @@ public class BotSlashCommand {
     )
     public InteractionResponse searchItem(JDA jda, ChannelEntity channel, @Param("name") String itemNameParam, @Param("meta") Boolean metaParam, @Param("removed") Boolean removedParam) throws Exception {
 
-        String             itemName = Optional.ofNullable(itemNameParam).orElse("");
-        TranslationContext context  = this.translationService.getContext(channel.getEffectiveLanguage());
+        String             itemName    = Optional.ofNullable(itemNameParam).orElse("");
+        TranslationContext context     = this.translationService.getContext(channel.getEffectiveLanguage());
+        String             rawItemName = itemName.replaceAll("\\s\\(.*\\)$", "");
 
         Map<String, Object> searchParams = new HashMap<>();
-        searchParams.put("query", itemName);
+        searchParams.put("query", rawItemName);
         searchParams.put("metaItems", metaParam != null && metaParam);
         searchParams.put("removedItems", removedParam != null && removedParam);
         searchParams.put("language", channel.getEffectiveLanguage());
@@ -222,8 +223,10 @@ public class BotSlashCommand {
             return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__INVALID_PARAM__PRICE));
         }
 
+        String rawItemName = itemName.replaceAll("\\s\\(.*\\)$", "");
+
         Map<String, Object> searchParams = new HashMap<>();
-        searchParams.put("query", itemName);
+        searchParams.put("query", rawItemName);
         searchParams.put("language", channel.getEffectiveLanguage());
 
         List<IItem> items      = this.xoDB.items().findAll(searchParams).complete();

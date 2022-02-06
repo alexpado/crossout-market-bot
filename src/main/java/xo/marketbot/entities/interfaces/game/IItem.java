@@ -48,4 +48,10 @@ public interface IItem extends Identifiable<Integer>, Nameable, Describable, Upd
      */
     IFaction getFaction();
 
+    /**
+     * Mark this {@link IItem} as duplicate in its context. This will change the {@link #getName()} behavior by
+     * appending the rarity name to the {@link IItem} name.
+     */
+    void markAsDupe();
+
 }

@@ -36,6 +36,8 @@ public class Item implements IItem {
     private final ICategory     category;
     private final IFaction      faction;
 
+    private boolean dupe;
+
     /**
      * Create a new {@link Item} instance.
      *
@@ -65,6 +67,8 @@ public class Item implements IItem {
         this.type     = xoDB.fromTypeCache(source.getInt("typeId"));
         this.category = xoDB.fromCategoryCache(source.getInt("categoryId"));
         this.faction  = xoDB.fromFactionCache(source.getInt("factionNumber"));
+
+        this.dupe = false;
     }
 
     /**
@@ -180,6 +184,9 @@ public class Item implements IItem {
     @Override
     public String getName() {
 
+        if (this.dupe) {
+            return String.format("%s (%s)", this.availableName, this.getRarity().getName());
+        }
         return this.availableName;
     }
 
@@ -258,6 +265,16 @@ public class Item implements IItem {
     public IFaction getFaction() {
 
         return this.faction;
+    }
+
+    /**
+     * Mark this {@link IItem} as duplicate in its context. This will change the {@link #getName()} behavior by
+     * appending the rarity name to the {@link IItem} name.
+     */
+    @Override
+    public void markAsDupe() {
+
+        this.dupe = true;
     }
 
     @Override

@@ -61,8 +61,20 @@ public class FindAllItemsAction extends RestAction<List<IItem>> {
         JSONArray   array = new JSONArray(new String(requestBody));
         List<IItem> items = new ArrayList<>();
 
-        for (int i = 0 ; i < array.length() ; i++) {
+        for (int i = 0; i < array.length(); i++) {
             items.add(new Item(this.xoDB, array.getJSONObject(i)));
+        }
+
+        // 2021-11-28 | Anti dupe name fix
+        Map<String, IItem> nameMap = new HashMap<>();
+
+        for (IItem item : items) {
+            if (nameMap.containsKey(item.getName())) {
+                nameMap.get(item.getName()).markAsDupe();
+                item.markAsDupe();
+            } else {
+                nameMap.put(item.getName(), item);
+            }
         }
 
         return items;
@@ -73,4 +85,5 @@ public class FindAllItemsAction extends RestAction<List<IItem>> {
 
         return this.searchParams;
     }
+
 }

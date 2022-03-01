@@ -49,7 +49,7 @@ public class XoDB {
 
     public String getChartUrl() {
 
-        return "http://xomarket.akio.ovh:8282/chart/%s/%s.png";
+        return "http://xomarket.akio.ovh:8383/chart/%s/%s.png";
     }
 
     /**

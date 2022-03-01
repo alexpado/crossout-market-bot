@@ -1,11 +1,11 @@
 import java.nio.charset.StandardCharsets
 
 plugins {
-    id 'org.springframework.boot' version '2.6.3'
+    id 'org.springframework.boot' version '2.6.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'com.github.ben-manes.versions' version '0.42.0'
-    id 'org.ajoberstar.reckon' version '0.13.1'
+    id 'org.ajoberstar.reckon' version '0.16.1'
 }
 
 def generalCharset = StandardCharsets.UTF_8.name();
@@ -56,7 +56,7 @@ dependencies {
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.4.4'
 
     implementation group: 'org.json', name: 'json', version: '20211205'
-    implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.5'
+    implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.9'
     implementation group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
 
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.0.3'

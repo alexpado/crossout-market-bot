@@ -56,14 +56,14 @@ dependencies {
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.4.4'
 
     implementation group: 'org.json', name: 'json', version: '20211205'
-    implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.9'
+    implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.4'
     implementation group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
 
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.0.3'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
 
     implementation group: 'fr.alexpado', name: 'simple-http-client', version: '1.0.2'
-    implementation group: 'fr.alexpado', name: 'jda-interactions-extension', version: '0.1.0-beta.0.0+20220115T161733Z'
+    implementation group: 'fr.alexpado', name: 'jda-interactions-extension', version: '0.0.7-beta.1'
 
     implementation group: 'io.sentry', name: 'sentry-spring-boot-starter', version: '5.6.1'
 }

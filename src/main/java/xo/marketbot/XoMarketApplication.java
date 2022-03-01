@@ -7,6 +7,7 @@ import fr.alexpado.jda.interactions.interfaces.interactions.InteractionItem;
 import fr.alexpado.jda.interactions.interfaces.interactions.InteractionManager;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -50,16 +51,18 @@ public class XoMarketApplication extends ListenerAdapter implements InteractionE
 
         if (!configuration.getToken().isEmpty() && configuration.isEnabled()) {
             JDABuilder builder = JDABuilder.createLight(configuration.getToken());
-            this.manager = InteractionManager.using(builder, this);
+
+            builder.addEventListeners(this);
+            builder.addEventListeners(store);
+
+            JDA jda = builder.build();
+
+            this.manager = InteractionManager.using(jda, this);
             this.manager.registerInteraction(slash);
 
             this.manager.registerMapping(GuildEntity.class, entitySynchronization::mapGuild);
             this.manager.registerMapping(ChannelEntity.class, entitySynchronization::mapChannel);
             this.manager.registerMapping(UserEntity.class, entitySynchronization::mapUser);
-
-            builder.addEventListeners(this);
-            builder.addEventListeners(store);
-            builder.build();
         } else {
             this.manager = null;
         }

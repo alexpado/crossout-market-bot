@@ -6,19 +6,23 @@ import fr.alexpado.jda.interactions.annotations.Option;
 import fr.alexpado.jda.interactions.annotations.Param;
 import fr.alexpado.jda.interactions.entities.responses.SimpleInteractionResponse;
 import fr.alexpado.jda.interactions.enums.InteractionType;
+import fr.alexpado.jda.interactions.enums.SlashTarget;
 import fr.alexpado.jda.interactions.interfaces.interactions.InteractionResponse;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import xo.marketbot.entities.discord.ChannelEntity;
-import xo.marketbot.entities.discord.UserEntity;
-import xo.marketbot.entities.discord.Watcher;
+import xo.marketbot.entities.discord.*;
 import xo.marketbot.entities.interfaces.game.IItem;
 import xo.marketbot.entities.interfaces.game.IPack;
 import xo.marketbot.enums.WatcherTrigger;
+import xo.marketbot.repositories.ChannelEntityRepository;
+import xo.marketbot.repositories.GuildEntityRepository;
+import xo.marketbot.repositories.UserEntityRepository;
 import xo.marketbot.repositories.WatcherRepository;
 import xo.marketbot.responses.EntitiesDisplay;
 import xo.marketbot.responses.EntityDisplay;
@@ -33,22 +37,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static xo.marketbot.services.i18n.TranslationService.*;
 
 @Component
 public class BotSlashCommand {
 
-    private static final Logger             LOGGER = LoggerFactory.getLogger(BotSlashCommand.class);
-    private final        XoDB               xoDB;
-    private final        TranslationService translationService;
-    private final        WatcherRepository  watcherRepository;
+    private static final Logger                  LOGGER = LoggerFactory.getLogger(BotSlashCommand.class);
+    private final        XoDB                    xoDB;
+    private final        TranslationService      translationService;
+    private final        WatcherRepository       watcherRepository;
+    private final        UserEntityRepository    userEntityRepository;
+    private final        ChannelEntityRepository channelEntityRepository;
+    private final        GuildEntityRepository   guildEntityRepository;
 
-    public BotSlashCommand(XoDB xoDB, TranslationService translationService, WatcherRepository watcherRepository) {
+    public BotSlashCommand(XoDB xoDB, TranslationService translationService, WatcherRepository watcherRepository, UserEntityRepository userEntityRepository, ChannelEntityRepository channelEntityRepository, GuildEntityRepository guildEntityRepository) {
 
-        this.xoDB               = xoDB;
-        this.translationService = translationService;
-        this.watcherRepository  = watcherRepository;
+        this.xoDB                    = xoDB;
+        this.translationService      = translationService;
+        this.watcherRepository       = watcherRepository;
+        this.userEntityRepository    = userEntityRepository;
+        this.channelEntityRepository = channelEntityRepository;
+        this.guildEntityRepository   = guildEntityRepository;
     }
 
     @Interact(
@@ -419,6 +430,148 @@ public class BotSlashCommand {
 
         user.setWatcherPaused(true);
         return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_WATCHER__STATUS_RESUMED));
+    }
+
+    private Optional<InteractionResponse> applyLanguageUpdate(TranslationContext context, ChannelEntity channel, Member member, JDA jda, String languageParam, Consumer<Language> languageConsumer) {
+
+        Optional<Language> optionalLanguage = Optional.empty();
+
+        if (!languageParam.equals("none")) {
+            optionalLanguage = this.translationService.getSupportedLanguages().stream().filter(
+                    language -> language.getId().equalsIgnoreCase(languageParam)
+            ).findAny();
+        }
+
+        if (!member.isOwner() && !member.hasPermission(Permission.MANAGE_PERMISSIONS) && !member.hasPermission(Permission.ADMINISTRATOR)) {
+            return Optional.of(new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_GENERAL__NOT_ALLOWED)));
+        }
+
+        if (optionalLanguage.isEmpty() && !languageParam.equals("none")) {
+            return Optional.of(new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_LANGUAGE__NOT_SUPPORTED)));
+        }
+
+        languageConsumer.accept(optionalLanguage.orElse(null));
+        return Optional.empty();
+    }
+
+    @Interact(
+            name = "language/server",
+            description = "Change the language of this server",
+            type = InteractionType.SLASH,
+            target = SlashTarget.GUILD,
+            options = {
+                    @Option(
+                            name = "language",
+                            description = "The language",
+                            type = OptionType.STRING,
+                            required = true,
+                            choices = {
+                                    @Choice(
+                                            id = "en",
+                                            display = "English (EN)"
+                                    ),
+                                    @Choice(
+                                            id = "fr",
+                                            display = "Français (FR)"
+                                    )
+                            }
+                    )
+            }
+    )
+    public InteractionResponse changeServerLanguage(GuildEntity guild, ChannelEntity channel, Member member, JDA jda, @Param("language") String languageParam) {
+
+        TranslationContext            context                     = this.translationService.getContext(channel.getEffectiveLanguage());
+        Optional<InteractionResponse> optionalInteractionResponse = this.applyLanguageUpdate(context, channel, member, jda, languageParam, guild::setLanguage);
+
+        if (optionalInteractionResponse.isPresent()) {
+            return optionalInteractionResponse.get();
+        }
+
+        this.guildEntityRepository.save(guild);
+        return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_LANGUAGE__UPDATED__GUILD));
+    }
+
+    @Interact(
+            name = "language/channel",
+            description = "Change the language of this channel",
+            type = InteractionType.SLASH,
+            target = SlashTarget.GUILD,
+            options = {
+                    @Option(
+                            name = "language",
+                            description = "The language",
+                            type = OptionType.STRING,
+                            required = true,
+                            choices = {
+                                    @Choice(
+                                            id = "en",
+                                            display = "English (EN)"
+                                    ),
+                                    @Choice(
+                                            id = "fr",
+                                            display = "Français (FR)"
+                                    ),
+                                    @Choice(
+                                            id = "none",
+                                            display = "Server's default"
+                                    )
+                            }
+                    )
+            }
+    )
+    public InteractionResponse changeChannelLanguage(ChannelEntity channel, Member member, JDA jda, @Param("language") String languageParam) {
+
+        TranslationContext            context                     = this.translationService.getContext(channel.getEffectiveLanguage());
+        Optional<InteractionResponse> optionalInteractionResponse = this.applyLanguageUpdate(context, channel, member, jda, languageParam, channel::setLanguage);
+
+        if (optionalInteractionResponse.isPresent()) {
+            return optionalInteractionResponse.get();
+        }
+
+        this.channelEntityRepository.save(channel);
+        return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_LANGUAGE__UPDATED__CHANNEL));
+    }
+
+    @Interact(
+            name = "language/user",
+            description = "Change your own language",
+            type = InteractionType.SLASH,
+            target = SlashTarget.ALL,
+            options = {
+                    @Option(
+                            name = "language",
+                            description = "The language",
+                            type = OptionType.STRING,
+                            required = true,
+                            choices = {
+                                    @Choice(
+                                            id = "en",
+                                            display = "English (EN)"
+                                    ),
+                                    @Choice(
+                                            id = "fr",
+                                            display = "Français (FR)"
+                                    )
+                            }
+                    )
+            }
+    )
+    public InteractionResponse changeUserLanguage(UserEntity user, JDA jda, @Param("language") String languageParam) {
+
+        TranslationContext context = this.translationService.getContext(user.getLanguage());
+
+        Optional<Language> optionalLanguage = this.translationService.getSupportedLanguages().stream().filter(
+                language -> language.getId().equalsIgnoreCase(languageParam)
+        ).findAny();
+
+        if (optionalLanguage.isEmpty()) {
+            return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_LANGUAGE__NOT_SUPPORTED));
+        }
+
+        Language language = optionalLanguage.get();
+        user.setLanguage(language);
+        this.userEntityRepository.save(user);
+        return new SimpleInteractionResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_LANGUAGE__UPDATED__USER));
     }
 
 }

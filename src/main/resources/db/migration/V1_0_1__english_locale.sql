@@ -35,4 +35,11 @@ VALUES ('en', 'embed.header.full', '**%1$s**\n[View on CrossoutDB](%2$s) • [Re
        ('en', 'trigger.sell.over', '%1$s when market sell price is over %2$s every %3$s'),
        ('en', 'trigger.buy.under', '%1$s when market buy price is under %2$s every %3$s'),
        ('en', 'trigger.buy.over', '%1$s when market buy price is over %2$s every %3$s'),
-       ('en', 'trigger.everytime', '%1$s every %2$s');
+       ('en', 'trigger.everytime', '%1$s every %2$s'),
+       ('en', 'language.updated.guild', 'The server language has been updated.'),
+       ('en', 'language.updated.channel', 'The channel language has been updated.'),
+       ('en', 'language.updated.user', 'Your language has been updated.'),
+       ('en', 'language.unsupported', 'This language is not supported (yet?).'),
+       ('en', 'general.forbidden', 'Your not allowed to do this.'),
+       ('en', 'general.xodb.offline', 'CrossoutDB seems not available for now, please try again later.'),
+       ('en', 'general.xodb.error', 'An error occurred while getting data from CrossoutDB. Please try again later.');

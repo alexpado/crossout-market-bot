@@ -35,4 +35,13 @@ VALUES ('fr', 'embed.header.full', '**%1$s**\n[Voir sur CrossoutDB](%2$s) • [S
        ('fr', 'trigger.sell.over', '%1$s quand le prix de vente est au dessus de %2$s toutes les %3$s'),
        ('fr', 'trigger.buy.under', '%1$s quand le prix d\'achat est en dessous de %2$s toutes les %3$s'),
        ('fr', 'trigger.buy.over', '%1$s quand le prix d\'achat est au dessus de %2$s toutes les %3$s'),
-       ('fr', 'trigger.everytime', '%1$s toutes les %2$s');
+       ('fr', 'trigger.everytime', '%1$s toutes les %2$s'),
+       ('fr', 'language.updated.guild', 'Le langage du serveur a été mis à jour.'),
+       ('fr', 'language.updated.channel', 'Le langage du salon a été mis à jour.'),
+       ('fr', 'language.updated.user', 'Votre langage a été mis à jour.'),
+       ('fr', 'language.unsupported', 'Ce langage n\'est pas (encore?) supporté.'),
+       ('fr', 'general.forbidden', 'Vous n\'êtes pas autorisé à faire ceci.'),
+       ('fr', 'general.xodb.offline',
+        'CrossoutDB semble être indisponible pour le moment, merci de réessayer plus tard.'),
+       ('fr', 'general.xodb.error',
+        'Une erreur est survenue lors de la récupération des données depuis CrossoutDB. Merci de réessayer plus tard.');

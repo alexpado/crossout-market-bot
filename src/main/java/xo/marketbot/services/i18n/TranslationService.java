@@ -48,6 +48,13 @@ public class TranslationService {
     public static final String TR_TRIGGER__BUY_UNDER                    = "trigger.buy.under";
     public static final String TR_TRIGGER__BUY_OVER                     = "trigger.buy.over";
     public static final String TR_TRIGGER__EVERYTIME                    = "trigger.everytime";
+    public static final String TR_LANGUAGE__UPDATED__GUILD              = "language.updated.guild";
+    public static final String TR_LANGUAGE__UPDATED__CHANNEL            = "language.updated.channel";
+    public static final String TR_LANGUAGE__UPDATED__USER               = "language.updated.user";
+    public static final String TR_LANGUAGE__NOT_SUPPORTED               = "language.unsupported";
+    public static final String TR_GENERAL__NOT_ALLOWED                  = "general.forbidden";
+    public static final String TR_GENERAL__XODB_OFFLINE                 = "general.xodb.offline";
+    public static final String TR_GENERAL__XODB_ERROR                   = "general.xodb.error";
 
     private final LanguageRepository    languageRepository;
     private final TranslationRepository translationRepository;

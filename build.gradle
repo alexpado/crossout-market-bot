@@ -1,17 +1,30 @@
+import java.nio.charset.StandardCharsets
+
 plugins {
-    id 'org.springframework.boot' version '2.2.2.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'org.springframework.boot' version '2.6.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'com.github.ben-manes.versions' version '0.42.0'
+    id 'org.ajoberstar.reckon' version '0.16.1'
 }
 
+def generalCharset = StandardCharsets.UTF_8.name();
+
 group = 'fr.alexpado.bots'
-version = '3.0.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+compileJava.options.encoding = generalCharset
+compileTestJava.options.encoding = generalCharset
+javadoc.options.encoding = generalCharset
+
+reckon {
+    scopeFromProp()
+    stageFromProp('dev', 'beta', 'rc', 'final')
+}
 
 configurations {
-    developmentOnly
-    runtimeClasspath {
-        extendsFrom developmentOnly
-    }
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -19,30 +32,40 @@ configurations {
 
 repositories {
     mavenCentral()
-    jcenter()
+    mavenLocal()
+    maven {
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
+    }
+    maven {
+        name 'oss'
+        url 'https://s01.oss.sonatype.org/content/groups/public'
+    }
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-
-    compile group: 'org.json', name: 'json', version: '20190722'
-    compile 'net.dv8tion:JDA:4.2.0_214'
-    // https://mvnrepository._m/artifact/org.mariadb.jdbc/mariadb-java-client
-    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.5.3'
-    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.20'
-
-    compile group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
-
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.4.4'
+
+    implementation group: 'org.json', name: 'json', version: '20211205'
+    implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.9'
+    implementation group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
+
+    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.0.3'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
+
+    implementation group: 'fr.alexpado', name: 'simple-http-client', version: '1.0.2'
+    implementation group: 'fr.alexpado', name: 'jda-interactions-extension', version: '0.1.0-beta.0.0+20220115T161733Z'
+
+    implementation group: 'io.sentry', name: 'sentry-spring-boot-starter', version: '5.6.1'
 }
 
 task copyConfigurationMetadata(type: Copy) {
@@ -51,6 +74,7 @@ task copyConfigurationMetadata(type: Copy) {
     }
     into "out/production/classes"
 }
+
 compileJava {
     dependsOn processResources
     finalizedBy copyConfigurationMetadata
@@ -60,14 +84,15 @@ test {
     useJUnitPlatform()
 }
 
-tasks.withType(org.gradle.jvm.tasks.Jar) {
+def isNonStable = { String version ->
+    def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
+    def regex = /^[0-9,.v-]+(-r)?$/
+    return !stableKeyword && !(version ==~ regex)
+}
 
-    if (project.hasProperty('destinationPath')) {
-        destinationDirectory = file(project.property('destinationPath'))
+tasks.named("dependencyUpdates").configure {
+    // Example 2: disallow release candidates as upgradable versions from stable versions
+    rejectVersionIf {
+        isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
     }
-
-    if (project.hasProperty('destinationName')) {
-        archiveFileName = project.property('destinationName') + '.jar'
-    }
-
 }

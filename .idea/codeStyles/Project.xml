@@ -1,7 +1,7 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
     <option name="LINE_SEPARATOR" value="&#10;" />
-    <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="true" />
+    <option name="RIGHT_MARGIN" value="140" />
     <CssCodeStyleSettings>
       <option name="HEX_COLOR_UPPER_CASE" value="true" />
       <option name="HEX_COLOR_LONG_FORMAT" value="true" />
@@ -42,36 +42,16 @@
       <option name="USE_DOUBLE_QUOTES" value="false" />
       <option name="ENFORCE_QUOTES_ON_FORMAT" value="true" />
     </LessCodeStyleSettings>
-    <PHPCodeStyleSettings>
-      <option name="ALIGN_KEY_VALUE_PAIRS" value="true" />
-      <option name="ALIGN_PHPDOC_PARAM_NAMES" value="true" />
-      <option name="ALIGN_PHPDOC_COMMENTS" value="true" />
-      <option name="ALIGN_ASSIGNMENTS" value="true" />
-      <option name="ALIGN_INLINE_COMMENTS" value="true" />
-      <option name="COMMA_AFTER_LAST_ARRAY_ELEMENT" value="true" />
-      <option name="PHPDOC_BLANK_LINE_BEFORE_TAGS" value="true" />
-      <option name="PHPDOC_BLANK_LINES_AROUND_PARAMETERS" value="true" />
-      <option name="PHPDOC_WRAP_LONG_LINES" value="true" />
-      <option name="BLANK_LINES_BETWEEN_IMPORTS" value="1" />
-      <option name="PHPDOC_PARAM_SPACES_BETWEEN_TAG_AND_TYPE" value="2" />
-      <option name="PHPDOC_PARAM_SPACES_BETWEEN_TYPE_AND_NAME" value="2" />
-      <option name="PHPDOC_PARAM_SPACES_BETWEEN_NAME_AND_DESCRIPTION" value="2" />
-      <option name="PARAM_WEIGHT" value="1" />
-      <option name="RETURN_WEIGHT" value="3" />
-      <option name="DEPRECATED_WEIGHT" value="5" />
-      <option name="SEE_WEIGHT" value="4" />
-      <option name="TODO_WEIGHT" value="0" />
-      <option name="UPPER_CASE_NULL_CONST" value="true" />
-      <option name="LOWER_CASE_BOOLEAN_CONST" value="true" />
-      <option name="ELSE_IF_STYLE" value="SEPARATE" />
-      <option name="VARIABLE_NAMING_STYLE" value="CAMEL_CASE" />
-      <option name="BLANK_LINES_BEFORE_RETURN_STATEMENT" value="1" />
-      <option name="KEEP_RPAREN_AND_LBRACE_ON_ONE_LINE" value="true" />
-      <option name="ALIGN_CLASS_CONSTANTS" value="true" />
-      <option name="FORCE_SHORT_DECLARATION_ARRAY_STYLE" value="true" />
-      <option name="NEW_LINE_AFTER_PHP_OPENING_TAG" value="true" />
-      <option name="PLACE_PARENS_FOR_CONSTRUCTOR" value="1" />
-    </PHPCodeStyleSettings>
+    <MySQLCodeStyleSettings version="6">
+      <option name="USE_GENERAL_STYLE" value="false" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="TYPE_CASE" value="3" />
+      <option name="CUSTOM_TYPE_CASE" value="3" />
+      <option name="QUOTE_IDENTIFIER" value="2" />
+      <option name="INSERT_INTO_NL" value="2" />
+      <option name="INSERT_TABLE_EL_LINE" value="101" />
+      <option name="INSERT_VALUES_EL_LINE" value="101" />
+    </MySQLCodeStyleSettings>
     <Properties>
       <option name="SPACES_AROUND_KEY_VALUE_DELIMITER" value="true" />
       <option name="KEEP_BLANK_LINES" value="true" />
@@ -111,7 +91,6 @@
       <option name="CALL_PARAMETERS_RPAREN_ON_NEXT_LINE" value="true" />
     </codeStyleSettings>
     <codeStyleSettings language="JAVA">
-      <option name="KEEP_LINE_BREAKS" value="false" />
       <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
       <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
       <option name="BLANK_LINES_BEFORE_METHOD_BODY" value="1" />
@@ -161,96 +140,6 @@
       <indentOptions>
         <option name="INDENT_SIZE" value="4" />
       </indentOptions>
-    </codeStyleSettings>
-    <codeStyleSettings language="PHP">
-      <option name="BLANK_LINES_BEFORE_PACKAGE" value="0" />
-      <option name="BLANK_LINES_BEFORE_METHOD_BODY" value="1" />
-      <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1" />
-      <option name="CLASS_BRACE_STYLE" value="1" />
-      <option name="METHOD_BRACE_STYLE" value="1" />
-      <option name="SPECIAL_ELSE_IF_TREATMENT" value="true" />
-      <option name="ALIGN_MULTILINE_CHAINED_METHODS" value="true" />
-      <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
-      <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="true" />
-      <option name="ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION" value="true" />
-      <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />
-      <option name="SPACE_BEFORE_SEMICOLON" value="true" />
-      <option name="SPACE_AFTER_TYPE_CAST" value="true" />
-      <option name="CALL_PARAMETERS_WRAP" value="5" />
-      <option name="CALL_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
-      <option name="CALL_PARAMETERS_RPAREN_ON_NEXT_LINE" value="true" />
-      <option name="METHOD_PARAMETERS_WRAP" value="1" />
-      <option name="METHOD_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
-      <option name="METHOD_PARAMETERS_RPAREN_ON_NEXT_LINE" value="true" />
-      <option name="METHOD_CALL_CHAIN_WRAP" value="5" />
-      <option name="BINARY_OPERATION_WRAP" value="1" />
-      <option name="ARRAY_INITIALIZER_WRAP" value="5" />
-      <option name="ARRAY_INITIALIZER_LBRACE_ON_NEXT_LINE" value="true" />
-      <option name="ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE" value="true" />
-      <option name="IF_BRACE_FORCE" value="3" />
-      <option name="DOWHILE_BRACE_FORCE" value="3" />
-      <option name="WHILE_BRACE_FORCE" value="3" />
-      <option name="FOR_BRACE_FORCE" value="3" />
-      <arrangement>
-        <rules>
-          <section>
-            <rule>
-              <match>
-                <CONST>true</CONST>
-              </match>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <AND>
-                  <FIELD>true</FIELD>
-                  <modifiers />
-                </AND>
-              </match>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <CONSTRUCTOR>true</CONSTRUCTOR>
-              </match>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <AND>
-                  <METHOD>true</METHOD>
-                  <modifiers />
-                </AND>
-              </match>
-              <order>BY_NAME</order>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <TRAIT>true</TRAIT>
-              </match>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <INTERFACE>true</INTERFACE>
-              </match>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <CLASS>true</CLASS>
-              </match>
-            </rule>
-          </section>
-        </rules>
-      </arrangement>
     </codeStyleSettings>
     <codeStyleSettings language="Properties">
       <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />

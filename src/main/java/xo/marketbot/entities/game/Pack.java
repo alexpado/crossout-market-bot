@@ -176,7 +176,7 @@ public class Pack implements IPack {
     @Override
     public MessageEmbed.Field toField() {
 
-        return new MessageEmbed.Field(this.getName(), String.format("%s • %s • %s • %s", this.getPriceLine(this.priceUsd, "USD"), this.getPriceLine(this.priceEur, "EUR"), this.getPriceLine(this.priceGbp, "GBP"), this.getPriceLine(this.priceRub, "RUB")), true);
+        return new MessageEmbed.Field(this.getName(), String.format("%s • %s • %s • %s", this.getPriceLine(this.priceUsd, "USD"), this.getPriceLine(this.priceEur, "EUR"), this.getPriceLine(this.priceGbp, "GBP"), this.getPriceLine(this.priceRub, "RUB")), false);
     }
 
 }

@@ -34,7 +34,7 @@ public class Pack implements IPack {
         JSONObject appPrices = source.getJSONObject("appprices");
         JSONArray  array     = appPrices.getJSONArray("prices");
 
-        for (int i = 0 ; i < array.length() ; i++) {
+        for (int i = 0; i < array.length(); i++) {
             JSONObject priceSource = array.getJSONObject(i);
             double     value       = priceSource.getDouble("final");
 
@@ -50,7 +50,7 @@ public class Pack implements IPack {
 
     public static String toXoDBLink(String key) {
 
-        return String.format("https://crossoutdb.com/packs?ref=crossoutmarketbot#pack=%s", key);
+        return String.format("https://crossoutdb.com/packs?ref=crossoutmarketbot#%s", key);
     }
 
     public static String toXoDBThumbnail(String key) {
@@ -178,4 +178,5 @@ public class Pack implements IPack {
 
         return new MessageEmbed.Field(this.getName(), String.format("%s • %s • %s • %s", this.getPriceLine(this.priceUsd, "USD"), this.getPriceLine(this.priceEur, "EUR"), this.getPriceLine(this.priceGbp, "GBP"), this.getPriceLine(this.priceRub, "RUB")), true);
     }
+
 }

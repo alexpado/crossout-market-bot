@@ -51,7 +51,7 @@ public class Utilities {
 
     public static String createInvitationLink(JDA jda) {
 
-        String url = "https://discord.com/api/oauth2/authorize?client_id=%s&permissions=3072&scope=applications.commands%20bot";
+        String url = "https://discord.com/api/oauth2/authorize?client_id=%s&permissions=3072&scope=applications.commands%%20bot";
         return url.formatted(jda.getSelfUser().getId());
     }
 

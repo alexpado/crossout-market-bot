@@ -26,9 +26,8 @@ import java.util.List;
 @EnableScheduling
 public class XoMarketApplication extends ListenerAdapter {
 
-    public static final long   BOT_ADMIN_ID           = 149279150648066048L;
-    public static final long   BOT_OFFICIAL_SERVER_ID = 508012982287073280L;
-    public static final String INVITE                 = "https://discordapp.com/api/oauth2/authorize?client_id=500032551977746453&permissions=59456&scope=bot";
+    public static final long BOT_ADMIN_ID           = 149279150648066048L;
+    public static final long BOT_OFFICIAL_SERVER_ID = 508012982287073280L;
 
     private static final Logger             LOGGER = LoggerFactory.getLogger(XoMarketApplication.class);
     private static       List<String>       APP_ARGS;

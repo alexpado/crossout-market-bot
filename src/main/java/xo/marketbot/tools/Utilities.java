@@ -1,6 +1,7 @@
 package xo.marketbot.tools;
 
 import fr.alexpado.jda.interactions.meta.ChoiceMeta;
+import net.dv8tion.jda.api.JDA;
 import net.htmlparser.jericho.Renderer;
 import net.htmlparser.jericho.Source;
 import xo.marketbot.entities.interfaces.common.Nameable;
@@ -46,6 +47,12 @@ public class Utilities {
         return mapping.values().stream()
                 .map(v -> new ChoiceMeta(labelMapper.apply(v), labelMapper.apply(v))).toList();
 
+    }
+
+    public static String createInvitationLink(JDA jda) {
+
+        String url = "https://discord.com/api/oauth2/authorize?client_id=%s&permissions=3072&scope=applications.commands%20bot";
+        return url.formatted(jda.getSelfUser().getId());
     }
 
 }

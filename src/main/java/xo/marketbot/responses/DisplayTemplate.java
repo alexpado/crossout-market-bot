@@ -4,9 +4,9 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import xo.marketbot.XoMarketApplication;
 import xo.marketbot.services.i18n.TranslationContext;
 import xo.marketbot.services.i18n.TranslationService;
+import xo.marketbot.tools.Utilities;
 
 public class DisplayTemplate extends EmbedBuilder {
 
@@ -38,7 +38,7 @@ public class DisplayTemplate extends EmbedBuilder {
         this.setThumbnail("https://crossoutdb.com/img/crossoutdb_logo_compact.png");
         this.setAuthor(
                 context.getTranslation(TranslationService.TR_EMBED__INVITE),
-                XoMarketApplication.INVITE,
+                Utilities.createInvitationLink(this.jda),
                 jda.getSelfUser().getAvatarUrl()
         );
         this.setFooter(null);

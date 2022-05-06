@@ -4,7 +4,7 @@ import xo.marketbot.entities.interfaces.common.*;
 
 import java.time.LocalDateTime;
 
-public interface IItem extends Identifiable<Integer>, Nameable, Describable, Updatable<LocalDateTime>, Marchantable, Craftable, Fieldable {
+public interface IItem extends Identifiable<Integer>, Nameable, Describable, Updatable<LocalDateTime>, Marchantable, Craftable, Fieldable, Comparable<IItem> {
 
     /**
      * Check if this {@link IItem} has been removed from the game.

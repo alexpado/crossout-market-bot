@@ -10,7 +10,7 @@ import xo.marketbot.entities.interfaces.common.Nameable;
  *
  * @author alexpado
  */
-public interface IPack extends Identifiable<Integer>, Nameable, Marchantable, Fieldable {
+public interface IPack extends Identifiable<Integer>, Nameable, Marchantable, Fieldable, Comparable<IPack> {
 
     /**
      * Retrieve this {@link IPack}'s key identifier.

@@ -33,6 +33,8 @@ public class EntitiesDisplay<T extends Fieldable & Nameable> {
         this.itemPerPage = itemPerPage;
         this.renderer    = () -> new DisplayTemplate(context, jda, context.getTranslation(TranslationService.TR_SEARCH__RESULTS));
         this.totalPage   = Math.floorDiv(items.size(), itemPerPage) + Math.min(1, items.size() % itemPerPage);
+
+        this.items.sort(null);
     }
 
     public boolean isNextPageAvailable() {

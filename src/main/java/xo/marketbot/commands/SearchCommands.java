@@ -147,7 +147,8 @@ public class SearchCommands {
                     @Option(
                             name = "pack",
                             description = "Name of the pack (complete or not)",
-                            type = OptionType.STRING
+                            type = OptionType.STRING,
+                            autoComplete = true
                     )
             }
     )

@@ -27,24 +27,28 @@ import xo.marketbot.entities.discord.UserEntity;
 import xo.marketbot.repositories.CachedItemRepository;
 import xo.marketbot.services.EntitySynchronization;
 import xo.marketbot.services.interactions.pagination.PaginationHandler;
+import xo.marketbot.xodb.XoDB;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class InteractionWrapper {
 
     private final ListableBeanFactory  beanFactory;
+    private final XoDB                 xoDB;
     private final InteractionExtension extension;
     private final CachedItemRepository cacheRepository;
 
-    public InteractionWrapper(ListableBeanFactory beanFactory, EntitySynchronization entitySynchronization, CachedItemRepository cacheRepository) {
+    public InteractionWrapper(ListableBeanFactory beanFactory, EntitySynchronization entitySynchronization, XoDB xoDB, CachedItemRepository cacheRepository) {
 
         this.beanFactory     = beanFactory;
+        this.xoDB            = xoDB;
         this.cacheRepository = cacheRepository;
         this.extension       = new InteractionExtension();
 
@@ -133,6 +137,7 @@ public class InteractionWrapper {
                 completion.addCompletionProvider("type", this::completeItemSearch);
                 completion.addCompletionProvider("category", this::completeItemSearch);
                 completion.addCompletionProvider("item", this::completeItemSearch);
+                completion.addCompletionProvider("pack", this::completePackSearch);
 
                 this.extension.getSlashContainer().register(slash);
                 this.extension.getButtonContainer().register(button);
@@ -170,6 +175,14 @@ public class InteractionWrapper {
             case "item" -> stream.map(item -> new Command.Choice(item.getDisplayName(), item.getId())).toList();
             default -> Collections.emptyList();
         };
+    }
+
+    public List<Command.Choice> completePackSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String value) {
+
+        return this.xoDB.getPackCache().values().stream()
+                .filter(pack -> pack.getName().toLowerCase().contains(value.toLowerCase()))
+                .map(pack -> new Command.Choice(pack.getName(), pack.getName()))
+                .collect(Collectors.toList());
     }
 
 }

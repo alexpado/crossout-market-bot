@@ -51,7 +51,10 @@ public interface IItem extends Identifiable<Integer>, Nameable, Describable, Upd
     /**
      * Mark this {@link IItem} as duplicate in its context. This will change the {@link #getName()} behavior by
      * appending the rarity name to the {@link IItem} name.
+     *
+     * @param dupe
+     *         True to mark this {@link IItem} as duplicated.
      */
-    void markAsDupe();
+    void setDupe(boolean dupe);
 
 }

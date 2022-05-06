@@ -24,7 +24,7 @@ public class FindAllItemsAction extends RestAction<List<IItem>> {
     public FindAllItemsAction(XoDB xoDB) {
 
         this.xoDB         = xoDB;
-        this.searchParams = null;
+        this.searchParams = new HashMap<>();
     }
 
     public FindAllItemsAction(XoDB xoDB, Map<String, Object> searchParams) {
@@ -70,8 +70,8 @@ public class FindAllItemsAction extends RestAction<List<IItem>> {
 
         for (IItem item : items) {
             if (nameMap.containsKey(item.getName())) {
-                nameMap.get(item.getName()).markAsDupe();
-                item.markAsDupe();
+                nameMap.get(item.getName()).setDupe(true);
+                item.setDupe(true);
             } else {
                 nameMap.put(item.getName(), item);
             }

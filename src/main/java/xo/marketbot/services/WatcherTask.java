@@ -1,5 +1,7 @@
 package xo.marketbot.services;
 
+import fr.alexpado.xodb4j.XoDB;
+import fr.alexpado.xodb4j.interfaces.IItem;
 import io.sentry.Sentry;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -10,13 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import xo.marketbot.entities.discord.Watcher;
-import xo.marketbot.entities.interfaces.game.IItem;
 import xo.marketbot.repositories.WatcherRepository;
 import xo.marketbot.responses.EntityDisplay;
 import xo.marketbot.services.i18n.TranslationContext;
 import xo.marketbot.services.i18n.TranslationService;
 import xo.marketbot.tools.Utilities;
-import xo.marketbot.xodb.XoDB;
 
 import java.time.LocalDateTime;
 import java.util.List;

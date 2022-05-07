@@ -1,10 +1,10 @@
 package xo.marketbot.tools;
 
 import fr.alexpado.jda.interactions.meta.ChoiceMeta;
+import fr.alexpado.xodb4j.interfaces.common.Nameable;
 import net.dv8tion.jda.api.JDA;
 import net.htmlparser.jericho.Renderer;
 import net.htmlparser.jericho.Source;
-import xo.marketbot.entities.interfaces.common.Nameable;
 
 import java.time.LocalDateTime;
 import java.util.List;

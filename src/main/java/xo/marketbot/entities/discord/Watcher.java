@@ -1,11 +1,11 @@
 package xo.marketbot.entities.discord;
 
+import fr.alexpado.xodb4j.interfaces.IItem;
+import fr.alexpado.xodb4j.interfaces.common.Identifiable;
+import fr.alexpado.xodb4j.interfaces.common.Marchantable;
+import fr.alexpado.xodb4j.interfaces.common.Nameable;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import xo.marketbot.entities.interfaces.common.Identifiable;
-import xo.marketbot.entities.interfaces.common.Marchantable;
-import xo.marketbot.entities.interfaces.common.Nameable;
 import xo.marketbot.entities.interfaces.crossout.IWatcher;
-import xo.marketbot.entities.interfaces.game.IItem;
 import xo.marketbot.enums.WatcherTrigger;
 import xo.marketbot.services.i18n.TranslationContext;
 import xo.marketbot.tools.TimeConverter;
@@ -210,8 +210,8 @@ public class Watcher implements IWatcher {
     }
 
     /**
-     * Define the price limit which will trigger this {@link IWatcher}. If {@link #getTrigger()} is {@link
-     * WatcherTrigger#EVERYTIME}, this will most likely have any effect.
+     * Define the price limit which will trigger this {@link IWatcher}. If {@link #getTrigger()} is
+     * {@link WatcherTrigger#EVERYTIME}, this will most likely have any effect.
      *
      * @param price
      *         The price reference.

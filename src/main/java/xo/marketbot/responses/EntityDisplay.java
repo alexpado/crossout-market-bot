@@ -1,16 +1,14 @@
 package xo.marketbot.responses;
 
+import fr.alexpado.xodb4j.XoDB;
+import fr.alexpado.xodb4j.XoDBUtils;
+import fr.alexpado.xodb4j.interfaces.IItem;
+import fr.alexpado.xodb4j.interfaces.IPack;
 import net.dv8tion.jda.api.JDA;
 import xo.marketbot.entities.discord.Watcher;
-import xo.marketbot.entities.game.Item;
-import xo.marketbot.entities.game.Pack;
-import xo.marketbot.entities.interfaces.game.IItem;
-import xo.marketbot.entities.interfaces.game.IPack;
 import xo.marketbot.services.i18n.TranslationContext;
 import xo.marketbot.tools.Utilities;
-import xo.marketbot.xodb.XoDB;
 
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +20,11 @@ public class EntityDisplay extends DisplayTemplate {
     private static final String EMBED_DISPLAY_HEADER       = "**%s**\n[View on CrossoutDB](%s) • [Report an issue](%s)";
     private static final String EMBED_DISPLAY_HEADER_NO_XO = "**%s**\n[Report an issue](%s)";
 
-    public EntityDisplay(TranslationContext context, JDA jda, XoDB xoDB, IItem item) {
+    public EntityDisplay(TranslationContext context, JDA jda, IItem item) {
 
-        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), item.getName(), Item.toXoDBLink(item.getId()), XODB_ISSUE_CHANNEL));
+        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), item.getName(), XoDBUtils.getWebLink(item), XODB_ISSUE_CHANNEL));
         this.appendDescription(item.getDescription());
-        this.setThumbnail(Item.toXoDBThumbnail(item.getId(), item.getLastUpdate()));
+        this.setThumbnail(XoDBUtils.getImage(item));
 
         if (item.isRemoved()) {
             this.appendDescription("\n\n");
@@ -46,14 +44,11 @@ public class EntityDisplay extends DisplayTemplate {
         }
 
         this.setColor(item.getRarity().getColor());
-
-        long timestamp = item.getLastUpdate().toEpochSecond(ZoneOffset.UTC);
-        this.setImage(String.format(xoDB.getChartUrl(), timestamp, item.getId()));
     }
 
     public EntityDisplay(TranslationContext context, JDA jda, IPack pack) {
 
-        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), pack.getName(), Pack.toXoDBLink(pack.getKey()), XODB_ISSUE_CHANNEL));
+        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), pack.getName(), XoDBUtils.getWebLink(pack), XODB_ISSUE_CHANNEL));
 
         String currency = context.getTranslation(TR_MARKET__CURRENCY);
         this.addField(context.getTranslation(TR_MARKET__SELL), Utilities.money(pack.getMarketSell() / 100.0, currency), true);
@@ -81,13 +76,13 @@ public class EntityDisplay extends DisplayTemplate {
             this.addBlankField(true);
         }
 
-        this.setImage(Pack.toXoDBThumbnail(pack.getKey()));
+        this.setImage(XoDBUtils.getImage(pack));
     }
 
     public EntityDisplay(TranslationContext context, JDA jda, XoDB xoDB, Watcher watcher, IItem item) {
 
         super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_SIMPLE), watcher.getName(), XODB_ISSUE_CHANNEL));
-        this.setThumbnail(Item.toXoDBThumbnail(item.getId(), item.getLastUpdate()));
+        this.setThumbnail(XoDBUtils.getImage(item));
 
         String currency       = context.getTranslation(TR_MARKET__CURRENCY);
         String newMarketSell  = Utilities.money(item.getMarketSell() / 100.0, currency);
@@ -99,9 +94,6 @@ public class EntityDisplay extends DisplayTemplate {
 
         this.addField(context.getTranslation(TR_MARKET__SELL), String.format(priceFormat, newMarketSell, marketSellDiff), true);
         this.addField(context.getTranslation(TR_MARKET__BUY), String.format(priceFormat, newMarketBuy, marketBuyDiff), true);
-
-        long timestamp = item.getLastUpdate().toEpochSecond(ZoneOffset.UTC);
-        this.setImage(String.format(xoDB.getChartUrl(), timestamp, item.getId()));
     }
 
 }

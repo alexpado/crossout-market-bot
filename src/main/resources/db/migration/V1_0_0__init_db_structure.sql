@@ -72,15 +72,3 @@ CREATE TABLE `watcher`
     `updated_at`      DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW(),
     CONSTRAINT `FK_WATCHER_OWNER` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 );
-
-CREATE TABLE cached_item
-(
-    id       INT          NOT NULL PRIMARY KEY,
-    name     VARCHAR(255) NOT NULL,
-    removed  BOOLEAN      NOT NULL,
-    meta     BOOLEAN      NOT NULL,
-    rarity   VARCHAR(255) NOT NULL,
-    faction  VARCHAR(255) NOT NULL,
-    category VARCHAR(255) NOT NULL,
-    type     VARCHAR(255) NOT NULL
-);

@@ -1,7 +1,7 @@
 package xo.marketbot.tools;
 
+import fr.alexpado.xodb4j.interfaces.common.Nameable;
 import org.jetbrains.annotations.Nullable;
-import xo.marketbot.entities.interfaces.common.Nameable;
 
 import java.util.List;
 import java.util.Optional;

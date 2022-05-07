@@ -5,6 +5,8 @@ import fr.alexpado.jda.interactions.annotations.Interact;
 import fr.alexpado.jda.interactions.annotations.Option;
 import fr.alexpado.jda.interactions.annotations.Param;
 import fr.alexpado.jda.interactions.responses.SlashResponse;
+import fr.alexpado.xodb4j.XoDB;
+import fr.alexpado.xodb4j.interfaces.IItem;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -14,7 +16,7 @@ import org.springframework.stereotype.Service;
 import xo.marketbot.entities.discord.ChannelEntity;
 import xo.marketbot.entities.discord.UserEntity;
 import xo.marketbot.entities.discord.Watcher;
-import xo.marketbot.entities.interfaces.game.IItem;
+import xo.marketbot.entities.interfaces.common.Fieldable;
 import xo.marketbot.enums.WatcherTrigger;
 import xo.marketbot.repositories.WatcherRepository;
 import xo.marketbot.responses.EntitiesDisplay;
@@ -25,7 +27,6 @@ import xo.marketbot.services.interactions.InteractionBean;
 import xo.marketbot.services.interactions.pagination.PaginationTarget;
 import xo.marketbot.services.interactions.responses.SimpleSlashResponse;
 import xo.marketbot.tools.TimeConverter;
-import xo.marketbot.xodb.XoDB;
 
 import java.awt.*;
 import java.util.List;
@@ -49,58 +50,7 @@ public class WatcherCommands {
         this.watcherRepository  = watcherRepository;
     }
 
-    @Interact(
-            name = "watchers/create",
-            description = "Create a watcher (message in DMs when price for a given item changes)",
-            options = {
-                    @Option(
-                            name = "item",
-                            description = "The item name you want to watch",
-                            required = true,
-                            type = OptionType.STRING,
-                            autoComplete = true
-                    ),
-                    @Option(
-                            name = "trigger",
-                            description = "In which case the watcher message should be sent ?",
-                            required = true,
-                            type = OptionType.STRING,
-                            choices = {
-                                    @Choice(
-                                            id = "sell_over",
-                                            display = "When the sell price is over"
-                                    ),
-                                    @Choice(
-                                            id = "sell_under",
-                                            display = "When the sell price is under"
-                                    ),
-                                    @Choice(
-                                            id = "buy_over",
-                                            display = "When the buy price is over"
-                                    ),
-                                    @Choice(
-                                            id = "buy_under",
-                                            display = "When the buy price is under"
-                                    ),
-                                    @Choice(
-                                            id = "everytime",
-                                            display = "Everytime the price changes"
-                                    )
-                            }
-                    ),
-                    @Option(
-                            name = "price",
-                            description = "The price limit you want to set (may not be used depending on the trigger)",
-                            type = OptionType.STRING
-                    ),
-                    @Option(
-                            name = "frequency",
-                            description = "How often the price should be checked",
-                            type = OptionType.STRING
-                    )
-            },
-            defer = true
-    )
+    @Interact(name = "watchers/create", description = "Create a watcher (message in DMs when price for a given item changes)", options = {@Option(name = "item", description = "The item name you want to watch", required = true, type = OptionType.STRING, autoComplete = true), @Option(name = "trigger", description = "In which case the watcher message should be sent ?", required = true, type = OptionType.STRING, choices = {@Choice(id = "sell_over", display = "When the sell price is over"), @Choice(id = "sell_under", display = "When the sell price is under"), @Choice(id = "buy_over", display = "When the buy price is over"), @Choice(id = "buy_under", display = "When the buy price is under"), @Choice(id = "everytime", display = "Everytime the price changes")}), @Option(name = "price", description = "The price limit you want to set (may not be used depending on the trigger)", type = OptionType.STRING), @Option(name = "frequency", description = "How often the price should be checked", type = OptionType.STRING)}, defer = true)
     public SlashResponse createWatcher(JDA jda, UserEntity user, ChannelEntity channel, @Param("item") String itemId, @Param("trigger") String triggerName, @Param("price") String priceParam, @Param("frequency") String frequencyParam) throws Exception {
 
         TranslationContext context     = this.translationService.getContext(channel.getEffectiveLanguage());
@@ -134,10 +84,7 @@ public class WatcherCommands {
         return new SimpleSlashResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_WATCHER__CREATED, watcher.getId()));
     }
 
-    @Interact(
-            name = "watchers/list",
-            description = "List your watchers"
-    )
+    @Interact(name = "watchers/list", description = "List your watchers")
     public Object listWatchers(UserEntity user, ChannelEntity channel, JDA jda) {
 
         TranslationContext context  = this.translationService.getContext(channel.getEffectiveLanguage());
@@ -147,21 +94,10 @@ public class WatcherCommands {
             return new SimpleSlashResponse(new SimpleMessageEmbed(context, jda, Color.ORANGE, TR_WATCHER__LIST_EMPTY));
         }
 
-        return new PaginationTarget(new EntitiesDisplay<>(context, jda, watchers));
+        return new PaginationTarget(new EntitiesDisplay<>(context, jda, Fieldable::toField, watchers));
     }
 
-    @Interact(
-            name = "watchers/remove",
-            description = "Remove a watcher",
-            options = {
-                    @Option(
-                            name = "watcher",
-                            description = "Watcher identifier",
-                            type = OptionType.INTEGER,
-                            required = true
-                    )
-            }
-    )
+    @Interact(name = "watchers/remove", description = "Remove a watcher", options = {@Option(name = "watcher", description = "Watcher identifier", type = OptionType.INTEGER, required = true)})
     public SlashResponse removeWatcher(UserEntity user, ChannelEntity channel, JDA jda, @Param("id") Long idParam) {
 
         TranslationContext context = this.translationService.getContext(channel.getEffectiveLanguage());
@@ -183,54 +119,7 @@ public class WatcherCommands {
         return new SimpleSlashResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_WATCHER__DELETED));
     }
 
-    @Interact(
-            name = "watchers/settings",
-            description = "Change a watcher settings",
-            options = {
-                    @Option(
-                            name = "watcher",
-                            description = "Watcher identifier",
-                            required = true,
-                            type = OptionType.NUMBER
-                    ),
-                    @Option(
-                            name = "trigger",
-                            description = "In which case the watcher should be sent ?",
-                            type = OptionType.STRING,
-                            choices = {
-                                    @Choice(
-                                            id = "sell_over",
-                                            display = "When the market sell price is over"
-                                    ),
-                                    @Choice(
-                                            id = "sell_under",
-                                            display = "When the market sell price is under"
-                                    ),
-                                    @Choice(
-                                            id = "buy_over",
-                                            display = "When the market buy price is over"
-                                    ),
-                                    @Choice(
-                                            id = "buy_under",
-                                            display = "When the market buy price is under"
-                                    ),
-                                    @Choice(
-                                            id = "everytime",
-                                            display = "Everytime the price changes"
-                                    )
-                            }
-                    ),
-                    @Option(
-                            name = "price",
-                            description = "The price limit you want to set (may not be used depending on the trigger)",
-                            type = OptionType.STRING
-                    ),
-                    @Option(
-                            name = "frequency",
-                            description = "How often the price should be checked",
-                            type = OptionType.STRING
-                    )
-            })
+    @Interact(name = "watchers/settings", description = "Change a watcher settings", options = {@Option(name = "watcher", description = "Watcher identifier", required = true, type = OptionType.NUMBER), @Option(name = "trigger", description = "In which case the watcher should be sent ?", type = OptionType.STRING, choices = {@Choice(id = "sell_over", display = "When the market sell price is over"), @Choice(id = "sell_under", display = "When the market sell price is under"), @Choice(id = "buy_over", display = "When the market buy price is over"), @Choice(id = "buy_under", display = "When the market buy price is under"), @Choice(id = "everytime", display = "Everytime the price changes")}), @Option(name = "price", description = "The price limit you want to set (may not be used depending on the trigger)", type = OptionType.STRING), @Option(name = "frequency", description = "How often the price should be checked", type = OptionType.STRING)})
     public SlashResponse changeWatcherBehavior(JDA jda, UserEntity user, ChannelEntity channel, @Param("watcher") Long watcherId, @Param("trigger") String triggerName, @Param("price") String priceParam, @Param("frequency") String frequencyParam) {
 
         TranslationContext context         = this.translationService.getContext(channel.getEffectiveLanguage());
@@ -272,10 +161,7 @@ public class WatcherCommands {
         return new SimpleSlashResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_WATCHER__UPDATED));
     }
 
-    @Interact(
-            name = "watchers/pause",
-            description = "Pause your watchers"
-    )
+    @Interact(name = "watchers/pause", description = "Pause your watchers")
     public SlashResponse pauseWatchers(ChannelEntity channel, JDA jda, UserEntity user) {
 
         TranslationContext context = this.translationService.getContext(channel.getEffectiveLanguage());
@@ -287,10 +173,7 @@ public class WatcherCommands {
         return new SimpleSlashResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_WATCHER__STATUS_PAUSED));
     }
 
-    @Interact(
-            name = "watchers/resume",
-            description = "Resume your watchers"
-    )
+    @Interact(name = "watchers/resume", description = "Resume your watchers")
     public SlashResponse resumeWatchers(ChannelEntity channel, JDA jda, UserEntity user) {
 
         TranslationContext context = this.translationService.getContext(channel.getEffectiveLanguage());

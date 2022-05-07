@@ -1,11 +1,11 @@
 package xo.marketbot.entities.interfaces.crossout;
 
+import fr.alexpado.xodb4j.interfaces.IItem;
+import fr.alexpado.xodb4j.interfaces.common.Identifiable;
+import fr.alexpado.xodb4j.interfaces.common.Marchantable;
+import fr.alexpado.xodb4j.interfaces.common.Nameable;
 import xo.marketbot.entities.discord.UserEntity;
 import xo.marketbot.entities.interfaces.common.Fieldable;
-import xo.marketbot.entities.interfaces.common.Identifiable;
-import xo.marketbot.entities.interfaces.common.Marchantable;
-import xo.marketbot.entities.interfaces.common.Nameable;
-import xo.marketbot.entities.interfaces.game.IItem;
 import xo.marketbot.enums.WatcherTrigger;
 
 import java.time.LocalDateTime;
@@ -43,16 +43,16 @@ public interface IWatcher extends Identifiable<Integer>, Nameable, Marchantable,
     void setItemId(int id);
 
     /**
-     * Retrieve the price limit which will trigger this {@link IWatcher} depending on its {@link #getTrigger()}. This will most likely
-     * return null when {@link #getTrigger()} is set to {@link WatcherTrigger#EVERYTIME}.
+     * Retrieve the price limit which will trigger this {@link IWatcher} depending on its {@link #getTrigger()}. This
+     * will most likely return null when {@link #getTrigger()} is set to {@link WatcherTrigger#EVERYTIME}.
      *
      * @return The price reference.
      */
     Double getPriceReference();
 
     /**
-     * Define the price limit which will trigger this {@link IWatcher}. If {@link #getTrigger()} is {@link WatcherTrigger#EVERYTIME}, this
-     * will most likely have any effect.
+     * Define the price limit which will trigger this {@link IWatcher}. If {@link #getTrigger()} is
+     * {@link WatcherTrigger#EVERYTIME}, this will most likely have any effect.
      *
      * @param price
      *         The price reference.

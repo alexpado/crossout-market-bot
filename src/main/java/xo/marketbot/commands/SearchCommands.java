@@ -3,16 +3,18 @@ package xo.marketbot.commands;
 import fr.alexpado.jda.interactions.annotations.Interact;
 import fr.alexpado.jda.interactions.annotations.Option;
 import fr.alexpado.jda.interactions.annotations.Param;
+import fr.alexpado.xodb4j.XoDB;
+import fr.alexpado.xodb4j.interfaces.IFaction;
+import fr.alexpado.xodb4j.interfaces.IItem;
+import fr.alexpado.xodb4j.interfaces.IPack;
+import fr.alexpado.xodb4j.interfaces.IRarity;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import xo.marketbot.entities.discord.CachedItem;
 import xo.marketbot.entities.discord.ChannelEntity;
-import xo.marketbot.entities.interfaces.game.IItem;
-import xo.marketbot.entities.interfaces.game.IPack;
-import xo.marketbot.repositories.CachedItemRepository;
 import xo.marketbot.responses.EntitiesDisplay;
 import xo.marketbot.responses.EntityDisplay;
 import xo.marketbot.responses.SimpleMessageEmbed;
@@ -22,7 +24,7 @@ import xo.marketbot.services.interactions.InteractionBean;
 import xo.marketbot.services.interactions.pagination.PaginationTarget;
 import xo.marketbot.services.interactions.responses.SimpleSlashResponse;
 import xo.marketbot.tools.SearchHelper;
-import xo.marketbot.xodb.XoDB;
+import xo.marketbot.tools.Utilities;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -36,16 +38,14 @@ import static xo.marketbot.services.i18n.TranslationService.TR_SEARCH__EMPTY;
 @Service
 public class SearchCommands {
 
-    private static final Logger               LOGGER = LoggerFactory.getLogger(SearchCommands.class);
-    private final        XoDB                 xoDB;
-    private final        TranslationService   translationService;
-    private final        CachedItemRepository cacheRepository;
+    private static final Logger             LOGGER = LoggerFactory.getLogger(SearchCommands.class);
+    private final        XoDB               xoDB;
+    private final        TranslationService translationService;
 
-    public SearchCommands(XoDB xoDB, TranslationService translationService, CachedItemRepository cacheRepository) {
+    public SearchCommands(XoDB xoDB, TranslationService translationService) {
 
         this.xoDB               = xoDB;
         this.translationService = translationService;
-        this.cacheRepository    = cacheRepository;
     }
 
     @Interact(
@@ -103,16 +103,17 @@ public class SearchCommands {
         Map<String, Object> searchParams = new HashMap<>();
 
         if (itemId != null) {
-            int                  id   = Integer.parseInt(itemId);
-            Optional<CachedItem> byId = this.cacheRepository.findById(id);
-            byId.ifPresent(cachedItem -> {
-                searchParams.put("query", cachedItem.getName());
-                searchParams.put("rarity", cachedItem.getRarity());
-                searchParams.put("category", cachedItem.getCategory());
-                searchParams.put("faction", cachedItem.getFaction());
-                searchParams.put("metaItems", cachedItem.isMeta());
-                searchParams.put("removedItems", cachedItem.isRemoved());
-            });
+            int   id   = Integer.parseInt(itemId);
+            IItem item = this.xoDB.getItemCache().get(id);
+
+            if (item != null) {
+                searchParams.put("query", item.getName());
+                searchParams.put("rarity", item.getRarity());
+                searchParams.put("category", item.getCategory());
+                searchParams.put("faction", item.getFaction());
+                searchParams.put("metaItems", item.isMeta());
+                searchParams.put("removedItems", item.isRemoved());
+            }
         }
 
         if (searchParams.isEmpty()) {
@@ -135,9 +136,15 @@ public class SearchCommands {
         Optional<IItem> search = SearchHelper.search(items, null);
 
         if (search.isPresent()) {
-            return new SimpleSlashResponse(new EntityDisplay(context, jda, this.xoDB, search.get()));
+            return new SimpleSlashResponse(new EntityDisplay(context, jda, search.get()));
         }
-        return new PaginationTarget(new EntitiesDisplay<>(context, jda, items));
+        return new PaginationTarget(new EntitiesDisplay<>(context, jda, item -> {
+            IFaction faction     = Optional.ofNullable(item.getFaction()).orElse(IFaction.DEFAULT);
+            IRarity  rarity      = Optional.ofNullable(item.getRarity()).orElse(IRarity.DEFAULT);
+            String   description = "%s • %s".formatted(faction.getName(), rarity.getName());
+
+            return new MessageEmbed.Field(item.getName(), description, false);
+        }, items));
     }
 
     @Interact(
@@ -167,7 +174,16 @@ public class SearchCommands {
         if (search.isPresent()) {
             return new SimpleSlashResponse(new EntityDisplay(context, jda, search.get()));
         }
-        return new PaginationTarget(new EntitiesDisplay<>(context, jda, packs));
+        return new PaginationTarget(new EntitiesDisplay<>(context, jda, pack -> {
+
+            String usd         = Utilities.money((pack.getPriceUSD() / 100), " USD");
+            String eur         = Utilities.money((pack.getPriceEUR() / 100), " EUR");
+            String gbp         = Utilities.money((pack.getPriceEUR() / 100), " GBP");
+            String rub         = Utilities.money((pack.getPriceRUB() / 100), " RUB");
+            String description = String.format("%s • %s • %s • %s", usd, eur, gbp, rub);
+
+            return new MessageEmbed.Field(pack.getName(), description, false);
+        }, packs));
     }
 
 }

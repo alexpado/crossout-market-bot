@@ -11,6 +11,8 @@ import fr.alexpado.jda.interactions.interfaces.interactions.button.ButtonInterac
 import fr.alexpado.jda.interactions.interfaces.interactions.slash.SlashInteractionTarget;
 import fr.alexpado.jda.interactions.meta.InteractionMeta;
 import fr.alexpado.jda.interactions.meta.OptionMeta;
+import fr.alexpado.xodb4j.XoDB;
+import fr.alexpado.xodb4j.interfaces.IItem;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -20,17 +22,15 @@ import net.dv8tion.jda.api.interactions.components.buttons.ButtonInteraction;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.stereotype.Service;
-import xo.marketbot.entities.discord.CachedItem;
 import xo.marketbot.entities.discord.ChannelEntity;
 import xo.marketbot.entities.discord.GuildEntity;
 import xo.marketbot.entities.discord.UserEntity;
-import xo.marketbot.repositories.CachedItemRepository;
 import xo.marketbot.services.EntitySynchronization;
 import xo.marketbot.services.interactions.pagination.PaginationHandler;
-import xo.marketbot.xodb.XoDB;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -43,14 +43,14 @@ public class InteractionWrapper {
     private final ListableBeanFactory  beanFactory;
     private final XoDB                 xoDB;
     private final InteractionExtension extension;
-    private final CachedItemRepository cacheRepository;
 
-    public InteractionWrapper(ListableBeanFactory beanFactory, EntitySynchronization entitySynchronization, XoDB xoDB, CachedItemRepository cacheRepository) {
+    public InteractionWrapper(ListableBeanFactory beanFactory, EntitySynchronization entitySynchronization, XoDB xoDB) throws Exception {
 
-        this.beanFactory     = beanFactory;
-        this.xoDB            = xoDB;
-        this.cacheRepository = cacheRepository;
-        this.extension       = new InteractionExtension();
+        this.beanFactory = beanFactory;
+        this.xoDB        = xoDB;
+        this.extension   = new InteractionExtension();
+
+        this.xoDB.buildCaches(true);
 
         PaginationHandler paginationHandler = new PaginationHandler();
         this.extension.registerContainer(ButtonInteraction.class, paginationHandler);
@@ -149,30 +149,37 @@ public class InteractionWrapper {
     public List<Command.Choice> completeItemSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String value) {
 
         CommandAutoCompleteInteraction interaction = event.getInteraction();
-        List<CachedItem>               items       = this.cacheRepository.findAll();
-        Stream<CachedItem>             stream      = items.stream();
+        Collection<IItem>              items       = this.xoDB.getItemCache().values();
+        Stream<IItem>                  stream      = items.stream();
 
         for (OptionMapping option : interaction.getOptions()) {
             String searchValue = option.getName().equals(name) ? value.toLowerCase() : option.getAsString()
                     .toLowerCase();
 
             switch (option.getName().toLowerCase()) {
-                case "category" -> stream = stream.filter(item -> item.getCategory().toLowerCase()
-                        .contains(searchValue));
-                case "rarity" -> stream = stream.filter(item -> item.getRarity().toLowerCase().contains(searchValue));
-                case "faction" -> stream = stream.filter(item -> item.getFaction().toLowerCase().contains(searchValue));
-                case "item" -> stream = stream.filter(item -> item.getName().toLowerCase().contains(searchValue));
+                case "category" -> stream = stream
+                        .filter(item -> item.getCategory().getName().toLowerCase().contains(searchValue));
+                case "rarity" -> stream = stream
+                        .filter(item -> item.getRarity().getName().toLowerCase().contains(searchValue));
+                case "faction" -> stream = stream
+                        .filter(item -> item.getFaction().getName().toLowerCase().contains(searchValue));
+                case "item" -> stream = stream
+                        .filter(item -> item.getName().toLowerCase().contains(searchValue));
             }
         }
 
         return switch (name.toLowerCase()) {
-            case "category" -> stream.map(CachedItem::getCategory).distinct().map(str -> new Command.Choice(str, str))
-                    .toList();
-            case "rarity" -> stream.map(CachedItem::getRarity).distinct().map(str -> new Command.Choice(str, str))
-                    .toList();
-            case "faction" -> stream.map(CachedItem::getFaction).distinct().map(str -> new Command.Choice(str, str))
-                    .toList();
-            case "item" -> stream.map(item -> new Command.Choice(item.getDisplayName(), item.getId())).toList();
+            case "category" -> stream
+                    .map(item -> item.getCategory().getName()).distinct()
+                    .map(str -> new Command.Choice(str, str)).toList();
+            case "rarity" -> stream
+                    .map(item -> item.getRarity().getName()).distinct()
+                    .map(str -> new Command.Choice(str, str)).toList();
+            case "faction" -> stream
+                    .map(item -> item.getFaction().getName()).distinct()
+                    .map(str -> new Command.Choice(str, str)).toList();
+            case "item" -> stream
+                    .map(item -> new Command.Choice(item.getName(), item.getId())).toList();
             default -> Collections.emptyList();
         };
     }

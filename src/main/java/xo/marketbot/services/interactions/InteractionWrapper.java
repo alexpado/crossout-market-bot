@@ -12,7 +12,10 @@ import fr.alexpado.jda.interactions.interfaces.interactions.slash.SlashInteracti
 import fr.alexpado.jda.interactions.meta.InteractionMeta;
 import fr.alexpado.jda.interactions.meta.OptionMeta;
 import fr.alexpado.xodb4j.XoDB;
+import fr.alexpado.xodb4j.interfaces.ICategory;
+import fr.alexpado.xodb4j.interfaces.IFaction;
 import fr.alexpado.xodb4j.interfaces.IItem;
+import fr.alexpado.xodb4j.interfaces.IRarity;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -29,10 +32,7 @@ import xo.marketbot.services.EntitySynchronization;
 import xo.marketbot.services.interactions.pagination.PaginationHandler;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -116,7 +116,8 @@ public class InteractionWrapper {
                         annotation.target(),
                         options,
                         annotation.hideAsSlash(),
-                        false
+                        annotation.defer(),
+                        true
                 );
 
                 InteractionMeta buttonMeta = new InteractionMeta(
@@ -125,7 +126,8 @@ public class InteractionWrapper {
                         annotation.target(),
                         options,
                         annotation.hideAsButton(),
-                        false
+                        annotation.defer(),
+                        annotation.shouldReply()
                 );
 
                 SlashInteractionTarget        slash      = new SlashInteractionTargetImpl(obj, method, slashMeta);
@@ -158,10 +160,13 @@ public class InteractionWrapper {
 
             switch (option.getName().toLowerCase()) {
                 case "category" -> stream = stream
+                        .filter(item -> item.getCategory() != null)
                         .filter(item -> item.getCategory().getName().toLowerCase().contains(searchValue));
                 case "rarity" -> stream = stream
+                        .filter(item -> item.getRarity() != null)
                         .filter(item -> item.getRarity().getName().toLowerCase().contains(searchValue));
                 case "faction" -> stream = stream
+                        .filter(item -> item.getFaction() != null)
                         .filter(item -> item.getFaction().getName().toLowerCase().contains(searchValue));
                 case "item" -> stream = stream
                         .filter(item -> item.getName().toLowerCase().contains(searchValue));
@@ -170,12 +175,15 @@ public class InteractionWrapper {
 
         return switch (name.toLowerCase()) {
             case "category" -> stream
+                    .filter(item -> item.getCategory() != null)
                     .map(item -> item.getCategory().getName()).distinct()
                     .map(str -> new Command.Choice(str, str)).toList();
             case "rarity" -> stream
+                    .filter(item -> item.getRarity() != null)
                     .map(item -> item.getRarity().getName()).distinct()
                     .map(str -> new Command.Choice(str, str)).toList();
             case "faction" -> stream
+                    .filter(item -> item.getFaction() != null)
                     .map(item -> item.getFaction().getName()).distinct()
                     .map(str -> new Command.Choice(str, str)).toList();
             case "item" -> stream
@@ -190,6 +198,21 @@ public class InteractionWrapper {
                 .filter(pack -> pack.getName().toLowerCase().contains(value.toLowerCase()))
                 .map(pack -> new Command.Choice(pack.getName(), pack.getName()))
                 .collect(Collectors.toList());
+    }
+
+    private ICategory asCategory(IItem item) {
+
+        return Optional.ofNullable(item.getCategory()).orElse(ICategory.DEFAULT);
+    }
+
+    private IRarity asRarity(IItem item) {
+
+        return Optional.ofNullable(item.getRarity()).orElse(IRarity.DEFAULT);
+    }
+
+    private IFaction asFaction(IItem item) {
+
+        return Optional.ofNullable(item.getFaction()).orElse(IFaction.DEFAULT);
     }
 
 }

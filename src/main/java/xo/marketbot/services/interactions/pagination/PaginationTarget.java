@@ -28,7 +28,7 @@ public class PaginationTarget implements ButtonInteractionTarget {
     @Override
     public InteractionMeta getMeta() {
 
-        return new InteractionMeta("pagination://" + this.id, "", SlashTarget.ALL, Collections.emptyList(), false, false);
+        return new InteractionMeta("pagination://" + this.id, "", SlashTarget.ALL, Collections.emptyList(), false, false, false);
     }
 
     /**

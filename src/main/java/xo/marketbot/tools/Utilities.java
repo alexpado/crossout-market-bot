@@ -1,12 +1,15 @@
 package xo.marketbot.tools;
 
 import fr.alexpado.jda.interactions.meta.ChoiceMeta;
+import fr.alexpado.xodb4j.interfaces.IItem;
 import fr.alexpado.xodb4j.interfaces.common.Nameable;
 import net.dv8tion.jda.api.JDA;
 import net.htmlparser.jericho.Renderer;
 import net.htmlparser.jericho.Source;
+import xo.marketbot.configurations.interfaces.IMarketConfiguration;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -53,6 +56,14 @@ public class Utilities {
 
         String url = "https://discord.com/api/oauth2/authorize?client_id=%s&permissions=3072&scope=applications.commands%%20bot";
         return url.formatted(jda.getSelfUser().getId());
+    }
+
+    public static String createChartUrl(IMarketConfiguration configuration, IItem item, int interval) {
+
+        String chartApi  = configuration.getChartApi();
+        long   timestamp = item.getLastUpdate().toEpochSecond(ZoneOffset.UTC);
+
+        return "%s/chart/%s/%s.png?hour=%s".formatted(chartApi, timestamp, item.getId(), interval);
     }
 
 }

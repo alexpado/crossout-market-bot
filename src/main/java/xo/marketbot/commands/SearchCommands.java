@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import xo.marketbot.configurations.interfaces.IMarketConfiguration;
 import xo.marketbot.entities.discord.ChannelEntity;
 import xo.marketbot.responses.EntitiesDisplay;
 import xo.marketbot.responses.EntityDisplay;
@@ -38,14 +39,16 @@ import static xo.marketbot.services.i18n.TranslationService.TR_SEARCH__EMPTY;
 @Service
 public class SearchCommands {
 
-    private static final Logger             LOGGER = LoggerFactory.getLogger(SearchCommands.class);
-    private final        XoDB               xoDB;
-    private final        TranslationService translationService;
+    private static final Logger               LOGGER = LoggerFactory.getLogger(SearchCommands.class);
+    private final        XoDB                 xoDB;
+    private final        TranslationService   translationService;
+    private final        IMarketConfiguration configuration;
 
-    public SearchCommands(XoDB xoDB, TranslationService translationService) {
+    public SearchCommands(XoDB xoDB, TranslationService translationService, IMarketConfiguration configuration) {
 
         this.xoDB               = xoDB;
         this.translationService = translationService;
+        this.configuration      = configuration;
     }
 
     @Interact(
@@ -136,7 +139,7 @@ public class SearchCommands {
         Optional<IItem> search = SearchHelper.search(items, null);
 
         if (search.isPresent()) {
-            return new SimpleSlashResponse(new EntityDisplay(context, jda, search.get()));
+            return new SimpleSlashResponse(new EntityDisplay(context, this.configuration, jda, search.get()));
         }
         return new PaginationTarget(new EntitiesDisplay<>(context, jda, item -> {
             IFaction faction     = Optional.ofNullable(item.getFaction()).orElse(IFaction.DEFAULT);

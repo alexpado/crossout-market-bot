@@ -5,6 +5,7 @@ import fr.alexpado.xodb4j.XoDBUtils;
 import fr.alexpado.xodb4j.interfaces.IItem;
 import fr.alexpado.xodb4j.interfaces.IPack;
 import net.dv8tion.jda.api.JDA;
+import xo.marketbot.configurations.interfaces.IMarketConfiguration;
 import xo.marketbot.entities.discord.Watcher;
 import xo.marketbot.services.i18n.TranslationContext;
 import xo.marketbot.tools.Utilities;
@@ -20,7 +21,7 @@ public class EntityDisplay extends DisplayTemplate {
     private static final String EMBED_DISPLAY_HEADER       = "**%s**\n[View on CrossoutDB](%s) • [Report an issue](%s)";
     private static final String EMBED_DISPLAY_HEADER_NO_XO = "**%s**\n[Report an issue](%s)";
 
-    public EntityDisplay(TranslationContext context, JDA jda, IItem item) {
+    public EntityDisplay(TranslationContext context, IMarketConfiguration configuration, JDA jda, IItem item) {
 
         super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), item.getName(), XoDBUtils.getWebLink(item), XODB_ISSUE_CHANNEL));
         this.appendDescription(item.getDescription());
@@ -41,6 +42,8 @@ public class EntityDisplay extends DisplayTemplate {
                 this.addField(context.getTranslation(TR_MARKET__CRAFT_BUY), Utilities.money(item.getBuyCraftPrice() / 100.0, currency), true);
                 this.addBlankField(true);
             }
+
+            this.setImage(Utilities.createChartUrl(configuration, item, 5));
         }
 
         this.setColor(item.getRarity().getColor());

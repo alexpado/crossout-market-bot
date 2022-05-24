@@ -10,10 +10,19 @@ public class MarketConfiguration implements IMarketConfiguration {
     @Value("${xomarket.api}")
     private String marketApi;
 
+    @Value("${xomarket.chart}")
+    private String chartApi;
+
     @Override
     public String getApi() {
 
         return this.marketApi;
+    }
+
+    @Override
+    public String getChartApi() {
+
+        return this.chartApi;
     }
 
 }

@@ -159,7 +159,8 @@ public class WatcherCommands {
                             name = "watcher",
                             description = "Watcher identifier",
                             type = OptionType.INTEGER,
-                            required = true
+                            required = true,
+                            autoComplete = true
                     )
             }
     )
@@ -192,7 +193,14 @@ public class WatcherCommands {
                             name = "watcher",
                             description = "Watcher identifier",
                             required = true,
-                            type = OptionType.NUMBER
+                            type = OptionType.INTEGER,
+                            autoComplete = true
+                    ),
+                    @Option(
+                            name = "name",
+                            description = "Name of the watcher",
+                            required = true,
+                            type = OptionType.STRING
                     ),
                     @Option(
                             name = "trigger",
@@ -233,7 +241,7 @@ public class WatcherCommands {
                     )
             }
     )
-    public SlashResponse changeWatcherBehavior(JDA jda, UserEntity user, ChannelEntity channel, @Param("watcher") Long watcherId, @Param("trigger") String triggerName, @Param("price") String priceParam, @Param("frequency") String frequencyParam) {
+    public SlashResponse changeWatcherBehavior(JDA jda, UserEntity user, ChannelEntity channel, @Param("watcher") Long watcherId, @Param("name") String name, @Param("trigger") String triggerName, @Param("price") String priceParam, @Param("frequency") String frequencyParam) {
 
         TranslationContext context         = this.translationService.getContext(channel.getEffectiveLanguage());
         Optional<Watcher>  optionalWatcher = this.watcherRepository.findById(watcherId.intValue());
@@ -267,6 +275,10 @@ public class WatcherCommands {
             }
 
             watcher.setTiming(timing);
+        }
+
+        if (name != null && !name.isEmpty()) {
+            watcher.setName(name);
         }
 
         watcher.setFailureCount(0);

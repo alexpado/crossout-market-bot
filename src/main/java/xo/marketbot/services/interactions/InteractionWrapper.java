@@ -12,10 +12,7 @@ import fr.alexpado.jda.interactions.interfaces.interactions.slash.SlashInteracti
 import fr.alexpado.jda.interactions.meta.InteractionMeta;
 import fr.alexpado.jda.interactions.meta.OptionMeta;
 import fr.alexpado.xodb4j.XoDB;
-import fr.alexpado.xodb4j.interfaces.ICategory;
-import fr.alexpado.xodb4j.interfaces.IFaction;
 import fr.alexpado.xodb4j.interfaces.IItem;
-import fr.alexpado.xodb4j.interfaces.IRarity;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -28,11 +25,15 @@ import org.springframework.stereotype.Service;
 import xo.marketbot.entities.discord.ChannelEntity;
 import xo.marketbot.entities.discord.GuildEntity;
 import xo.marketbot.entities.discord.UserEntity;
+import xo.marketbot.repositories.WatcherRepository;
 import xo.marketbot.services.EntitySynchronization;
 import xo.marketbot.services.interactions.pagination.PaginationHandler;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,12 +44,14 @@ public class InteractionWrapper {
     private final ListableBeanFactory  beanFactory;
     private final XoDB                 xoDB;
     private final InteractionExtension extension;
+    private final WatcherRepository    watcherRepository;
 
-    public InteractionWrapper(ListableBeanFactory beanFactory, EntitySynchronization entitySynchronization, XoDB xoDB) throws Exception {
+    public InteractionWrapper(ListableBeanFactory beanFactory, EntitySynchronization entitySynchronization, XoDB xoDB, WatcherRepository watcherRepository) throws Exception {
 
-        this.beanFactory = beanFactory;
-        this.xoDB        = xoDB;
-        this.extension   = new InteractionExtension();
+        this.beanFactory       = beanFactory;
+        this.xoDB              = xoDB;
+        this.watcherRepository = watcherRepository;
+        this.extension         = new InteractionExtension();
 
         this.xoDB.buildCaches(true);
 
@@ -140,6 +143,7 @@ public class InteractionWrapper {
                 completion.addCompletionProvider("category", this::completeItemSearch);
                 completion.addCompletionProvider("item", this::completeItemSearch);
                 completion.addCompletionProvider("pack", this::completePackSearch);
+                completion.addCompletionProvider("watcher", this::completeWatcherSearch);
 
                 this.extension.getSlashContainer().register(slash);
                 this.extension.getButtonContainer().register(button);
@@ -200,19 +204,13 @@ public class InteractionWrapper {
                 .collect(Collectors.toList());
     }
 
-    private ICategory asCategory(IItem item) {
+    public List<Command.Choice> completeWatcherSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String value) {
 
-        return Optional.ofNullable(item.getCategory()).orElse(ICategory.DEFAULT);
-    }
-
-    private IRarity asRarity(IItem item) {
-
-        return Optional.ofNullable(item.getRarity()).orElse(IRarity.DEFAULT);
-    }
-
-    private IFaction asFaction(IItem item) {
-
-        return Optional.ofNullable(item.getFaction()).orElse(IFaction.DEFAULT);
+        return this.watcherRepository.findAllByOwnerId(event.getInteraction().getUser().getIdLong())
+                .stream()
+                .filter(watcher -> watcher.getName().toLowerCase().contains(value.toLowerCase()))
+                .map(watcher -> new Command.Choice(watcher.getName(), watcher.getId()))
+                .collect(Collectors.toList());
     }
 
 }

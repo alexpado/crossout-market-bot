@@ -44,8 +44,8 @@ public class Watcher implements IWatcher {
         this.trigger        = trigger;
         this.itemId         = item.getId();
         this.priceReference = priceReference;
-        this.marketSell     = item.getMarketSell() / 100.0;
-        this.marketBuy      = item.getMarketBuy() / 100.0;
+        this.marketSell     = item.getMarketSell();
+        this.marketBuy      = item.getMarketBuy();
         this.owner          = user;
         this.regular        = regular;
         this.timing         = timing;

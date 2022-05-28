@@ -385,11 +385,6 @@ public class Watcher implements IWatcher {
         return isRegular() ? Utilities.toNormalizedDateTime(next, this.getTiming()) : next;
     }
 
-    public void execute() {
-
-        this.setLastExecution(this.getNextExecution());
-    }
-
     public boolean isLate(LocalDateTime now) {
 
         return now.isAfter(this.getNextExecution().plusSeconds(1));

@@ -63,11 +63,11 @@ public class WatcherTask {
             User           jdaUser     = jdaInstance.retrieveUserById(watcher.getOwner().getId()).complete();
             PrivateChannel channel     = jdaUser.openPrivateChannel().complete();
 
-            if (watcher.isLate(now)) {
+            if (watcher.isLate(now) && watcher.isRegular()) {
                 LocalDateTime from = watcher.getLastExecution();
                 LOGGER.info("Watcher {} need time fix...", watcher.getId());
                 while (watcher.isLate(now)) {
-                    watcher.execute();
+                    watcher.setLastExecution(watcher.getNextExecution());
                 }
                 LOGGER.info("Fixed: {} -> {}", from, watcher.getLastExecution());
                 this.watcherRepository.save(watcher);
@@ -102,7 +102,7 @@ public class WatcherTask {
                         channel.sendMessageEmbeds(builder.build()).complete();
 
                         watcher.refresh(item);
-                        watcher.execute();
+                        watcher.setLastExecution(now);
                     } catch (Exception e) {
                         LOGGER.error("An error occurred while sending the watcher message.", e);
                         Sentry.withScope(scope -> {
@@ -112,10 +112,10 @@ public class WatcherTask {
                         });
                         watcher.setFailureCount(watcher.getFailureCount() + 1);
                     } finally {
-                        LOGGER.info("Finished handling watcher {}", watcher.getId());
                         this.watcherRepository.save(watcher);
                     }
                 }
+                LOGGER.info("Finished handling watcher {}", watcher.getId());
             } catch (Exception e) {
                 LOGGER.error("Error handling watcher {}", watcher.getId(), e);
                 Sentry.withScope(scope -> {

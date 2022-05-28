@@ -311,7 +311,11 @@ public class Watcher implements IWatcher {
     @Override
     public void setLastExecution(LocalDateTime lastExecution) {
 
-        this.lastExecution = lastExecution;
+        if (this.isRegular()) {
+            this.lastExecution = Utilities.toNormalizedDateTime(lastExecution, this.timing);
+        } else {
+            this.lastExecution = lastExecution;
+        }
     }
 
     /**

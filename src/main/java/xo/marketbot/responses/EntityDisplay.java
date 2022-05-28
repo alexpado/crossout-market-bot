@@ -6,6 +6,7 @@ import fr.alexpado.xodb4j.interfaces.IPack;
 import net.dv8tion.jda.api.JDA;
 import xo.marketbot.configurations.interfaces.IMarketConfiguration;
 import xo.marketbot.entities.discord.Watcher;
+import xo.marketbot.enums.PriceEmote;
 import xo.marketbot.services.i18n.TranslationContext;
 import xo.marketbot.tools.TimeConverter;
 import xo.marketbot.tools.Utilities;
@@ -88,12 +89,10 @@ public class EntityDisplay extends DisplayTemplate {
         this.setThumbnail(XoDBUtils.getImage(item));
 
         String currency       = context.getTranslation(TR_MARKET__CURRENCY);
-        String newMarketSell  = Utilities.money(item.getMarketSell() / 100.0, currency);
-        String newMarketBuy   = Utilities.money(item.getMarketBuy() / 100.0, currency);
-        String marketSellDiff = Utilities.money((item.getMarketSell() - watcher.getMarketSell()) / 100.0, currency);
-        String marketBuyDiff  = Utilities.money((item.getMarketBuy() - watcher.getMarketBuy()) / 100.0, currency);
-
-        String priceFormat = "%s (%s)";
+        String newMarketSell  = Utilities.money(item.getMarketSell(), currency);
+        String newMarketBuy   = Utilities.money(item.getMarketBuy(), currency);
+        String marketSellDiff = Utilities.money((item.getMarketSell() - watcher.getMarketSell()), currency);
+        String marketBuyDiff  = Utilities.money((item.getMarketBuy() - watcher.getMarketBuy()), currency);
 
         this.appendDescription(String.format(
                 context.getTranslation(watcher.getTrigger().getTranslationKey()),
@@ -102,8 +101,14 @@ public class EntityDisplay extends DisplayTemplate {
                 new TimeConverter(watcher.getTiming())
         ));
 
-        this.addField(context.getTranslation(TR_MARKET__SELL), String.format(priceFormat, newMarketSell, marketSellDiff), true);
-        this.addField(context.getTranslation(TR_MARKET__BUY), String.format(priceFormat, newMarketBuy, marketBuyDiff), true);
+        String priceFormat = "%s (%s %s)";
+
+        String sellEmote = PriceEmote.with(item.getMarketSell(), watcher.getMarketSell(), false).getEmote(jda);
+        String buyEmote  = PriceEmote.with(item.getMarketBuy(), watcher.getMarketBuy(), true).getEmote(jda);
+
+        this.addField(context.getTranslation(TR_MARKET__SELL), String.format(priceFormat, newMarketSell, sellEmote, marketSellDiff), true);
+        this.addField(context.getTranslation(TR_MARKET__BUY), String.format(priceFormat, newMarketBuy, buyEmote, marketBuyDiff), true);
+
         this.setImage(Utilities.createChartUrl(configuration, item, 5));
     }
 

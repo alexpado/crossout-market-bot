@@ -13,6 +13,8 @@ import fr.alexpado.jda.interactions.meta.InteractionMeta;
 import fr.alexpado.jda.interactions.meta.OptionMeta;
 import fr.alexpado.xodb4j.XoDB;
 import fr.alexpado.xodb4j.interfaces.IItem;
+import fr.alexpado.xodb4j.interfaces.IRarity;
+import fr.alexpado.xodb4j.interfaces.common.Nameable;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -30,10 +32,7 @@ import xo.marketbot.services.EntitySynchronization;
 import xo.marketbot.services.interactions.pagination.PaginationHandler;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -177,6 +176,14 @@ public class InteractionWrapper {
             }
         }
 
+        List<IItem> elements = stream.toList();
+        Set<String> names    = new HashSet<>();
+        List<String> dupeNames = elements.stream()
+                .map(Nameable::getName)
+                .filter(str -> !names.add(str)).toList();
+
+        stream = elements.stream();
+
         return switch (name.toLowerCase()) {
             case "category" -> stream
                     .filter(item -> item.getCategory() != null)
@@ -191,7 +198,23 @@ public class InteractionWrapper {
                     .map(item -> item.getFaction().getName()).distinct()
                     .map(str -> new Command.Choice(str, str)).toList();
             case "item" -> stream
-                    .map(item -> new Command.Choice(item.getName(), item.getId())).toList();
+                    .map(item -> {
+                        if (names.contains(item.getName())) {
+                            return new Command.Choice(
+                                    String.format(
+                                            "%s (%s)",
+                                            item.getName(),
+                                            Optional.ofNullable(item.getRarity()).orElse(IRarity.DEFAULT).getName()
+                                    ),
+                                    item.getId()
+                            );
+                        } else {
+                            return new Command.Choice(
+                                    item.getName(),
+                                    item.getId()
+                            );
+                        }
+                    }).toList();
             default -> Collections.emptyList();
         };
     }

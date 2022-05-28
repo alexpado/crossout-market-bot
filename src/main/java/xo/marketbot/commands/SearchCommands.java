@@ -107,27 +107,16 @@ public class SearchCommands {
 
         if (itemId != null) {
             int   id   = Integer.parseInt(itemId);
-            IItem item = this.xoDB.getItemCache().get(id);
-
-            if (item != null) {
-                searchParams.put("query", item.getName());
-                searchParams.put("rarity", item.getRarity());
-                searchParams.put("category", item.getCategory());
-                searchParams.put("faction", item.getFaction());
-                searchParams.put("metaItems", item.isMeta());
-                searchParams.put("removedItems", item.isRemoved());
-            }
+            IItem item = this.xoDB.items().findById(id).complete();
+            return new SimpleSlashResponse(new EntityDisplay(context, this.configuration, jda, item));
         }
 
-        if (searchParams.isEmpty()) {
-            Optional.ofNullable(rarityNameParam).ifPresent(str -> searchParams.put("rarity", str));
-            Optional.ofNullable(categoryNameParam).ifPresent(str -> searchParams.put("category", str));
-            Optional.ofNullable(factionNameParam).ifPresent(str -> searchParams.put("faction", str));
+        Optional.ofNullable(rarityNameParam).ifPresent(str -> searchParams.put("rarity", str));
+        Optional.ofNullable(categoryNameParam).ifPresent(str -> searchParams.put("category", str));
+        Optional.ofNullable(factionNameParam).ifPresent(str -> searchParams.put("faction", str));
 
-            searchParams.put("metaItems", metaParam != null && metaParam);
-            searchParams.put("removedItems", removedParam != null && removedParam);
-        }
-
+        searchParams.put("metaItems", metaParam != null && metaParam);
+        searchParams.put("removedItems", removedParam != null && removedParam);
         searchParams.put("language", channel.getEffectiveLanguage());
 
         List<IItem> items = this.xoDB.items().findAll(searchParams).complete();

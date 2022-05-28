@@ -34,13 +34,13 @@ public class EntityDisplay extends DisplayTemplate {
         } else {
 
             String currency = context.getTranslation(TR_MARKET__CURRENCY);
-            this.addField(context.getTranslation(TR_MARKET__SELL), Utilities.money(item.getMarketSell() / 100.0, currency), true);
-            this.addField(context.getTranslation(TR_MARKET__BUY), Utilities.money(item.getMarketBuy() / 100.0, currency), true);
+            this.addField(context.getTranslation(TR_MARKET__SELL), Utilities.money(item.getMarketSell(), currency), true);
+            this.addField(context.getTranslation(TR_MARKET__BUY), Utilities.money(item.getMarketBuy(), currency), true);
             this.addBlankField(true);
 
             if (item.isCraftable()) {
-                this.addField(context.getTranslation(TR_MARKET__CRAFT_SELL), Utilities.money(item.getSellCraftPrice() / 100.0, currency), true);
-                this.addField(context.getTranslation(TR_MARKET__CRAFT_BUY), Utilities.money(item.getBuyCraftPrice() / 100.0, currency), true);
+                this.addField(context.getTranslation(TR_MARKET__CRAFT_SELL), Utilities.money(item.getSellCraftPrice(), currency), true);
+                this.addField(context.getTranslation(TR_MARKET__CRAFT_BUY), Utilities.money(item.getBuyCraftPrice(), currency), true);
                 this.addBlankField(true);
             }
 

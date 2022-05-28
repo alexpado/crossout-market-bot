@@ -85,10 +85,10 @@ public class WatcherTask {
                 IItem item   = this.xoDB.items().findById(itemId).complete();
 
                 boolean maySend = switch (watcher.getTrigger()) {
-                    case SELL_UNDER -> (item.getMarketSell() / 100.0) < watcher.getPriceReference();
-                    case SELL_OVER -> (item.getMarketSell() / 100.0) > watcher.getPriceReference();
-                    case BUY_UNDER -> (item.getMarketBuy() / 100.0) < watcher.getPriceReference();
-                    case BUY_OVER -> (item.getMarketBuy() / 100.0) > watcher.getPriceReference();
+                    case SELL_UNDER -> item.getMarketSell() < watcher.getPriceReference();
+                    case SELL_OVER -> item.getMarketSell() > watcher.getPriceReference();
+                    case BUY_UNDER -> item.getMarketBuy() < watcher.getPriceReference();
+                    case BUY_OVER -> item.getMarketBuy() > watcher.getPriceReference();
                     case EVERYTIME -> true;
                 };
 

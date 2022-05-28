@@ -1,6 +1,5 @@
 package xo.marketbot.responses;
 
-import fr.alexpado.xodb4j.XoDB;
 import fr.alexpado.xodb4j.XoDBUtils;
 import fr.alexpado.xodb4j.interfaces.IItem;
 import fr.alexpado.xodb4j.interfaces.IPack;
@@ -8,6 +7,7 @@ import net.dv8tion.jda.api.JDA;
 import xo.marketbot.configurations.interfaces.IMarketConfiguration;
 import xo.marketbot.entities.discord.Watcher;
 import xo.marketbot.services.i18n.TranslationContext;
+import xo.marketbot.tools.TimeConverter;
 import xo.marketbot.tools.Utilities;
 
 import java.util.ArrayList;
@@ -82,7 +82,7 @@ public class EntityDisplay extends DisplayTemplate {
         this.setImage(XoDBUtils.getImage(pack));
     }
 
-    public EntityDisplay(TranslationContext context, JDA jda, XoDB xoDB, Watcher watcher, IItem item) {
+    public EntityDisplay(TranslationContext context, IMarketConfiguration configuration, JDA jda, Watcher watcher, IItem item) {
 
         super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_SIMPLE), watcher.getName(), XODB_ISSUE_CHANNEL));
         this.setThumbnail(XoDBUtils.getImage(item));
@@ -95,8 +95,16 @@ public class EntityDisplay extends DisplayTemplate {
 
         String priceFormat = "%s (%s)";
 
+        this.appendDescription(String.format(
+                context.getTranslation(watcher.getTrigger().getTranslationKey()),
+                item.getName(),
+                watcher.getPriceReference(),
+                new TimeConverter(watcher.getTiming())
+        ));
+
         this.addField(context.getTranslation(TR_MARKET__SELL), String.format(priceFormat, newMarketSell, marketSellDiff), true);
         this.addField(context.getTranslation(TR_MARKET__BUY), String.format(priceFormat, newMarketBuy, marketBuyDiff), true);
+        this.setImage(Utilities.createChartUrl(configuration, item, 5));
     }
 
 }

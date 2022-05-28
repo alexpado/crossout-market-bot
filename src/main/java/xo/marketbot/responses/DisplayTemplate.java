@@ -33,7 +33,7 @@ public class DisplayTemplate extends EmbedBuilder {
     private void makeDefaults() {
 
         if (this.title != null) {
-            this.setDescription(this.title + "\n──────────────────────────────\n");
+            this.setDescription(this.title + "\n────────────────────────\n");
         }
         this.setThumbnail("https://crossoutdb.com/img/crossoutdb_logo_compact.png");
         this.setAuthor(

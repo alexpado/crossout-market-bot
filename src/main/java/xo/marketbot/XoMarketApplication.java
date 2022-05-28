@@ -11,14 +11,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import xo.marketbot.configurations.interfaces.IDiscordConfiguration;
-import xo.marketbot.entities.discord.Watcher;
 import xo.marketbot.repositories.WatcherRepository;
 import xo.marketbot.services.JdaStore;
 import xo.marketbot.services.interactions.InteractionWrapper;
-import xo.marketbot.tools.Utilities;
 
 import javax.security.auth.login.LoginException;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,14 +41,6 @@ public class XoMarketApplication extends ListenerAdapter {
             builder.addEventListeners(store);
             builder.build();
         }
-
-        List<Watcher> watchers = watcherRepository.findAll();
-
-        for (Watcher watcher : watchers) {
-            watcher.setLastExecution(Utilities.toNormalizedDateTime(LocalDateTime.now(), watcher.getTiming()));
-        }
-
-        watcherRepository.saveAll(watchers);
     }
 
     public static void main(String[] args) {

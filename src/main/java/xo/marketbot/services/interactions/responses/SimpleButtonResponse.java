@@ -39,4 +39,10 @@ public class SimpleButtonResponse implements ButtonResponse {
         return this.editOriginal;
     }
 
+    @Override
+    public boolean isEphemeral() {
+
+        return false;
+    }
+
 }

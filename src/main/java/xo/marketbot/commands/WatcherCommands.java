@@ -96,7 +96,7 @@ public class WatcherCommands {
                     ),
                     @Option(
                             name = "frequency",
-                            description = "How often the price should be checked",
+                            description = "How often the price should be checked (example value: 5ms, 5h, 2h45m)",
                             type = OptionType.STRING
                     )
             },
@@ -236,7 +236,7 @@ public class WatcherCommands {
                     ),
                     @Option(
                             name = "frequency",
-                            description = "How often the price should be checked",
+                            description = "How often the price should be checked (example value: 5ms, 5h, 2h45m)",
                             type = OptionType.STRING
                     )
             }

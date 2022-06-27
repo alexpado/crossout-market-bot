@@ -164,7 +164,7 @@ public class WatcherCommands {
                     )
             }
     )
-    public SlashResponse removeWatcher(UserEntity user, ChannelEntity channel, JDA jda, @Param("id") Long idParam) {
+    public SlashResponse removeWatcher(UserEntity user, ChannelEntity channel, JDA jda, @Param("watcher") Long idParam) {
 
         TranslationContext context = this.translationService.getContext(channel.getEffectiveLanguage());
         // Convert long to int

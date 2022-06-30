@@ -97,11 +97,16 @@ public class WatcherCommands {
                             name = "frequency",
                             description = "How often the price should be checked (example value: 5m, 5h, 2h45m)",
                             type = OptionType.STRING
-                    )
+                    ),
+                    @Option(
+                            name = "name",
+                            description = "Name of the watcher",
+                            type = OptionType.STRING
+                    ),
             },
             defer = true
     )
-    public SlashResponse createWatcher(JDA jda, UserEntity user, ChannelEntity channel, @Param("item") String itemId, @Param("trigger") String triggerName, @Param("price") String priceParam, @Param("frequency") String frequencyParam) throws Exception {
+    public SlashResponse createWatcher(JDA jda, UserEntity user, ChannelEntity channel, @Param("item") String itemId, @Param("trigger") String triggerName, @Param("price") String priceParam, @Param("frequency") String frequencyParam, @Param("name") String name) throws Exception {
 
         TranslationContext context     = this.translationService.getContext(channel.getEffectiveLanguage());
         TranslationContext userContext = this.translationService.getContext(user.getLanguage());
@@ -129,6 +134,10 @@ public class WatcherCommands {
         IItem item = this.xoDB.items().findById(id).complete();
 
         Watcher watcher = new Watcher(userContext, user, item, trigger, price, timing, true);
+
+        if (name != null) {
+            watcher.setName(name);
+        }
 
         watcher = this.watcherRepository.save(watcher);
         return new SimpleSlashResponse(new SimpleMessageEmbed(context, jda, Color.GREEN, TR_WATCHER__CREATED, watcher.getId()));

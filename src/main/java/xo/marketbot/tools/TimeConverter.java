@@ -1,5 +1,7 @@
 package xo.marketbot.tools;
 
+import xo.marketbot.exceptions.EmbedException;
+
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,21 +23,25 @@ public class TimeConverter {
 
     public static long fromString(String str) {
 
-        String  regex   = "(?<hours>\\d*h)?(?<minutes>\\d+m)?";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(str);
-        long    time    = 0L;
-        if (matcher.find()) {
-            String hour   = matcher.group("hours");
-            String minute = matcher.group("minutes");
-            if (hour != null) {
-                time += Long.parseLong(hour.replace("h", "")) * 3600000;
+        try {
+            String  regex   = "(?<hours>\\d*h)?(?<minutes>\\d+m)?";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(str);
+            long    time    = 0L;
+            if (matcher.find()) {
+                String hour   = matcher.group("hours");
+                String minute = matcher.group("minutes");
+                if (hour != null) {
+                    time += Long.parseLong(hour.replace("h", "")) * 3600000;
+                }
+                if (minute != null) {
+                    time += Long.parseLong(minute.replace("m", "")) * 60000;
+                }
             }
-            if (minute != null) {
-                time += Long.parseLong(minute.replace("m", "")) * 60000;
-            }
+            return time;
+        } catch (NumberFormatException e) {
+            throw new EmbedException("Please input a valid frequency");
         }
-        return time;
     }
 
     @Override

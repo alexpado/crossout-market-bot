@@ -7,7 +7,6 @@ import fr.alexpado.jda.interactions.annotations.Param;
 import fr.alexpado.jda.interactions.responses.SlashResponse;
 import fr.alexpado.xodb4j.XoDB;
 import fr.alexpado.xodb4j.interfaces.IItem;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import org.slf4j.Logger;
@@ -260,9 +259,7 @@ public class WatcherCommands {
         if (triggerName != null) {
             WatcherTrigger trigger = WatcherTrigger.from(triggerName);
             if (trigger.isRequiringPrice() && (price == null || watcher.getPriceReference() == null)) {
-                EmbedBuilder result = new EmbedBuilder().setColor(Color.RED)
-                        .setDescription("Please provide a price when using the provided trigger.");
-                return new SimpleSlashResponse(result);
+                return new SimpleSlashResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__INVALID_PARAM__PRICE_TRIGGER));
             }
 
             watcher.setTrigger(trigger);

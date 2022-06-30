@@ -254,7 +254,7 @@ public class WatcherCommands {
 
         if (triggerName != null) {
             WatcherTrigger trigger = WatcherTrigger.from(triggerName);
-            if (trigger.isRequiringPrice() && price == null) {
+            if (trigger.isRequiringPrice() && (price == null || watcher.getPriceReference() == null)) {
                 EmbedBuilder result = new EmbedBuilder().setColor(Color.RED)
                         .setDescription("Please provide a price when using the provided trigger.");
                 return new SimpleSlashResponse(result);

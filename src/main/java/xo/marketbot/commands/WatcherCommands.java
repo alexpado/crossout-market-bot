@@ -122,7 +122,7 @@ public class WatcherCommands {
             return new SimpleSlashResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__INVALID_PARAM__PRICE_TRIGGER));
         }
 
-        if (price != null && price < 0d) {
+        if (price != null && (price < 0 || price > Double.MAX_VALUE)) {
             return new SimpleSlashResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__INVALID_PARAM__PRICE));
         }
 
@@ -238,7 +238,8 @@ public class WatcherCommands {
                             description = "How often the price should be checked (example value: 5m, 5h, 2h45m)",
                             type = OptionType.STRING
                     )
-            }
+            },
+            defer = true
     )
     public SlashResponse changeWatcherBehavior(JDA jda, UserEntity user, ChannelEntity channel, @Param("watcher") Long watcherId, @Param("name") String name, @Param("trigger") String triggerName, @Param("price") String priceParam, @Param("frequency") String frequencyParam) {
 
@@ -251,6 +252,10 @@ public class WatcherCommands {
 
         Watcher watcher = optionalWatcher.get();
         Double  price   = Optional.ofNullable(priceParam).map(Double::parseDouble).orElse(null);
+
+        if (price != null && (price > Double.MAX_VALUE || price < 0)) {
+            return new SimpleSlashResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__INVALID_PARAM__PRICE));
+        }
 
         if (triggerName != null) {
             WatcherTrigger trigger = WatcherTrigger.from(triggerName);

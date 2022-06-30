@@ -57,7 +57,7 @@ dependencies {
 
     implementation group: 'fr.alexpado', name: 'simple-http-client', version: '1.0.2'
     implementation group: 'fr.alexpado', name: 'xodb4j', version: '1.0.0-rc.3'
-    implementation(group: 'fr.alexpado', name: 'jda-interactions-extension', version: '0.1.0-rc.5') {
+    implementation(group: 'fr.alexpado', name: 'jda-interactions-extension', version: '0.1.0-rc.6') {
         exclude(group: 'io.sentry')
     }
 

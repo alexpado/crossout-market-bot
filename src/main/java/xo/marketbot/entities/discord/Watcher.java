@@ -5,6 +5,7 @@ import fr.alexpado.xodb4j.interfaces.common.Identifiable;
 import fr.alexpado.xodb4j.interfaces.common.Marchantable;
 import fr.alexpado.xodb4j.interfaces.common.Nameable;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import org.jetbrains.annotations.NotNull;
 import xo.marketbot.entities.interfaces.crossout.IWatcher;
 import xo.marketbot.enums.WatcherTrigger;
 import xo.marketbot.services.i18n.TranslationContext;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class Watcher implements IWatcher {
+public class Watcher implements IWatcher, Comparable<Watcher> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -388,6 +389,12 @@ public class Watcher implements IWatcher {
     public boolean isLate(LocalDateTime now) {
 
         return now.isAfter(this.getNextExecution().plusSeconds(1));
+    }
+
+    @Override
+    public int compareTo(@NotNull Watcher other) {
+
+        return this.id.compareTo(other.getId());
     }
 
 }

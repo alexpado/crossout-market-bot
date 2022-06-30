@@ -199,7 +199,6 @@ public class WatcherCommands {
                     @Option(
                             name = "name",
                             description = "Name of the watcher",
-                            required = true,
                             type = OptionType.STRING
                     ),
                     @Option(

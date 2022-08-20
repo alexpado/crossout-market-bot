@@ -1,18 +1,32 @@
+import java.nio.charset.StandardCharsets
+
 plugins {
-    id 'org.springframework.boot' version '2.5.3'
+    id 'org.springframework.boot' version '2.7.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
-    id 'com.github.ben-manes.versions' version '0.39.0'
+    id 'com.github.ben-manes.versions' version '0.42.0'
+    id 'org.ajoberstar.reckon' version '0.16.1'
 }
 
+def generalCharset = StandardCharsets.UTF_8.name()
+
 group = 'fr.alexpado.bots'
-version = '3.0.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+compileJava.options.encoding = generalCharset
+compileTestJava.options.encoding = generalCharset
+javadoc.options.encoding = generalCharset
+
+reckon {
+    stages('dev', 'beta', 'rc', 'final')
+
+    scopeCalc = calcScopeFromProp() | calcScopeFromCommitMessages()
+    stageCalc = calcStageFromProp()
+}
 
 configurations {
-    developmentOnly
-    runtimeClasspath {
-        extendsFrom developmentOnly
-    }
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -20,33 +34,34 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven {
-        name 'm2-dv8tion'
-        url 'https://m2.dv8tion.net/releases'
-    }
+    mavenLocal()
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-    implementation group: 'org.json', name: 'json', version: '20210307'
-    implementation 'net.dv8tion:JDA:4.3.0_298'
-    // https://mvnrepository._m/artifact/org.mariadb.jdbc/mariadb-java-client
-    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.7.3'
-    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.26'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '7.15.0'
 
+    implementation group: 'org.json', name: 'json', version: '20220320'
+    implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.12'
     implementation group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
 
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.0.4'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.29'
+
+    implementation group: 'fr.alexpado', name: 'simple-http-client', version: '1.0.2'
+    implementation group: 'fr.alexpado', name: 'xodb4j', version: '1.0.0-rc.3'
+    implementation(group: 'fr.alexpado', name: 'jda-interactions-extension', version: '0.1.0-rc.6') {
+        exclude(group: 'io.sentry')
+    }
+
+    implementation group: 'io.sentry', name: 'sentry-spring-boot-starter', version: '5.7.4'
 }
 
 task copyConfigurationMetadata(type: Copy) {
@@ -55,6 +70,7 @@ task copyConfigurationMetadata(type: Copy) {
     }
     into "out/production/classes"
 }
+
 compileJava {
     dependsOn processResources
     finalizedBy copyConfigurationMetadata
@@ -64,26 +80,13 @@ test {
     useJUnitPlatform()
 }
 
-tasks.withType(org.gradle.jvm.tasks.Jar) {
-
-    if (project.hasProperty('destinationPath')) {
-        destinationDirectory = file(project.property('destinationPath'))
-    }
-
-    if (project.hasProperty('destinationName')) {
-        archiveFileName = project.property('destinationName') + '.jar'
-    }
-
-}
-
-def isNonStable = { String version ->
+static def isNonStable(String version) {
     def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
     def regex = /^[0-9,.v-]+(-r)?$/
     return !stableKeyword && !(version ==~ regex)
 }
 
 tasks.named("dependencyUpdates").configure {
-    // Example 2: disallow release candidates as upgradable versions from stable versions
     rejectVersionIf {
         isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
     }

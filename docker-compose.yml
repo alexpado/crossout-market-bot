@@ -1,0 +1,42 @@
+version: '3'
+services:
+  xomarket.service:
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: akionakao/xo-market-bot
+    ports:
+      - '80:${APP_PORT:-8080}'
+    networks:
+      - xomarket
+    links:
+      - "xomarket.mariadb:mariadb"
+    depends_on:
+      - xomarket.mariadb
+  xomarket.mariadb:
+    image: 'mariadb:10.8'
+    ports:
+      - '3306:${DB_PORT}'
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USERNAME}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+    volumes:
+      - 'xomarket:/var/lib/mysql'
+    networks:
+      - xomarket
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}" ]
+      retries: 3
+      timeout: 5s
+
+networks:
+  xomarket:
+    driver: bridge
+volumes:
+  xomarket:
+    driver: local

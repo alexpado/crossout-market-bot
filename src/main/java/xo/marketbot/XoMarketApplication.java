@@ -11,7 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import xo.marketbot.configurations.interfaces.IDiscordConfiguration;
-import xo.marketbot.repositories.WatcherRepository;
+import xo.marketbot.services.EntityUpdater;
 import xo.marketbot.services.JdaStore;
 import xo.marketbot.services.interactions.InteractionWrapper;
 
@@ -30,7 +30,7 @@ public class XoMarketApplication extends ListenerAdapter {
     private static       List<String>       APP_ARGS;
     private final        InteractionWrapper wrapper;
 
-    public XoMarketApplication(IDiscordConfiguration configuration, JdaStore store, WatcherRepository watcherRepository, InteractionWrapper wrapper) throws LoginException {
+    public XoMarketApplication(IDiscordConfiguration configuration, JdaStore store, InteractionWrapper wrapper, EntityUpdater entityUpdater) throws LoginException {
 
         this.wrapper = wrapper;
 
@@ -38,6 +38,7 @@ public class XoMarketApplication extends ListenerAdapter {
             JDABuilder builder = JDABuilder.createLight(configuration.getToken());
 
             builder.addEventListeners(this);
+            builder.addEventListeners(entityUpdater);
             builder.addEventListeners(store);
             builder.build();
         }

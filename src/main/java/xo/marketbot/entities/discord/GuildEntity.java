@@ -1,5 +1,6 @@
 package xo.marketbot.entities.discord;
 
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +26,7 @@ public class GuildEntity {
     private String   icon;
     @ManyToOne
     private Language language;
+    private boolean  active = false;
 
     /**
      * Create a new {@link GuildEntity} with no data. This should not be used, and is present only for the sake of
@@ -46,6 +48,7 @@ public class GuildEntity {
         this.name     = guild.getName();
         this.icon     = guild.getIconUrl();
         this.language = language;
+        this.active   = true;
     }
 
     /**
@@ -120,6 +123,28 @@ public class GuildEntity {
     public void setLanguage(@Nullable Language language) {
 
         this.language = language;
+    }
+
+    /**
+     * Check if this {@link GuildEntity} is active. An active {@link GuildEntity} means that the associated
+     * {@link Guild} is still accessible through any {@link JDA} instance.
+     *
+     * @return True if active, false otherwise.
+     */
+    public boolean isActive() {
+
+        return active;
+    }
+
+    /**
+     * Define if this {@link GuildEntity} is active.
+     *
+     * @param active
+     *         True if active, false otherwise.
+     */
+    public void setActive(boolean active) {
+
+        this.active = active;
     }
 
     @Override

@@ -51,7 +51,7 @@ public class EntitySynchronization {
             guild = optionalGuild.get();
             guild.setName(interaction.getGuild().getName());
             guild.setIcon(interaction.getGuild().getIconUrl());
-
+            guild.setActive(true);
         } else {
             guild = new GuildEntity(interaction.getGuild(), this.getDefaultLanguage());
         }
@@ -66,7 +66,7 @@ public class EntitySynchronization {
 
         Optional<ChannelEntity> optionalChannel = this.channelRepository.findById(interaction.getGuildChannel()
                 .getIdLong());
-        ChannelEntity           channel;
+        ChannelEntity channel;
 
         if (optionalChannel.isPresent()) {
             channel = optionalChannel.get();

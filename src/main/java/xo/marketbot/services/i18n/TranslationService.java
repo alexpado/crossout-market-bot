@@ -31,6 +31,7 @@ public class TranslationService {
     public static final String TR_WATCHER__INVALID_PARAM__FREQUENCY     = "watcher.params.frequency";
     public static final String TR_WATCHER__INVALID_PARAM__PRICE         = "watcher.params.price";
     public static final String TR_WATCHER__INVALID_PARAM__PRICE_TRIGGER = "watcher.params.priceTrigger";
+    public static final String TR_WATCHER__INVALID_PARAM__NAME          = "watcher.params.name";
     public static final String TR_WATCHER__ITEM__TOO_MANY               = "watcher.item.tooMany";
     public static final String TR_WATCHER__ITEM__NONE                   = "watcher.item.none";
     public static final String TR_WATCHER__LIST_EMPTY                   = "watcher.empty";

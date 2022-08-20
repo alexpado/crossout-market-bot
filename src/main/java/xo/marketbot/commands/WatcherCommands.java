@@ -136,6 +136,11 @@ public class WatcherCommands {
         Watcher watcher = new Watcher(userContext, user, item, trigger, price, timing, true);
 
         if (name != null) {
+
+            if (name.length() > 255) {
+                return new SimpleSlashResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__INVALID_PARAM__NAME));
+            }
+
             watcher.setName(name);
         }
 
@@ -288,6 +293,9 @@ public class WatcherCommands {
         }
 
         if (name != null && !name.isEmpty()) {
+            if (name.length() > 255) {
+                return new SimpleSlashResponse(new SimpleMessageEmbed(context, jda, Color.RED, TR_WATCHER__INVALID_PARAM__NAME));
+            }
             watcher.setName(name);
         }
 

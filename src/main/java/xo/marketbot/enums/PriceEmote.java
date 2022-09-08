@@ -1,8 +1,8 @@
 package xo.marketbot.enums;
 
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import xo.marketbot.XoMarketApplication;
 
 public enum PriceEmote {
@@ -38,13 +38,13 @@ public enum PriceEmote {
 
     public String getEmote(JDA jda) {
 
-        Emote globalEmoteById = jda.getEmoteById(this.id);
-        if (globalEmoteById != null) {return globalEmoteById.getAsMention();}
+        Emoji globalEmoteById = jda.getEmojiById(this.id);
+        if (globalEmoteById != null) {return globalEmoteById.getFormatted();}
         Guild guild = jda.getGuildById(XoMarketApplication.BOT_OFFICIAL_SERVER_ID);
         if (guild != null) {
-            Emote guildEmoteById = guild.getEmoteById(this.id);
-            if (guildEmoteById != null) {return guildEmoteById.getAsMention();}
-            return guild.retrieveEmoteById(this.id).complete().getAsMention();
+            Emoji guildEmoteById = guild.getEmojiById(this.id);
+            if (guildEmoteById != null) {return guildEmoteById.getFormatted();}
+            return guild.retrieveEmojiById(this.id).complete().getAsMention();
         }
         return "";
     }

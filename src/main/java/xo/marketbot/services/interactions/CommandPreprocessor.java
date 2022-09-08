@@ -4,6 +4,7 @@ import fr.alexpado.jda.interactions.entities.DispatchEvent;
 import fr.alexpado.jda.interactions.interfaces.interactions.InteractionPreprocessor;
 import net.dv8tion.jda.api.entities.Channel;
 import net.dv8tion.jda.api.interactions.Interaction;
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import xo.marketbot.entities.discord.ChannelEntity;
@@ -59,7 +60,7 @@ public class CommandPreprocessor implements InteractionPreprocessor {
         URI    interaction = dispatchEvent.getPath();
         String action      = "%s%s".formatted(interaction.getHost(), interaction.getPath());
 
-        if (INTERACTION_XODB_RELATED.contains(action)) {
+        if (!this.task.isXoDbAvailable() && INTERACTION_XODB_RELATED.contains(action) && dispatchEvent.getInteraction() instanceof SlashCommandInteraction) {
             return Optional.of(
                     new SimpleSlashResponse(
                             new SimpleMessageEmbed(

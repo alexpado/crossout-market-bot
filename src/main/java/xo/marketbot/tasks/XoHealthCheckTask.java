@@ -6,6 +6,8 @@ import io.sentry.Sentry;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import xo.marketbot.services.JdaStore;
@@ -15,6 +17,8 @@ import java.util.Optional;
 
 @Service
 public class XoHealthCheckTask {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(XoHealthCheckTask.class);
 
     private final XoDB     xoDB;
     private final JdaStore store;
@@ -26,7 +30,7 @@ public class XoHealthCheckTask {
         this.store = store;
     }
 
-    @Scheduled(cron = "0 0/5 * * * *") // Every 5 minutes
+    @Scheduled(cron = "0/10 * * * * *") // Every 10 seconds
     public void doTask() {
 
         IRestAction<Void> health        = this.xoDB.health();
@@ -46,6 +50,7 @@ public class XoHealthCheckTask {
 
         Optional<JDA> optionalJDA = this.store.getJda();
         if (statusChanged && optionalJDA.isPresent()) {
+            LOGGER.info("XODB STATUS CHANGED: XoDB is now {}", this.xoDbAvailable ? "available" : "unavailable");
             JDA jda = optionalJDA.get();
 
             if (this.xoDbAvailable) {

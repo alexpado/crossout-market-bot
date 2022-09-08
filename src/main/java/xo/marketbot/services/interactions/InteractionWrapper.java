@@ -45,12 +45,13 @@ public class InteractionWrapper {
     private final InteractionExtension extension;
     private final WatcherRepository    watcherRepository;
 
-    public InteractionWrapper(ListableBeanFactory beanFactory, EntitySynchronization entitySynchronization, XoDB xoDB, WatcherRepository watcherRepository) throws Exception {
+    public InteractionWrapper(ListableBeanFactory beanFactory, EntitySynchronization entitySynchronization, XoDB xoDB, WatcherRepository watcherRepository, CommandPreprocessor preprocessor) throws Exception {
 
         this.beanFactory       = beanFactory;
         this.xoDB              = xoDB;
         this.watcherRepository = watcherRepository;
         this.extension         = new InteractionExtension();
+        this.extension.registerPreprocessor(preprocessor);
 
         this.xoDB.buildCaches(true);
 
@@ -62,32 +63,32 @@ public class InteractionWrapper {
         this.extension.useDefaultMapping();
 
         this.extension.getSlashContainer()
-                .addClassMapping(GuildEntity.class, (ev) -> () -> entitySynchronization.mapGuild(ev.getInteraction()));
+                      .addClassMapping(GuildEntity.class, (ev) -> () -> entitySynchronization.mapGuild(ev.getInteraction()));
         this.extension.getSlashContainer()
-                .addClassMapping(ChannelEntity.class, (ev) -> () -> entitySynchronization.mapChannel(ev.getInteraction()));
+                      .addClassMapping(ChannelEntity.class, (ev) -> () -> entitySynchronization.mapChannel(ev.getInteraction()));
         this.extension.getSlashContainer()
-                .addClassMapping(UserEntity.class, (ev) -> () -> entitySynchronization.mapUser(ev.getInteraction()));
+                      .addClassMapping(UserEntity.class, (ev) -> () -> entitySynchronization.mapUser(ev.getInteraction()));
 
         this.extension.getButtonContainer()
-                .addClassMapping(GuildEntity.class, (ev) -> () -> entitySynchronization.mapGuild(ev.getInteraction()));
+                      .addClassMapping(GuildEntity.class, (ev) -> () -> entitySynchronization.mapGuild(ev.getInteraction()));
         this.extension.getButtonContainer()
-                .addClassMapping(ChannelEntity.class, (ev) -> () -> entitySynchronization.mapChannel(ev.getInteraction()));
+                      .addClassMapping(ChannelEntity.class, (ev) -> () -> entitySynchronization.mapChannel(ev.getInteraction()));
         this.extension.getButtonContainer()
-                .addClassMapping(UserEntity.class, (ev) -> () -> entitySynchronization.mapUser(ev.getInteraction()));
+                      .addClassMapping(UserEntity.class, (ev) -> () -> entitySynchronization.mapUser(ev.getInteraction()));
 
         this.extension.getAutocompleteContainer()
-                .addClassMapping(GuildEntity.class, (ev) -> () -> entitySynchronization.mapGuild(ev.getInteraction()));
+                      .addClassMapping(GuildEntity.class, (ev) -> () -> entitySynchronization.mapGuild(ev.getInteraction()));
         this.extension.getAutocompleteContainer()
-                .addClassMapping(ChannelEntity.class, (ev) -> () -> entitySynchronization.mapChannel(ev.getInteraction()));
+                      .addClassMapping(ChannelEntity.class, (ev) -> () -> entitySynchronization.mapChannel(ev.getInteraction()));
         this.extension.getAutocompleteContainer()
-                .addClassMapping(UserEntity.class, (ev) -> () -> entitySynchronization.mapUser(ev.getInteraction()));
+                      .addClassMapping(UserEntity.class, (ev) -> () -> entitySynchronization.mapUser(ev.getInteraction()));
     }
 
     private void hook(JDA jda, Supplier<CommandListUpdateAction> action) {
 
         this.beanFactory.getBeansWithAnnotation(InteractionBean.class)
-                .values()
-                .forEach(this::register);
+                        .values()
+                        .forEach(this::register);
 
         jda.addEventListener(this.extension);
         this.extension.useDefaultMapping();
@@ -159,7 +160,7 @@ public class InteractionWrapper {
 
         for (OptionMapping option : interaction.getOptions()) {
             String searchValue = option.getName().equals(name) ? value.toLowerCase() : option.getAsString()
-                    .toLowerCase();
+                                                                                             .toLowerCase();
 
             switch (option.getName().toLowerCase()) {
                 case "category" -> stream = stream
@@ -179,8 +180,8 @@ public class InteractionWrapper {
         List<IItem> elements = stream.toList();
         Set<String> names    = new HashSet<>();
         List<String> dupeNames = elements.stream()
-                .map(Nameable::getName)
-                .filter(str -> !names.add(str)).toList();
+                                         .map(Nameable::getName)
+                                         .filter(str -> !names.add(str)).toList();
 
         stream = elements.stream();
 
@@ -222,18 +223,18 @@ public class InteractionWrapper {
     public List<Command.Choice> completePackSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String value) {
 
         return this.xoDB.getPackCache().values().stream()
-                .filter(pack -> pack.getName().toLowerCase().contains(value.toLowerCase()))
-                .map(pack -> new Command.Choice(pack.getName(), pack.getName()))
-                .collect(Collectors.toList());
+                        .filter(pack -> pack.getName().toLowerCase().contains(value.toLowerCase()))
+                        .map(pack -> new Command.Choice(pack.getName(), pack.getName()))
+                        .collect(Collectors.toList());
     }
 
     public List<Command.Choice> completeWatcherSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String value) {
 
         return this.watcherRepository.findAllByOwnerId(event.getInteraction().getUser().getIdLong())
-                .stream()
-                .filter(watcher -> watcher.getName().toLowerCase().contains(value.toLowerCase()))
-                .map(watcher -> new Command.Choice(watcher.getName(), watcher.getId()))
-                .collect(Collectors.toList());
+                                     .stream()
+                                     .filter(watcher -> watcher.getName().toLowerCase().contains(value.toLowerCase()))
+                                     .map(watcher -> new Command.Choice(watcher.getName(), watcher.getId()))
+                                     .collect(Collectors.toList());
     }
 
 }

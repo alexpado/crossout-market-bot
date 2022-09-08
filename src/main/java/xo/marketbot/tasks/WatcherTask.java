@@ -30,14 +30,16 @@ public class WatcherTask {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(WatcherTask.class);
 
+    private final XoHealthCheckTask    healthCheckTask;
     private final TranslationService   translationService;
     private final IMarketConfiguration configuration;
     private final JdaStore             store;
     private final WatcherRepository    watcherRepository;
     private final XoDB                 xoDB;
 
-    public WatcherTask(TranslationService translationService, IMarketConfiguration configuration, JdaStore store, WatcherRepository watcherRepository, XoDB xoDB) {
+    public WatcherTask(XoHealthCheckTask healthCheckTask, TranslationService translationService, IMarketConfiguration configuration, JdaStore store, WatcherRepository watcherRepository, XoDB xoDB) {
 
+        this.healthCheckTask    = healthCheckTask;
         this.translationService = translationService;
         this.configuration      = configuration;
         this.store              = store;
@@ -50,7 +52,7 @@ public class WatcherTask {
 
         Optional<JDA> jda = this.store.getJda();
 
-        if (jda.isEmpty()) {
+        if (jda.isEmpty() || !this.healthCheckTask.isXoDbAvailable()) {
             return;
         }
 
@@ -126,6 +128,5 @@ public class WatcherTask {
             }
         }
     }
-
 
 }

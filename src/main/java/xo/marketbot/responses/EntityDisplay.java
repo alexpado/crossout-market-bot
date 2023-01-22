@@ -3,6 +3,7 @@ package xo.marketbot.responses;
 import fr.alexpado.xodb4j.XoDBUtils;
 import fr.alexpado.xodb4j.interfaces.IItem;
 import fr.alexpado.xodb4j.interfaces.IPack;
+import fr.alexpado.xodb4j.interfaces.IRarity;
 import net.dv8tion.jda.api.JDA;
 import xo.marketbot.configurations.interfaces.IMarketConfiguration;
 import xo.marketbot.entities.discord.Watcher;
@@ -13,6 +14,7 @@ import xo.marketbot.tools.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static xo.marketbot.services.i18n.TranslationService.*;
 
@@ -47,7 +49,8 @@ public class EntityDisplay extends DisplayTemplate {
             this.setImage(Utilities.createChartUrl(configuration, item, 5));
         }
 
-        this.setColor(item.getRarity().getColor());
+        IRarity rarity = Optional.ofNullable(item.getRarity()).orElse(IRarity.DEFAULT);
+        this.setColor(rarity.getColor());
     }
 
     public EntityDisplay(TranslationContext context, JDA jda, IPack pack) {

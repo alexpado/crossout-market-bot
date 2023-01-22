@@ -5,14 +5,14 @@ import fr.alexpado.jda.interactions.impl.interactions.button.ButtonInteractionCo
 import fr.alexpado.jda.interactions.interfaces.interactions.InteractionResponseHandler;
 import fr.alexpado.jda.interactions.interfaces.interactions.InteractionTarget;
 import fr.alexpado.jda.interactions.interfaces.interactions.button.ButtonInteractionTarget;
-import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
+import fr.alexpado.jda.interactions.responses.SlashResponse;
 import net.dv8tion.jda.api.interactions.Interaction;
-import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonInteraction;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import net.dv8tion.jda.api.utils.messages.MessageEditBuilder;
 import org.jetbrains.annotations.Nullable;
+import xo.marketbot.responses.EntitiesDisplay;
 import xo.marketbot.services.interactions.responses.SimpleSlashResponse;
 
 import java.net.URI;
@@ -91,33 +91,45 @@ public class PaginationHandler extends ButtonInteractionContainerImpl {
 
         if (response instanceof PaginationTarget target) {
             this.paginationTargetMap.put(String.valueOf(target.getId()), target);
+            EntitiesDisplay<?> display = target.getDisplay();
+            display.setTransactionId(target.getId());
 
-            event.getTimedAction().action("build", "Building the response");
-            MessageEmbed embed      = target.getDisplay().render().build();
-            ActionRow[]  actionRows = target.getDisplay().getActionRows(String.valueOf(target.getId()));
-            Message      message    = new MessageBuilder().setEmbeds(embed).setActionRows(actionRows).build();
-            event.getTimedAction().endAction();
+            if (event.getInteraction() instanceof IReplyCallback callback) {
+                if (callback.isAcknowledged()) {
+                    event.getTimedAction().action("build", "Building the response");
+                    MessageEditBuilder builder = this.getMessageEditBuilder(display);
+                    event.getTimedAction().endAction();
 
-            event.getTimedAction().action("replying", "Sending the reply");
-            if (event.getInteraction() instanceof ButtonInteraction button) {
-                if (button.isAcknowledged()) {
-                    button.getHook().editOriginal(message).complete();
+                    event.getTimedAction().action("reply", "Replying to the interaction (EDIT)");
+                    callback.getHook().editOriginal(builder.build()).complete();
+                    event.getTimedAction().endAction();
                 } else {
-                    button.editMessage(message).complete();
+                    event.getTimedAction().action("build", "Building the response");
+                    MessageCreateBuilder builder = this.getMessageCreateBuilder(display);
+                    event.getTimedAction().endAction();
+
+                    event.getTimedAction().action("reply", "Replying to the interaction (CREATE)");
+                    callback.reply(builder.build()).setEphemeral(display.isEphemeral()).complete();
+                    event.getTimedAction().endAction();
                 }
-                return;
-            } else if (event.getInteraction() instanceof SlashCommandInteraction slash) {
-                if (slash.isAcknowledged()) {
-                    slash.getHook().editOriginal(message).complete();
-                } else {
-                    slash.reply(message).complete();
-                }
-                return;
             }
-            event.getTimedAction().endAction();
         }
 
         super.handleResponse(event, response);
+    }
+
+    private MessageEditBuilder getMessageEditBuilder(SlashResponse response) {
+
+        MessageEditBuilder builder = new MessageEditBuilder();
+        response.getHandler().accept(builder);
+        return builder;
+    }
+
+    private MessageCreateBuilder getMessageCreateBuilder(SlashResponse response) {
+
+        MessageCreateBuilder builder = new MessageCreateBuilder();
+        response.getHandler().accept(builder);
+        return builder;
     }
 
 }

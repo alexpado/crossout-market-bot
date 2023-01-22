@@ -1,10 +1,10 @@
 package xo.marketbot.entities.discord;
 
-import net.dv8tion.jda.api.entities.Channel;
-import net.dv8tion.jda.api.entities.GuildChannel;
+import jakarta.persistence.*;
+import net.dv8tion.jda.api.entities.channel.Channel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import org.jetbrains.annotations.Nullable;
 
-import javax.persistence.*;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -27,7 +27,8 @@ public class ChannelEntity {
     private Language    language;
 
     /**
-     * Create a new {@link ChannelEntity} with no data. This should not be used, and is present only for the sake of hibernate.
+     * Create a new {@link ChannelEntity} with no data. This should not be used, and is present only for the sake of
+     * hibernate.
      */
     public ChannelEntity() {}
 
@@ -136,4 +137,5 @@ public class ChannelEntity {
 
         return Objects.hash(this.getId());
     }
+
 }

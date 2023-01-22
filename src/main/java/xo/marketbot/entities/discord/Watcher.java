@@ -4,6 +4,7 @@ import fr.alexpado.xodb4j.interfaces.IItem;
 import fr.alexpado.xodb4j.interfaces.common.Identifiable;
 import fr.alexpado.xodb4j.interfaces.common.Marchantable;
 import fr.alexpado.xodb4j.interfaces.common.Nameable;
+import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.jetbrains.annotations.NotNull;
 import xo.marketbot.entities.interfaces.crossout.IWatcher;
@@ -12,7 +13,6 @@ import xo.marketbot.services.i18n.TranslationContext;
 import xo.marketbot.tools.TimeConverter;
 import xo.marketbot.tools.Utilities;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -63,7 +63,7 @@ public class Watcher implements IWatcher, Comparable<Watcher> {
 
         this.name = switch (this.getTrigger()) {
             case SELL_UNDER, SELL_OVER, BUY_OVER, BUY_UNDER -> String.format(context.getTranslation(this.getTrigger()
-                    .getTranslationKey()), item.getName(), this.priceReference, new TimeConverter(this.timing));
+                                                                                                        .getTranslationKey()), item.getName(), this.priceReference, new TimeConverter(this.timing));
             case EVERYTIME -> String.format("%s every %s", item.getName(), new TimeConverter(this.timing));
         };
     }

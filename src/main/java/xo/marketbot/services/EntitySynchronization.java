@@ -1,6 +1,6 @@
 package xo.marketbot.services;
 
-import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.interactions.Interaction;
 import org.springframework.stereotype.Service;
 import xo.marketbot.entities.discord.ChannelEntity;
@@ -34,7 +34,7 @@ public class EntitySynchronization {
     private Language getDefaultLanguage() {
 
         return this.languageRepository.findById("en")
-                .orElseThrow(() -> new NoSuchElementException("Unable to load default language."));
+                                      .orElseThrow(() -> new NoSuchElementException("Unable to load default language."));
     }
 
     public GuildEntity mapGuild(Interaction interaction) {
@@ -65,7 +65,7 @@ public class EntitySynchronization {
         }
 
         Optional<ChannelEntity> optionalChannel = this.channelRepository.findById(interaction.getGuildChannel()
-                .getIdLong());
+                                                                                             .getIdLong());
         ChannelEntity channel;
 
         if (optionalChannel.isPresent()) {

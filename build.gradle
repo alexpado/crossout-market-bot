@@ -46,7 +46,8 @@ dependencies {
     }
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '7.15.0'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.12.0'
+    implementation group: 'org.flywaydb', name: 'flyway-mysql', version: '9.12.0'
 
     implementation group: 'org.json', name: 'json', version: '20220924'
     implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-beta.3'

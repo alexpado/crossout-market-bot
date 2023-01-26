@@ -2,7 +2,7 @@ package xo.marketbot.entities.interfaces.crossout;
 
 import fr.alexpado.xodb4j.interfaces.IItem;
 import fr.alexpado.xodb4j.interfaces.common.Identifiable;
-import fr.alexpado.xodb4j.interfaces.common.Marchantable;
+import fr.alexpado.xodb4j.interfaces.common.Merchantable;
 import fr.alexpado.xodb4j.interfaces.common.Nameable;
 import xo.marketbot.entities.discord.UserEntity;
 import xo.marketbot.entities.interfaces.common.Fieldable;
@@ -10,7 +10,7 @@ import xo.marketbot.enums.WatcherTrigger;
 
 import java.time.LocalDateTime;
 
-public interface IWatcher extends Identifiable<Integer>, Nameable, Marchantable, Fieldable {
+public interface IWatcher extends Identifiable<Integer>, Nameable, Merchantable, Fieldable {
 
     /**
      * Retrieve this {@link IWatcher} trigger.

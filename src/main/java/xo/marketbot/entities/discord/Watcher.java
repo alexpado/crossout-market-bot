@@ -2,7 +2,7 @@ package xo.marketbot.entities.discord;
 
 import fr.alexpado.xodb4j.interfaces.IItem;
 import fr.alexpado.xodb4j.interfaces.common.Identifiable;
-import fr.alexpado.xodb4j.interfaces.common.Marchantable;
+import fr.alexpado.xodb4j.interfaces.common.Merchantable;
 import fr.alexpado.xodb4j.interfaces.common.Nameable;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -29,6 +29,8 @@ public class Watcher implements IWatcher, Comparable<Watcher> {
     private Double         priceReference;
     private Double         marketSell;
     private Double         marketBuy;
+    private Integer        buyOrders;
+    private Integer        sellOffers;
     @ManyToOne
     private UserEntity     owner;
     private boolean        regular;
@@ -47,6 +49,8 @@ public class Watcher implements IWatcher, Comparable<Watcher> {
         this.priceReference = priceReference;
         this.marketSell     = item.getMarketSell();
         this.marketBuy      = item.getMarketBuy();
+        this.sellOffers     = item.getSellOffers();
+        this.buyOrders      = item.getBuyOrders();
         this.owner          = user;
         this.regular        = regular;
         this.timing         = timing;
@@ -80,7 +84,7 @@ public class Watcher implements IWatcher, Comparable<Watcher> {
     }
 
     /**
-     * Retrieve the amount of money needed to buy this {@link Marchantable}.
+     * Retrieve the amount of money needed to buy this {@link Merchantable}.
      *
      * @return The buy price
      */
@@ -91,7 +95,7 @@ public class Watcher implements IWatcher, Comparable<Watcher> {
     }
 
     /**
-     * Define the amount of money needed to buy this {@link Marchantable}.
+     * Define the amount of money needed to buy this {@link Merchantable}.
      *
      * @param price
      *         The buy price.
@@ -103,7 +107,7 @@ public class Watcher implements IWatcher, Comparable<Watcher> {
     }
 
     /**
-     * Retrieve the amount of money obtainable by selling this {@link Marchantable}.
+     * Retrieve the amount of money obtainable by selling this {@link Merchantable}.
      *
      * @return The sell price
      */
@@ -114,7 +118,7 @@ public class Watcher implements IWatcher, Comparable<Watcher> {
     }
 
     /**
-     * Define the amount of money obtainable by selling this {@link Marchantable}
+     * Define the amount of money obtainable by selling this {@link Merchantable}
      *
      * @param price
      *         The sell price
@@ -123,6 +127,52 @@ public class Watcher implements IWatcher, Comparable<Watcher> {
     public void setMarketBuy(double price) {
 
         this.marketBuy = price;
+    }
+
+    /**
+     * Retrieve the amount of sell offers available for this {@link Merchantable}.
+     *
+     * @return The sell offers amount.
+     */
+    @Override
+    public int getSellOffers() {
+
+        return this.sellOffers;
+    }
+
+    /**
+     * Define the amount of sell offers available for this {@link Merchantable}.
+     *
+     * @param sellOffers
+     *         The sell offers amount.
+     */
+    @Override
+    public void setSellOffers(int sellOffers) {
+
+        this.sellOffers = sellOffers;
+    }
+
+    /**
+     * Retrieve the amount of buy orders available for this {@link Merchantable}.
+     *
+     * @return The buy orders amount.
+     */
+    @Override
+    public int getBuyOrders() {
+
+        return this.buyOrders;
+    }
+
+    /**
+     * Define the amount of buy orders available for this {@link Merchantable}.
+     *
+     * @param buyOrders
+     *         The buy orders amount.
+     */
+    @Override
+    public void setBuyOrders(int buyOrders) {
+
+        this.buyOrders = buyOrders;
     }
 
     /**
@@ -343,15 +393,17 @@ public class Watcher implements IWatcher, Comparable<Watcher> {
     }
 
     /**
-     * Merge data from the provided {@link Marchantable} into this {@link Watcher}.
+     * Merge data from the provided {@link Merchantable} into this {@link Watcher}.
      *
      * @param marchantable
-     *         The {@link Marchantable}.
+     *         The {@link Merchantable}.
      */
-    public void refresh(Marchantable marchantable) {
+    public void refresh(Merchantable marchantable) {
 
         this.setMarketSell(marchantable.getMarketSell());
         this.setMarketBuy(marchantable.getMarketBuy());
+        this.setBuyOrders(marchantable.getBuyOrders());
+        this.setSellOffers(marchantable.getSellOffers());
     }
 
     @Override

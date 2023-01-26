@@ -35,9 +35,10 @@ public class EntityDisplay extends DisplayTemplate {
             this.appendDescription(context.getTranslation(TR_ITEM__REMOVED));
         } else {
 
-            String currency = context.getTranslation(TR_MARKET__CURRENCY);
-            this.addField(context.getTranslation(TR_MARKET__SELL), Utilities.money(item.getMarketSell(), currency), true);
-            this.addField(context.getTranslation(TR_MARKET__BUY), Utilities.money(item.getMarketBuy(), currency), true);
+            String currency    = context.getTranslation(TR_MARKET__CURRENCY);
+            String priceFormat = context.getTranslation(TR_MARKET__PRICE);
+            this.addField(context.getTranslation(TR_MARKET__SELL), priceFormat.formatted(item.getMarketSell(), currency, item.getSellOffers()), true);
+            this.addField(context.getTranslation(TR_MARKET__BUY), priceFormat.formatted(item.getMarketBuy(), currency, item.getBuyOrders()), true);
             this.addBlankField(true);
 
             if (item.isCraftable()) {
@@ -91,11 +92,15 @@ public class EntityDisplay extends DisplayTemplate {
         super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_SIMPLE), watcher.getName(), XODB_ISSUE_CHANNEL));
         this.setThumbnail(XoDBUtils.getImage(item));
 
-        String currency       = context.getTranslation(TR_MARKET__CURRENCY);
-        String newMarketSell  = Utilities.money(item.getMarketSell(), currency);
-        String newMarketBuy   = Utilities.money(item.getMarketBuy(), currency);
-        String marketSellDiff = Utilities.money((item.getMarketSell() - watcher.getMarketSell()), currency);
-        String marketBuyDiff  = Utilities.money((item.getMarketBuy() - watcher.getMarketBuy()), currency);
+        String currency        = context.getTranslation(TR_MARKET__CURRENCY);
+        String newMarketSell   = Utilities.money(item.getMarketSell(), currency);
+        String newMarketBuy    = Utilities.money(item.getMarketBuy(), currency);
+        String newMarketOffers = String.valueOf(item.getSellOffers());
+        String newMarketOrders = String.valueOf(item.getBuyOrders());
+        String marketSellDiff  = Utilities.money((item.getMarketSell() - watcher.getMarketSell()), currency);
+        String marketBuyDiff   = Utilities.money((item.getMarketBuy() - watcher.getMarketBuy()), currency);
+        String marketOfferDiff = String.valueOf(item.getSellOffers() - watcher.getSellOffers());
+        String marketOrderDiff = String.valueOf(item.getBuyOrders() - watcher.getBuyOrders());
 
         this.appendDescription(String.format(
                 context.getTranslation(watcher.getTrigger().getTranslationKey()),
@@ -104,13 +109,20 @@ public class EntityDisplay extends DisplayTemplate {
                 new TimeConverter(watcher.getTiming())
         ));
 
-        String priceFormat = "%s (%s %s)";
+        String priceFormat = "%s\n%s %s";
 
-        String sellEmote = PriceEmote.with(item.getMarketSell(), watcher.getMarketSell(), false).getEmote(jda);
-        String buyEmote  = PriceEmote.with(item.getMarketBuy(), watcher.getMarketBuy(), true).getEmote(jda);
+        String sellEmote  = PriceEmote.with(item.getMarketSell(), watcher.getMarketSell(), false).getEmote(jda);
+        String buyEmote   = PriceEmote.with(item.getMarketBuy(), watcher.getMarketBuy(), true).getEmote(jda);
+        String offerEmote = PriceEmote.with(item.getSellOffers(), watcher.getSellOffers(), false).getEmote(jda);
+        String orderEmote = PriceEmote.with(item.getBuyOrders(), watcher.getBuyOrders(), true).getEmote(jda);
 
         this.addField(context.getTranslation(TR_MARKET__SELL), String.format(priceFormat, newMarketSell, sellEmote, marketSellDiff), true);
         this.addField(context.getTranslation(TR_MARKET__BUY), String.format(priceFormat, newMarketBuy, buyEmote, marketBuyDiff), true);
+
+        this.addBlankField(true);
+
+        this.addField(context.getTranslation(TR_MARKET__SELL_OFFERS), String.format(priceFormat, newMarketOffers, offerEmote, marketOfferDiff), true);
+        this.addField(context.getTranslation(TR_MARKET__BUY_ORDERS), String.format(priceFormat, newMarketOrders, orderEmote, marketOrderDiff), true);
 
         this.setImage(Utilities.createChartUrl(configuration, item, 5));
     }

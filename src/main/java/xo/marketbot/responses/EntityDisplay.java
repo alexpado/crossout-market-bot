@@ -102,12 +102,12 @@ public class EntityDisplay extends DisplayTemplate {
         String marketOfferDiff = String.valueOf(item.getSellOffers() - watcher.getSellOffers());
         String marketOrderDiff = String.valueOf(item.getBuyOrders() - watcher.getBuyOrders());
 
-        this.appendDescription(String.format(
-                context.getTranslation(watcher.getTrigger().getTranslationKey()),
-                item.getName(),
-                watcher.getPriceReference(),
-                new TimeConverter(watcher.getTiming())
-        ));
+        this.appendDescription(switch (watcher.getTrigger()) {
+            case SELL_UNDER, SELL_OVER, BUY_OVER, BUY_UNDER -> String.format(context.getTranslation(watcher.getTrigger()
+                                                                                                           .getTranslationKey()), item.getName(), watcher.getPriceReference(), new TimeConverter(watcher.getTiming()));
+            case EVERYTIME -> String.format(context.getTranslation(watcher.getTrigger()
+                                                                          .getTranslationKey()), item.getName(), new TimeConverter(watcher.getTiming()));
+        });
 
         String priceFormat = "%s\n%s %s";
 

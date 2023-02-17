@@ -36,8 +36,8 @@ public class Utilities {
         long normalizedMinutes = unnormalized % minutes;
 
         return other.minusMinutes(normalizedMinutes)
-                .withSecond(0)
-                .withNano(0);
+                    .withSecond(0)
+                    .withNano(0);
     }
 
     public static <V extends Nameable> List<ChoiceMeta> mapChoice(Map<Integer, V> mapping) {
@@ -48,13 +48,13 @@ public class Utilities {
     public static <V> List<ChoiceMeta> mapChoice(Map<Integer, V> mapping, Function<V, String> labelMapper) {
 
         return mapping.values().stream()
-                .map(v -> new ChoiceMeta(labelMapper.apply(v), labelMapper.apply(v))).toList();
+                      .map(v -> new ChoiceMeta(labelMapper.apply(v), labelMapper.apply(v))).toList();
 
     }
 
     public static String createInvitationLink(JDA jda) {
 
-        String url = "https://discord.com/api/oauth2/authorize?client_id=%s&permissions=3072&scope=applications.commands%%20bot";
+        String url = "https://discord.com/api/oauth2/authorize?client_id=%s&permissions=262144&scope=bot";
         return url.formatted(jda.getSelfUser().getId());
     }
 

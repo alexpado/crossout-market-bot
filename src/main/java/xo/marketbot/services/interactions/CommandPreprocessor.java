@@ -2,7 +2,7 @@ package xo.marketbot.services.interactions;
 
 import fr.alexpado.jda.interactions.entities.DispatchEvent;
 import fr.alexpado.jda.interactions.interfaces.interactions.InteractionPreprocessor;
-import net.dv8tion.jda.api.entities.Channel;
+import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.interactions.Interaction;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import org.jetbrains.annotations.NotNull;
@@ -74,6 +74,12 @@ public class CommandPreprocessor implements InteractionPreprocessor {
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public <T extends Interaction> boolean mayContinue(@NotNull DispatchEvent<T> dispatchEvent) {
+
+        return true;
     }
 
 }

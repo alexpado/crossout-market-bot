@@ -152,7 +152,7 @@ public class InteractionWrapper {
         }
     }
 
-    public List<Command.Choice> completeItemSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String value) {
+    public List<Command.Choice> completeItemSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String completionName, String value) {
 
         CommandAutoCompleteInteraction interaction = event.getInteraction();
         Collection<IItem>              items       = this.xoDB.getItemCache().values();
@@ -220,7 +220,7 @@ public class InteractionWrapper {
         };
     }
 
-    public List<Command.Choice> completePackSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String value) {
+    public List<Command.Choice> completePackSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String completionName, String value) {
 
         return this.xoDB.getPackCache().values().stream()
                         .filter(pack -> pack.getName().toLowerCase().contains(value.toLowerCase()))
@@ -228,7 +228,7 @@ public class InteractionWrapper {
                         .collect(Collectors.toList());
     }
 
-    public List<Command.Choice> completeWatcherSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String value) {
+    public List<Command.Choice> completeWatcherSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String completionName, String value) {
 
         return this.watcherRepository.findAllByOwnerId(event.getInteraction().getUser().getIdLong())
                                      .stream()

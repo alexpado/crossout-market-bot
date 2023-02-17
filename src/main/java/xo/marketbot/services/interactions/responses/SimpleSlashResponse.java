@@ -2,33 +2,33 @@ package xo.marketbot.services.interactions.responses;
 
 import fr.alexpado.jda.interactions.responses.SlashResponse;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.utils.messages.MessageRequest;
+
+import java.util.function.Consumer;
 
 public class SimpleSlashResponse implements SlashResponse {
 
-    private final MessageBuilder builder;
+    private final EmbedBuilder builder;
 
     public SimpleSlashResponse(String message) {
 
-        this(new EmbedBuilder().setDescription(message));
+        this.builder = new EmbedBuilder().setDescription(message);
     }
 
     public SimpleSlashResponse(String message, String imageUrl) {
 
-        this(new EmbedBuilder().setDescription(message).setImage(imageUrl));
+        this.builder = new EmbedBuilder().setDescription(message).setImage(imageUrl);
     }
 
     public SimpleSlashResponse(EmbedBuilder builder) {
 
-        this.builder = new MessageBuilder();
-        this.builder.setEmbeds(builder.build());
+        this.builder = builder;
     }
 
     @Override
-    public Message getMessage() {
+    public Consumer<MessageRequest<?>> getHandler() {
 
-        return this.builder.build();
+        return (amb) -> amb.setEmbeds(this.builder.build());
     }
 
     @Override

@@ -6,4 +6,6 @@ public interface IMarketConfiguration {
 
     String getChartApi();
 
+    String getReportChannelUrl();
+
 }

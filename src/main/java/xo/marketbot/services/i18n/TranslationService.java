@@ -21,9 +21,13 @@ public class TranslationService {
     public static final String TR_EMBED__FOOTER_PAGINATION              = "embed.footer.pagination";
     public static final String TR_ITEM__REMOVED                         = "item.removed";
     public static final String TR_PACK__PRICE                           = "pack.price";
+    public static final String TR_MARKET__PRICE                         = "market.price";
+    public static final String TR_MARKET__SIMPLE_PRICE                  = "market.simplePrice";
     public static final String TR_MARKET__CURRENCY                      = "market.currency";
     public static final String TR_MARKET__SELL                          = "market.sell";
     public static final String TR_MARKET__BUY                           = "market.buy";
+    public static final String TR_MARKET__SELL_OFFERS                   = "market.sellOffers";
+    public static final String TR_MARKET__BUY_ORDERS                    = "market.buyOrders";
     public static final String TR_MARKET__CRAFT_SELL                    = "market.craft.sell";
     public static final String TR_MARKET__CRAFT_BUY                     = "market.craft.buy";
     public static final String TR_SEARCH__EMPTY                         = "search.empty";

@@ -2,41 +2,34 @@ package xo.marketbot.services.interactions.responses;
 
 import fr.alexpado.jda.interactions.responses.ButtonResponse;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.utils.messages.MessageRequest;
+
+import java.util.function.Consumer;
 
 public class SimpleButtonResponse implements ButtonResponse {
 
-    private final MessageBuilder builder;
-    private final boolean        editOriginal;
+    private final EmbedBuilder builder;
 
     public SimpleButtonResponse(String message) {
 
-        this(new EmbedBuilder().setDescription(message));
+        this.builder = new EmbedBuilder().setDescription(message);
     }
 
     public SimpleButtonResponse(String message, String imageUrl) {
 
-        this(new EmbedBuilder().setDescription(message).setImage(imageUrl));
-    }
-
-    public SimpleButtonResponse(EmbedBuilder builder) {
-
-        this.builder = new MessageBuilder();
-        this.builder.setEmbeds(builder.build());
-        this.editOriginal = false;
+        this.builder = new EmbedBuilder().setDescription(message).setImage(imageUrl);
     }
 
     @Override
-    public Message getMessage() {
+    public Consumer<MessageRequest<?>> getHandler() {
 
-        return this.builder.build();
+        return (amb) -> amb.setEmbeds(this.builder.build());
     }
 
     @Override
     public boolean shouldEditOriginalMessage() {
 
-        return this.editOriginal;
+        return true;
     }
 
     @Override

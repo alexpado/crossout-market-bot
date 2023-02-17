@@ -1,13 +1,13 @@
 package xo.marketbot.entities.discord;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import net.dv8tion.jda.api.entities.User;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import java.util.Objects;
 
 /**
@@ -30,13 +30,15 @@ public class UserEntity {
     private Language language;
 
     /**
-     * Create a new {@link UserEntity} with no data. This should not be used, and is present only for the sake of hibernate.
+     * Create a new {@link UserEntity} with no data. This should not be used, and is present only for the sake of
+     * hibernate.
      */
     public UserEntity() {}
 
     /**
-     * Create a new {@link UserEntity} with Discord API JSON response. This should be used only if the {@link UserEntity} isn't present in
-     * the database, or it will override this {@link UserEntity}'s settings upon saving.
+     * Create a new {@link UserEntity} with Discord API JSON response. This should be used only if the
+     * {@link UserEntity} isn't present in the database, or it will override this {@link UserEntity}'s settings upon
+     * saving.
      *
      * @param source
      *         The {@link JSONObject} to use to initialize this instance.
@@ -203,4 +205,5 @@ public class UserEntity {
 
         return Objects.hash(this.getId());
     }
+
 }

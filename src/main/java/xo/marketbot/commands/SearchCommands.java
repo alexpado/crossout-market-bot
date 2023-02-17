@@ -25,7 +25,6 @@ import xo.marketbot.services.interactions.InteractionBean;
 import xo.marketbot.services.interactions.pagination.PaginationTarget;
 import xo.marketbot.services.interactions.responses.SimpleSlashResponse;
 import xo.marketbot.tools.SearchHelper;
-import xo.marketbot.tools.Utilities;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -33,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static xo.marketbot.services.i18n.TranslationService.TR_MARKET__SIMPLE_PRICE;
 import static xo.marketbot.services.i18n.TranslationService.TR_SEARCH__EMPTY;
 
 @InteractionBean
@@ -153,7 +153,8 @@ public class SearchCommands {
     )
     public Object searchPack(JDA jda, ChannelEntity channel, @Param("pack") String packName) throws Exception {
 
-        TranslationContext context = this.translationService.getContext(channel.getEffectiveLanguage());
+        TranslationContext context           = this.translationService.getContext(channel.getEffectiveLanguage());
+        String             simplePriceFormat = context.getTranslation(TR_MARKET__SIMPLE_PRICE);
 
         List<IPack> packs = this.xoDB.packs().findAll().complete();
 
@@ -164,14 +165,14 @@ public class SearchCommands {
         Optional<IPack> search = SearchHelper.search(packs, packName);
 
         if (search.isPresent()) {
-            return new SimpleSlashResponse(new EntityDisplay(context, jda, search.get()));
+            return new SimpleSlashResponse(new EntityDisplay(context, this.configuration, jda, search.get()));
         }
         return new PaginationTarget(new EntitiesDisplay<>(context, jda, pack -> {
 
-            String usd         = Utilities.money((pack.getPriceUSD() / 100), " USD");
-            String eur         = Utilities.money((pack.getPriceEUR() / 100), " EUR");
-            String gbp         = Utilities.money((pack.getPriceEUR() / 100), " GBP");
-            String rub         = Utilities.money((pack.getPriceRUB() / 100), " RUB");
+            String usd         = simplePriceFormat.formatted((pack.getPriceUSD() / 100), " USD");
+            String eur         = simplePriceFormat.formatted((pack.getPriceEUR() / 100), " EUR");
+            String gbp         = simplePriceFormat.formatted((pack.getPriceEUR() / 100), " GBP");
+            String rub         = simplePriceFormat.formatted((pack.getPriceRUB() / 100), " RUB");
             String description = String.format("%s • %s • %s • %s", usd, eur, gbp, rub);
 
             return new MessageEmbed.Field(pack.getName(), description, false);

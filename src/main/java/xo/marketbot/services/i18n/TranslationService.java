@@ -22,6 +22,7 @@ public class TranslationService {
     public static final String TR_ITEM__REMOVED                         = "item.removed";
     public static final String TR_PACK__PRICE                           = "pack.price";
     public static final String TR_MARKET__PRICE                         = "market.price";
+    public static final String TR_MARKET__SIMPLE_PRICE                  = "market.simplePrice";
     public static final String TR_MARKET__CURRENCY                      = "market.currency";
     public static final String TR_MARKET__SELL                          = "market.sell";
     public static final String TR_MARKET__BUY                           = "market.buy";

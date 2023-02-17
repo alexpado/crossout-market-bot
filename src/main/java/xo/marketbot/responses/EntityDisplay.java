@@ -31,15 +31,17 @@ public class EntityDisplay extends DisplayTemplate {
             this.appendDescription(context.getTranslation(TR_ITEM__REMOVED));
         } else {
 
-            String currency    = context.getTranslation(TR_MARKET__CURRENCY);
-            String priceFormat = context.getTranslation(TR_MARKET__PRICE);
+            String currency          = context.getTranslation(TR_MARKET__CURRENCY);
+            String priceFormat       = context.getTranslation(TR_MARKET__PRICE);
+            String simplePriceFormat = context.getTranslation(TR_MARKET__SIMPLE_PRICE);
+
             this.addField(context.getTranslation(TR_MARKET__SELL), priceFormat.formatted(item.getMarketSell(), currency, item.getSellOffers()), true);
             this.addField(context.getTranslation(TR_MARKET__BUY), priceFormat.formatted(item.getMarketBuy(), currency, item.getBuyOrders()), true);
             this.addBlankField(true);
 
             if (item.isCraftable()) {
-                this.addField(context.getTranslation(TR_MARKET__CRAFT_SELL), Utilities.money(item.getSellCraftPrice(), currency), true);
-                this.addField(context.getTranslation(TR_MARKET__CRAFT_BUY), Utilities.money(item.getBuyCraftPrice(), currency), true);
+                this.addField(context.getTranslation(TR_MARKET__CRAFT_SELL), simplePriceFormat.formatted(item.getSellCraftPrice(), currency), true);
+                this.addField(context.getTranslation(TR_MARKET__CRAFT_BUY), simplePriceFormat.formatted(item.getBuyCraftPrice(), currency), true);
                 this.addBlankField(true);
             }
 
@@ -54,9 +56,11 @@ public class EntityDisplay extends DisplayTemplate {
 
         super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), pack.getName(), XoDBUtils.getWebLink(pack), configuration.getReportChannelUrl()));
 
-        String currency = context.getTranslation(TR_MARKET__CURRENCY);
-        this.addField(context.getTranslation(TR_MARKET__SELL), Utilities.money(pack.getMarketSell() / 100.0, currency), true);
-        this.addField(context.getTranslation(TR_MARKET__BUY), Utilities.money(pack.getMarketBuy() / 100.0, currency), true);
+        String simplePriceFormat = context.getTranslation(TR_MARKET__SIMPLE_PRICE);
+        String currency          = context.getTranslation(TR_MARKET__CURRENCY);
+
+        this.addField(context.getTranslation(TR_MARKET__SELL), simplePriceFormat.formatted(pack.getMarketSell() / 100.0, currency), true);
+        this.addField(context.getTranslation(TR_MARKET__BUY), simplePriceFormat.formatted(pack.getMarketBuy() / 100.0, currency), true);
         this.addBlankField(true);
 
         if (pack.getPriceUSD() > 0) {
@@ -65,15 +69,15 @@ public class EntityDisplay extends DisplayTemplate {
             List<String> priceMoney = new ArrayList<>();
             List<String> priceCoins = new ArrayList<>();
 
-            priceMoney.add(Utilities.money(pack.getPriceUSD() / 100.0, "USD"));
-            priceMoney.add(Utilities.money(pack.getPriceEUR() / 100.0, "EUR"));
-            priceMoney.add(Utilities.money(pack.getPriceGBP() / 100.0, "GBP"));
-            priceMoney.add(Utilities.money(pack.getPriceRUB() / 100.0, "RUB"));
+            priceMoney.add(simplePriceFormat.formatted(pack.getPriceUSD() / 100.0, "USD"));
+            priceMoney.add(simplePriceFormat.formatted(pack.getPriceEUR() / 100.0, "EUR"));
+            priceMoney.add(simplePriceFormat.formatted(pack.getPriceGBP() / 100.0, "GBP"));
+            priceMoney.add(simplePriceFormat.formatted(pack.getPriceRUB() / 100.0, "RUB"));
 
-            priceCoins.add(Utilities.money(coinBase / (pack.getPriceUSD() / 100.0), currency + "/USD"));
-            priceCoins.add(Utilities.money(coinBase / (pack.getPriceEUR() / 100.0), currency + "/EUR"));
-            priceCoins.add(Utilities.money(coinBase / (pack.getPriceGBP() / 100.0), currency + "/GBP"));
-            priceCoins.add(Utilities.money(coinBase / (pack.getPriceRUB() / 100.0), currency + "/RUB"));
+            priceCoins.add(simplePriceFormat.formatted(coinBase / (pack.getPriceUSD() / 100.0), currency + "/USD"));
+            priceCoins.add(simplePriceFormat.formatted(coinBase / (pack.getPriceEUR() / 100.0), currency + "/EUR"));
+            priceCoins.add(simplePriceFormat.formatted(coinBase / (pack.getPriceGBP() / 100.0), currency + "/GBP"));
+            priceCoins.add(simplePriceFormat.formatted(coinBase / (pack.getPriceRUB() / 100.0), currency + "/RUB"));
 
             this.addField(context.getTranslation(TR_PACK__PRICE), String.join("\n", priceMoney), true);
             this.addField("", String.join("\n", priceCoins), true);
@@ -88,13 +92,15 @@ public class EntityDisplay extends DisplayTemplate {
         super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_SIMPLE), watcher.getName(), configuration.getReportChannelUrl()));
         this.setThumbnail(XoDBUtils.getImage(item));
 
+        String simplePriceFormat = context.getTranslation(TR_MARKET__SIMPLE_PRICE);
+
         String currency        = context.getTranslation(TR_MARKET__CURRENCY);
-        String newMarketSell   = Utilities.money(item.getMarketSell(), currency);
-        String newMarketBuy    = Utilities.money(item.getMarketBuy(), currency);
+        String newMarketSell   = simplePriceFormat.formatted(item.getMarketSell(), currency);
+        String newMarketBuy    = simplePriceFormat.formatted(item.getMarketBuy(), currency);
         String newMarketOffers = String.valueOf(item.getSellOffers());
         String newMarketOrders = String.valueOf(item.getBuyOrders());
-        String marketSellDiff  = Utilities.money((item.getMarketSell() - watcher.getMarketSell()), currency);
-        String marketBuyDiff   = Utilities.money((item.getMarketBuy() - watcher.getMarketBuy()), currency);
+        String marketSellDiff  = simplePriceFormat.formatted((item.getMarketSell() - watcher.getMarketSell()), currency);
+        String marketBuyDiff   = simplePriceFormat.formatted((item.getMarketBuy() - watcher.getMarketBuy()), currency);
         String marketOfferDiff = String.valueOf(item.getSellOffers() - watcher.getSellOffers());
         String marketOrderDiff = String.valueOf(item.getBuyOrders() - watcher.getBuyOrders());
 

@@ -164,7 +164,7 @@ public class SearchCommands {
         Optional<IPack> search = SearchHelper.search(packs, packName);
 
         if (search.isPresent()) {
-            return new SimpleSlashResponse(new EntityDisplay(context, jda, search.get()));
+            return new SimpleSlashResponse(new EntityDisplay(context, this.configuration, jda, search.get()));
         }
         return new PaginationTarget(new EntitiesDisplay<>(context, jda, pack -> {
 

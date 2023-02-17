@@ -13,6 +13,9 @@ public class MarketConfiguration implements IMarketConfiguration {
     @Value("${xomarket.chart}")
     private String chartApi;
 
+    @Value("${xomarket.reportUrl}")
+    private String reportChannelUrl;
+
     @Override
     public String getApi() {
 
@@ -23,6 +26,12 @@ public class MarketConfiguration implements IMarketConfiguration {
     public String getChartApi() {
 
         return this.chartApi;
+    }
+
+    @Override
+    public String getReportChannelUrl() {
+
+        return this.reportChannelUrl;
     }
 
 }

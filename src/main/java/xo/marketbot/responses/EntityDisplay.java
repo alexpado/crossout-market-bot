@@ -20,13 +20,9 @@ import static xo.marketbot.services.i18n.TranslationService.*;
 
 public class EntityDisplay extends DisplayTemplate {
 
-    private static final String XODB_ISSUE_CHANNEL         = "https://discord.com/channels/467736507336097814/467737953721122836";
-    private static final String EMBED_DISPLAY_HEADER       = "**%s**\n[View on CrossoutDB](%s) • [Report an issue](%s)";
-    private static final String EMBED_DISPLAY_HEADER_NO_XO = "**%s**\n[Report an issue](%s)";
-
     public EntityDisplay(TranslationContext context, IMarketConfiguration configuration, JDA jda, IItem item) {
 
-        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), item.getName(), XoDBUtils.getWebLink(item), XODB_ISSUE_CHANNEL));
+        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), item.getName(), XoDBUtils.getWebLink(item), configuration.getReportChannelUrl()));
         this.appendDescription(item.getDescription());
         this.setThumbnail(XoDBUtils.getImage(item));
 
@@ -54,9 +50,9 @@ public class EntityDisplay extends DisplayTemplate {
         this.setColor(rarity.getColor());
     }
 
-    public EntityDisplay(TranslationContext context, JDA jda, IPack pack) {
+    public EntityDisplay(TranslationContext context, IMarketConfiguration configuration, JDA jda, IPack pack) {
 
-        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), pack.getName(), XoDBUtils.getWebLink(pack), XODB_ISSUE_CHANNEL));
+        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), pack.getName(), XoDBUtils.getWebLink(pack), configuration.getReportChannelUrl()));
 
         String currency = context.getTranslation(TR_MARKET__CURRENCY);
         this.addField(context.getTranslation(TR_MARKET__SELL), Utilities.money(pack.getMarketSell() / 100.0, currency), true);
@@ -89,7 +85,7 @@ public class EntityDisplay extends DisplayTemplate {
 
     public EntityDisplay(TranslationContext context, IMarketConfiguration configuration, JDA jda, Watcher watcher, IItem item) {
 
-        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_SIMPLE), watcher.getName(), XODB_ISSUE_CHANNEL));
+        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_SIMPLE), watcher.getName(), configuration.getReportChannelUrl()));
         this.setThumbnail(XoDBUtils.getImage(item));
 
         String currency        = context.getTranslation(TR_MARKET__CURRENCY);

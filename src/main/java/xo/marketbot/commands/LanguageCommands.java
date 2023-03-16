@@ -83,19 +83,29 @@ public class LanguageCommands {
                             type = OptionType.STRING,
                             required = true,
                             choices = {
-                                    @fr.alexpado.jda.interactions.annotations.Choice(
+                                    @Choice(
                                             id = "en",
                                             display = "English (EN)"
                                     ),
-                                    @fr.alexpado.jda.interactions.annotations.Choice(
+                                    @Choice(
                                             id = "fr",
                                             display = "Français (FR)"
+                                    ),
+                                    @Choice(
+                                            id = "de",
+                                            display = "Deutsch (DE)"
+                                    ),
+                                    @Choice(
+                                            id = "ru",
+                                            display = "Русский (RU)"
                                     )
                             }
                     )
             }
     )
-    public SlashResponse changeServerLanguage(GuildEntity guild, ChannelEntity channel, Member member, JDA jda, @Param("language") String languageParam) {
+    public SlashResponse changeServerLanguage(GuildEntity guild, ChannelEntity channel, Member member, JDA jda, @Param(
+            "language"
+    ) String languageParam) {
 
         TranslationContext      context                     = this.translationService.getContext(channel.getEffectiveLanguage());
         Optional<SlashResponse> optionalInteractionResponse = this.applyLanguageUpdate(context, channel, member, jda, languageParam, guild::setLanguage);
@@ -119,15 +129,23 @@ public class LanguageCommands {
                             type = OptionType.STRING,
                             required = true,
                             choices = {
-                                    @fr.alexpado.jda.interactions.annotations.Choice(
+                                    @Choice(
                                             id = "en",
                                             display = "English (EN)"
                                     ),
-                                    @fr.alexpado.jda.interactions.annotations.Choice(
+                                    @Choice(
                                             id = "fr",
                                             display = "Français (FR)"
                                     ),
-                                    @fr.alexpado.jda.interactions.annotations.Choice(
+                                    @Choice(
+                                            id = "de",
+                                            display = "Deutsch (DE)"
+                                    ),
+                                    @Choice(
+                                            id = "ru",
+                                            display = "Русский (RU)"
+                                    ),
+                                    @Choice(
                                             id = "none",
                                             display = "Server's default"
                                     )
@@ -159,13 +177,21 @@ public class LanguageCommands {
                             type = OptionType.STRING,
                             required = true,
                             choices = {
-                                    @fr.alexpado.jda.interactions.annotations.Choice(
+                                    @Choice(
                                             id = "en",
                                             display = "English (EN)"
                                     ),
                                     @Choice(
                                             id = "fr",
                                             display = "Français (FR)"
+                                    ),
+                                    @Choice(
+                                            id = "de",
+                                            display = "Deutsch (DE)"
+                                    ),
+                                    @Choice(
+                                            id = "ru",
+                                            display = "Русский (RU)"
                                     )
                             }
                     )

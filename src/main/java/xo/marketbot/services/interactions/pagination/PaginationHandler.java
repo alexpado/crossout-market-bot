@@ -114,8 +114,6 @@ public class PaginationHandler extends ButtonInteractionContainerImpl {
                 }
             }
         }
-
-        super.handleResponse(event, response);
     }
 
     private MessageEditBuilder getMessageEditBuilder(SlashResponse response) {

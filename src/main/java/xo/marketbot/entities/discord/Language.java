@@ -1,5 +1,6 @@
 package xo.marketbot.entities.discord;
 
+import fr.alexpado.xodb4j.XoDB;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -13,6 +14,7 @@ public class Language {
     private String        id;
     private String        name;
     private String        localized;
+    private boolean       apiLanguage;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -44,6 +46,17 @@ public class Language {
     public String getLocalized() {
 
         return this.localized;
+    }
+
+    /**
+     * Check if this {@link Language} can be used to query CrossoutDB API through {@link XoDB} to get localized
+     * content.
+     *
+     * @return True if usable with the api, false otherwise.
+     */
+    public boolean isApiLanguage() {
+
+        return apiLanguage;
     }
 
     /**

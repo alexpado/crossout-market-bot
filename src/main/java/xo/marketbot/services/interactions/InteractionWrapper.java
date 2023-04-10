@@ -28,6 +28,7 @@ import xo.marketbot.entities.discord.GuildEntity;
 import xo.marketbot.entities.discord.Language;
 import xo.marketbot.entities.discord.UserEntity;
 import xo.marketbot.helpers.CrossoutCache;
+import xo.marketbot.helpers.ExceptionHandler;
 import xo.marketbot.repositories.WatcherRepository;
 import xo.marketbot.services.EntitySynchronization;
 import xo.marketbot.services.interactions.pagination.PaginationHandler;
@@ -55,6 +56,7 @@ public class InteractionWrapper {
         this.entitySynchronization = entitySynchronization1;
         this.extension             = new InteractionExtension();
         this.extension.registerPreprocessor(preprocessor);
+        this.extension.setErrorHandler(new ExceptionHandler());
 
         PaginationHandler paginationHandler = new PaginationHandler();
         this.extension.registerContainer(ButtonInteraction.class, paginationHandler);

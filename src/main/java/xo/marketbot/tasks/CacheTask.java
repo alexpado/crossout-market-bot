@@ -1,22 +1,22 @@
 package xo.marketbot.tasks;
 
-import fr.alexpado.xodb4j.XoDB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import xo.marketbot.helpers.CrossoutCache;
 
 @Service
 public class CacheTask {
 
     private final static Logger            LOGGER = LoggerFactory.getLogger(WatcherTask.class);
     private final        XoHealthCheckTask healthCheckTask;
-    private final        XoDB              xoDB;
+    private final        CrossoutCache     crossoutCache;
 
-    public CacheTask(XoHealthCheckTask healthCheckTask, XoDB xoDB) {
+    public CacheTask(XoHealthCheckTask healthCheckTask, CrossoutCache crossoutCache) {
 
         this.healthCheckTask = healthCheckTask;
-        this.xoDB            = xoDB;
+        this.crossoutCache   = crossoutCache;
     }
 
     @Scheduled(cron = "0 0 * * * *") // Every hour
@@ -28,7 +28,7 @@ public class CacheTask {
             }
 
             LOGGER.info("Refreshing XoDB cache...");
-            this.xoDB.buildCaches(true);
+            this.crossoutCache.cache();
             LOGGER.info("The cache has been built.");
         } catch (Exception e) {
             throw new RuntimeException(e);

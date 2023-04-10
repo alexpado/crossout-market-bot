@@ -11,7 +11,6 @@ import fr.alexpado.jda.interactions.interfaces.interactions.button.ButtonInterac
 import fr.alexpado.jda.interactions.interfaces.interactions.slash.SlashInteractionTarget;
 import fr.alexpado.jda.interactions.meta.InteractionMeta;
 import fr.alexpado.jda.interactions.meta.OptionMeta;
-import fr.alexpado.xodb4j.XoDB;
 import fr.alexpado.xodb4j.interfaces.IItem;
 import fr.alexpado.xodb4j.interfaces.IRarity;
 import fr.alexpado.xodb4j.interfaces.common.Nameable;
@@ -26,7 +25,9 @@ import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.stereotype.Service;
 import xo.marketbot.entities.discord.ChannelEntity;
 import xo.marketbot.entities.discord.GuildEntity;
+import xo.marketbot.entities.discord.Language;
 import xo.marketbot.entities.discord.UserEntity;
+import xo.marketbot.helpers.CrossoutCache;
 import xo.marketbot.repositories.WatcherRepository;
 import xo.marketbot.services.EntitySynchronization;
 import xo.marketbot.services.interactions.pagination.PaginationHandler;
@@ -40,20 +41,20 @@ import java.util.stream.Stream;
 @Service
 public class InteractionWrapper {
 
-    private final ListableBeanFactory  beanFactory;
-    private final XoDB                 xoDB;
-    private final InteractionExtension extension;
-    private final WatcherRepository    watcherRepository;
+    private final ListableBeanFactory   beanFactory;
+    private final CrossoutCache         crossoutCache;
+    private final InteractionExtension  extension;
+    private final WatcherRepository     watcherRepository;
+    private final EntitySynchronization entitySynchronization;
 
-    public InteractionWrapper(ListableBeanFactory beanFactory, EntitySynchronization entitySynchronization, XoDB xoDB, WatcherRepository watcherRepository, CommandPreprocessor preprocessor) throws Exception {
+    public InteractionWrapper(ListableBeanFactory beanFactory, EntitySynchronization entitySynchronization, CrossoutCache crossoutCache, WatcherRepository watcherRepository, CommandPreprocessor preprocessor, EntitySynchronization entitySynchronization1) throws Exception {
 
-        this.beanFactory       = beanFactory;
-        this.xoDB              = xoDB;
-        this.watcherRepository = watcherRepository;
-        this.extension         = new InteractionExtension();
+        this.beanFactory           = beanFactory;
+        this.crossoutCache         = crossoutCache;
+        this.watcherRepository     = watcherRepository;
+        this.entitySynchronization = entitySynchronization1;
+        this.extension             = new InteractionExtension();
         this.extension.registerPreprocessor(preprocessor);
-
-        this.xoDB.buildCaches(true);
 
         PaginationHandler paginationHandler = new PaginationHandler();
         this.extension.registerContainer(ButtonInteraction.class, paginationHandler);
@@ -155,8 +156,13 @@ public class InteractionWrapper {
     public List<Command.Choice> completeItemSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String completionName, String value) {
 
         CommandAutoCompleteInteraction interaction = event.getInteraction();
-        Collection<IItem>              items       = this.xoDB.getItemCache().values();
-        Stream<IItem>                  stream      = items.stream();
+
+        // Read effective language
+        ChannelEntity channelEntity = this.entitySynchronization.mapChannel(interaction);
+        Language      language      = channelEntity.getEffectiveLanguage();
+
+        Collection<IItem> items  = this.crossoutCache.getItems(language.getId(), "en");
+        Stream<IItem>     stream = items.stream();
 
         for (OptionMapping option : interaction.getOptions()) {
             String searchValue = option.getName().equals(name) ? value.toLowerCase() : option.getAsString()
@@ -222,10 +228,10 @@ public class InteractionWrapper {
 
     public List<Command.Choice> completePackSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String completionName, String value) {
 
-        return this.xoDB.getPackCache().values().stream()
-                        .filter(pack -> pack.getName().toLowerCase().contains(value.toLowerCase()))
-                        .map(pack -> new Command.Choice(pack.getName(), pack.getName()))
-                        .collect(Collectors.toList());
+        return this.crossoutCache.getPacks().stream()
+                                 .filter(pack -> pack.getName().toLowerCase().contains(value.toLowerCase()))
+                                 .map(pack -> new Command.Choice(pack.getName(), pack.getName()))
+                                 .collect(Collectors.toList());
     }
 
     public List<Command.Choice> completeWatcherSearch(DispatchEvent<CommandAutoCompleteInteraction> event, String name, String completionName, String value) {

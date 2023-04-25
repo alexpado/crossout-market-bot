@@ -95,12 +95,13 @@ public class PaginationHandler extends ButtonInteractionContainerImpl {
             display.setTransactionId(target.getId());
 
             if (event.getInteraction() instanceof IReplyCallback callback) {
-                if (callback.isAcknowledged()) {
+                if (event.getInteraction() instanceof ButtonInteraction interaction) {
                     event.getTimedAction().action("build", "Building the response");
                     MessageEditBuilder builder = this.getMessageEditBuilder(display);
                     event.getTimedAction().endAction();
 
                     event.getTimedAction().action("reply", "Replying to the interaction (EDIT)");
+                    interaction.deferEdit().complete();
                     callback.getHook().editOriginal(builder.build()).complete();
                     event.getTimedAction().endAction();
                 } else {
@@ -114,8 +115,6 @@ public class PaginationHandler extends ButtonInteractionContainerImpl {
                 }
             }
         }
-
-        super.handleResponse(event, response);
     }
 
     private MessageEditBuilder getMessageEditBuilder(SlashResponse response) {

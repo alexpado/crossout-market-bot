@@ -1,29 +1,38 @@
 import java.nio.charset.StandardCharsets
 
 plugins {
-    id 'org.springframework.boot' version '3.0.5'
-    id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.springframework.boot' version '3.3.5'
+    id 'io.spring.dependency-management' version '1.1.6'
     id 'java'
-    id 'com.github.ben-manes.versions' version '0.46.0'
-    id 'org.ajoberstar.reckon' version '0.16.1'
+    id 'com.github.ben-manes.versions' version '0.51.0'
+    id 'org.ajoberstar.reckon' version '0.18.3'
 }
 
 def generalCharset = StandardCharsets.UTF_8.name()
 
-group = 'fr.alexpado.bots'
+static def isNonStable(String version) {
+    def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
+    def regex = /^[0-9,.v-]+(-r)?$/
+    return !stableKeyword && !(version ==~ regex)
+}
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+group = 'xo.marketbot'
 
 compileJava.options.encoding = generalCharset
 compileTestJava.options.encoding = generalCharset
 javadoc.options.encoding = generalCharset
 
 reckon {
+    defaultInferredScope = 'patch'
     stages('dev', 'beta', 'rc', 'final')
 
     scopeCalc = calcScopeFromProp() | calcScopeFromCommitMessages()
     stageCalc = calcStageFromProp()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 configurations {
@@ -33,58 +42,65 @@ configurations {
 }
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
+}
+
+ext {
+    set('sentryVersion', "7.6.0")
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'io.sentry:sentry-spring-boot-starter-jakarta:7.16.0'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.16.3'
-    implementation group: 'org.flywaydb', name: 'flyway-mysql', version: '9.16.3'
+    runtimeOnly group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.5.0'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.20.1'
+    implementation group: 'org.flywaydb', name: 'flyway-mysql', version: '10.20.1'
 
-    implementation group: 'org.json', name: 'json', version: '20230227'
-    implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-beta.7'
-    implementation group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
+    implementation group: 'net.dv8tion', name: 'JDA', version: '5.2.0'
 
-    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.1.3'
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
-
+    implementation group: 'fr.alexpado', name: 'xodb4j', version: '1.0.0-rc.9'
     implementation group: 'fr.alexpado', name: 'simple-http-client', version: '1.1.2'
-    implementation group: 'fr.alexpado', name: 'xodb4j', version: '1.0.0-rc.8'
-    implementation(group: 'fr.alexpado', name: 'jda-interactions-extension', version: '0.1.0-rc.15') {
+    implementation(group: 'fr.alexpado', name: 'jda-interactions-extension', version: '1.0.0-rc.2') {
         exclude(group: 'io.sentry')
     }
 
-    implementation group: 'io.sentry', name: 'sentry-spring-boot-starter', version: '6.17.0'
+    implementation group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.4'
+    implementation group: 'org.json', name: 'json', version: '20240303'
+
+    implementation group: 'org.jetbrains', name: 'annotations', version: '26.0.1'
 }
 
-task copyConfigurationMetadata(type: Copy) {
+tasks.register('copyConfigurationMetadata', Copy) {
     from(compileJava) {
         include 'META-INF/spring-configuration-metadata.json'
     }
     into "out/production/classes"
 }
 
-compileJava {
-    dependsOn processResources
-    finalizedBy copyConfigurationMetadata
+dependencyManagement {
+    imports {
+        mavenBom "io.sentry:sentry-bom:${sentryVersion}"
+    }
 }
 
 test {
     useJUnitPlatform()
 }
 
-static def isNonStable(String version) {
-    def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
-    def regex = /^[0-9,.v-]+(-r)?$/
-    return !stableKeyword && !(version ==~ regex)
+dependencyUpdates {
+    rejectVersionIf {
+        isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
+    }
+}
+
+compileJava {
+    dependsOn processResources
+    finalizedBy copyConfigurationMetadata
 }
 
 tasks.named("dependencyUpdates").configure {

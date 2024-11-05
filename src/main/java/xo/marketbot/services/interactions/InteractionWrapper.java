@@ -66,25 +66,52 @@ public class InteractionWrapper {
         this.extension.useDefaultMapping();
 
         this.extension.getSlashContainer()
-                      .addClassMapping(GuildEntity.class, (ev) -> () -> entitySynchronization.mapGuild(ev.getInteraction()));
+                      .addClassMapping(
+                              GuildEntity.class,
+                              (ev, opt) -> () -> entitySynchronization.mapGuild(ev.getInteraction())
+                      );
         this.extension.getSlashContainer()
-                      .addClassMapping(ChannelEntity.class, (ev) -> () -> entitySynchronization.mapChannel(ev.getInteraction()));
+                      .addClassMapping(
+                              ChannelEntity.class,
+                              (ev, opt) -> () -> entitySynchronization.mapChannel(ev.getInteraction())
+                      );
         this.extension.getSlashContainer()
-                      .addClassMapping(UserEntity.class, (ev) -> () -> entitySynchronization.mapUser(ev.getInteraction()));
+                      .addClassMapping(
+                              UserEntity.class,
+                              (ev, opt) -> () -> entitySynchronization.mapUser(ev.getInteraction())
+                      );
 
         this.extension.getButtonContainer()
-                      .addClassMapping(GuildEntity.class, (ev) -> () -> entitySynchronization.mapGuild(ev.getInteraction()));
+                      .addClassMapping(
+                              GuildEntity.class,
+                              (ev, opt) -> () -> entitySynchronization.mapGuild(ev.getInteraction())
+                      );
         this.extension.getButtonContainer()
-                      .addClassMapping(ChannelEntity.class, (ev) -> () -> entitySynchronization.mapChannel(ev.getInteraction()));
+                      .addClassMapping(
+                              ChannelEntity.class,
+                              (ev, opt) -> () -> entitySynchronization.mapChannel(ev.getInteraction())
+                      );
         this.extension.getButtonContainer()
-                      .addClassMapping(UserEntity.class, (ev) -> () -> entitySynchronization.mapUser(ev.getInteraction()));
+                      .addClassMapping(
+                              UserEntity.class,
+                              (ev, opt) -> () -> entitySynchronization.mapUser(ev.getInteraction())
+                      );
 
         this.extension.getAutocompleteContainer()
-                      .addClassMapping(GuildEntity.class, (ev) -> () -> entitySynchronization.mapGuild(ev.getInteraction()));
+                      .addClassMapping(
+                              GuildEntity.class,
+                              (ev, opt) -> () -> entitySynchronization.mapGuild(ev.getInteraction())
+                      );
         this.extension.getAutocompleteContainer()
-                      .addClassMapping(ChannelEntity.class, (ev) -> () -> entitySynchronization.mapChannel(ev.getInteraction()));
+                      .addClassMapping(
+                              ChannelEntity.class,
+                              (ev, opt) -> () -> entitySynchronization.mapChannel(ev.getInteraction())
+                      );
         this.extension.getAutocompleteContainer()
-                      .addClassMapping(UserEntity.class, (ev) -> () -> entitySynchronization.mapUser(ev.getInteraction()));
+                      .addClassMapping(
+                              UserEntity.class,
+                              (ev, opt) -> () -> entitySynchronization.mapUser(ev.getInteraction())
+                      );
     }
 
     private void hook(JDA jda, Supplier<CommandListUpdateAction> action) {

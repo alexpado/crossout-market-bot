@@ -1,116 +1,55 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
-    <option name="LINE_SEPARATOR" value="&#10;" />
-    <option name="RIGHT_MARGIN" value="140" />
-    <CssCodeStyleSettings>
-      <option name="HEX_COLOR_UPPER_CASE" value="true" />
-      <option name="HEX_COLOR_LONG_FORMAT" value="true" />
-      <option name="VALUE_ALIGNMENT" value="2" />
-      <option name="USE_DOUBLE_QUOTES" value="false" />
-      <option name="ENFORCE_QUOTES_ON_FORMAT" value="true" />
-    </CssCodeStyleSettings>
-    <HTMLCodeStyleSettings>
-      <option name="HTML_ATTRIBUTE_WRAP" value="4" />
-      <option name="HTML_ALIGN_TEXT" value="true" />
-      <option name="HTML_SPACE_INSIDE_EMPTY_TAG" value="true" />
-      <option name="HTML_NEWLINE_BEFORE_FIRST_ATTRIBUTE" value="When multiline" />
-      <option name="HTML_NEWLINE_AFTER_LAST_ATTRIBUTE" value="When multiline" />
-    </HTMLCodeStyleSettings>
+    <option name="LINE_SEPARATOR" />
+    <option name="RIGHT_MARGIN" value="120" />
     <JSCodeStyleSettings version="0">
-      <option name="FORCE_SEMICOLON_STYLE" value="true" />
       <option name="ALIGN_OBJECT_PROPERTIES" value="1" />
-      <option name="ALIGN_VAR_STATEMENTS" value="1" />
-      <option name="USE_DOUBLE_QUOTES" value="false" />
-      <option name="FORCE_QUOTE_STYlE" value="true" />
-      <option name="ENFORCE_TRAILING_COMMA" value="WhenMultiline" />
-      <option name="VAR_DECLARATION_WRAP" value="5" />
-      <option name="OBJECT_LITERAL_WRAP" value="2" />
-      <option name="IMPORTS_WRAP" value="0" />
-      <option name="ALIGN_IMPORTS" value="true" />
+      <option name="ALIGN_VAR_STATEMENTS" value="2" />
+      <option name="REFORMAT_C_STYLE_COMMENTS" value="true" />
     </JSCodeStyleSettings>
+    <JSON>
+      <option name="PROPERTY_ALIGNMENT" value="1" />
+      <option name="OBJECT_WRAPPING" value="5" />
+      <option name="ARRAY_WRAPPING" value="5" />
+    </JSON>
     <JavaCodeStyleSettings>
+      <option name="REPLACE_INSTANCEOF_AND_CAST" value="true" />
       <option name="CLASS_NAMES_IN_JAVADOC" value="3" />
       <option name="JD_ADD_BLANK_AFTER_PARM_COMMENTS" value="true" />
       <option name="JD_ADD_BLANK_AFTER_RETURN" value="true" />
+      <option name="JD_DO_NOT_WRAP_ONE_LINE_COMMENTS" value="true" />
       <option name="JD_PARAM_DESCRIPTION_ON_NEW_LINE" value="true" />
       <option name="JD_INDENT_ON_CONTINUATION" value="true" />
     </JavaCodeStyleSettings>
-    <LessCodeStyleSettings>
-      <option name="HEX_COLOR_UPPER_CASE" value="true" />
-      <option name="HEX_COLOR_LONG_FORMAT" value="true" />
-      <option name="VALUE_ALIGNMENT" value="2" />
-      <option name="USE_DOUBLE_QUOTES" value="false" />
-      <option name="ENFORCE_QUOTES_ON_FORMAT" value="true" />
-    </LessCodeStyleSettings>
-    <MySQLCodeStyleSettings version="6">
-      <option name="USE_GENERAL_STYLE" value="false" />
+    <JetCodeStyleSettings>
+      <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
+    </JetCodeStyleSettings>
+    <SqlCodeStyleSettings version="7">
       <option name="KEYWORD_CASE" value="2" />
+      <option name="IDENTIFIER_CASE" value="1" />
       <option name="TYPE_CASE" value="3" />
       <option name="CUSTOM_TYPE_CASE" value="3" />
+      <option name="ALIAS_CASE" value="4" />
       <option name="QUOTE_IDENTIFIER" value="2" />
-      <option name="INSERT_INTO_NL" value="2" />
-      <option name="INSERT_TABLE_EL_LINE" value="101" />
-      <option name="INSERT_VALUES_EL_LINE" value="101" />
-    </MySQLCodeStyleSettings>
-    <Properties>
-      <option name="SPACES_AROUND_KEY_VALUE_DELIMITER" value="true" />
-      <option name="KEEP_BLANK_LINES" value="true" />
-    </Properties>
-    <ScssCodeStyleSettings>
-      <option name="HEX_COLOR_UPPER_CASE" value="true" />
-      <option name="HEX_COLOR_LONG_FORMAT" value="true" />
-      <option name="VALUE_ALIGNMENT" value="2" />
-      <option name="USE_DOUBLE_QUOTES" value="false" />
-      <option name="ENFORCE_QUOTES_ON_FORMAT" value="true" />
-    </ScssCodeStyleSettings>
-    <XML>
-      <option name="XML_ATTRIBUTE_WRAP" value="4" />
-      <option name="XML_SPACE_INSIDE_EMPTY_TAG" value="true" />
-    </XML>
-    <codeStyleSettings language="CSS">
-      <arrangement>
-        <rules>
-          <section>
-            <rule>
-              <match>
-                <NAME>.*</NAME>
-              </match>
-              <order>BY_NAME</order>
-            </rule>
-          </section>
-        </rules>
-      </arrangement>
-    </codeStyleSettings>
-    <codeStyleSettings language="EditorConfig">
-      <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />
-    </codeStyleSettings>
-    <codeStyleSettings language="Groovy">
-      <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
-      <option name="CALL_PARAMETERS_WRAP" value="5" />
-      <option name="CALL_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
-      <option name="CALL_PARAMETERS_RPAREN_ON_NEXT_LINE" value="true" />
-    </codeStyleSettings>
+    </SqlCodeStyleSettings>
     <codeStyleSettings language="JAVA">
-      <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
-      <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
       <option name="BLANK_LINES_BEFORE_METHOD_BODY" value="1" />
       <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1" />
-      <option name="BLANK_LINES_AFTER_ANONYMOUS_CLASS_HEADER" value="1" />
+      <option name="BLANK_LINES_BEFORE_CLASS_END" value="1" />
       <option name="ALIGN_MULTILINE_CHAINED_METHODS" value="true" />
-      <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
-      <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="true" />
+      <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
+      <option name="ALIGN_MULTILINE_ASSIGNMENT" value="true" />
       <option name="ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION" value="true" />
       <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />
       <option name="ALIGN_CONSECUTIVE_VARIABLE_DECLARATIONS" value="true" />
       <option name="ALIGN_CONSECUTIVE_ASSIGNMENTS" value="true" />
-      <option name="ALIGN_SUBSEQUENT_SIMPLE_METHODS" value="true" />
-      <option name="SPACE_BEFORE_SEMICOLON" value="true" />
+      <option name="CALL_PARAMETERS_WRAP" value="5" />
+      <option name="CALL_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
+      <option name="CALL_PARAMETERS_RPAREN_ON_NEXT_LINE" value="true" />
       <option name="METHOD_CALL_CHAIN_WRAP" value="5" />
-      <option name="KEEP_SIMPLE_BLOCKS_IN_ONE_LINE" value="true" />
       <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
       <option name="KEEP_SIMPLE_LAMBDAS_IN_ONE_LINE" value="true" />
-      <option name="KEEP_SIMPLE_CLASSES_IN_ONE_LINE" value="true" />
-      <option name="ARRAY_INITIALIZER_WRAP" value="1" />
+      <option name="ARRAY_INITIALIZER_WRAP" value="5" />
       <option name="ARRAY_INITIALIZER_LBRACE_ON_NEXT_LINE" value="true" />
       <option name="ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE" value="true" />
       <option name="WRAP_COMMENTS" value="true" />
@@ -118,59 +57,19 @@
       <option name="DOWHILE_BRACE_FORCE" value="3" />
       <option name="WHILE_BRACE_FORCE" value="3" />
       <option name="FOR_BRACE_FORCE" value="3" />
-      <option name="ENUM_CONSTANTS_WRAP" value="2" />
-      <option name="WRAP_ON_TYPING" value="0" />
+      <option name="ENUM_CONSTANTS_WRAP" value="5" />
+    </codeStyleSettings>
+    <codeStyleSettings language="JSON">
+      <option name="SPACE_WITHIN_BRACKETS" value="true" />
+      <option name="SPACE_WITHIN_BRACES" value="true" />
     </codeStyleSettings>
     <codeStyleSettings language="JavaScript">
-      <option name="ALIGN_MULTILINE_CHAINED_METHODS" value="true" />
       <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="true" />
-      <option name="ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION" value="true" />
-      <option name="METHOD_CALL_CHAIN_WRAP" value="5" />
-      <option name="PARENTHESES_EXPRESSION_LPAREN_WRAP" value="true" />
-      <option name="PARENTHESES_EXPRESSION_RPAREN_WRAP" value="true" />
-      <option name="ARRAY_INITIALIZER_WRAP" value="5" />
-      <option name="ARRAY_INITIALIZER_LBRACE_ON_NEXT_LINE" value="true" />
-      <option name="ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE" value="true" />
-      <option name="IF_BRACE_FORCE" value="3" />
-      <option name="DOWHILE_BRACE_FORCE" value="3" />
-      <option name="WHILE_BRACE_FORCE" value="3" />
-      <option name="FOR_BRACE_FORCE" value="3" />
+      <option name="ALIGN_MULTILINE_TERNARY_OPERATION" value="true" />
+      <option name="WRAP_COMMENTS" value="true" />
     </codeStyleSettings>
-    <codeStyleSettings language="LESS">
-      <indentOptions>
-        <option name="INDENT_SIZE" value="4" />
-      </indentOptions>
-    </codeStyleSettings>
-    <codeStyleSettings language="Properties">
-      <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />
-    </codeStyleSettings>
-    <codeStyleSettings language="SCSS">
-      <indentOptions>
-        <option name="INDENT_SIZE" value="4" />
-      </indentOptions>
-      <arrangement>
-        <rules>
-          <section>
-            <rule>
-              <match>
-                <NAME>.*</NAME>
-              </match>
-              <order>BY_NAME</order>
-            </rule>
-          </section>
-        </rules>
-      </arrangement>
-    </codeStyleSettings>
-    <codeStyleSettings language="Shell Script">
-      <indentOptions>
-        <option name="INDENT_SIZE" value="4" />
-        <option name="TAB_SIZE" value="4" />
-      </indentOptions>
-    </codeStyleSettings>
-    <codeStyleSettings language="yaml">
-      <indentOptions>
-        <option name="INDENT_SIZE" value="4" />
-      </indentOptions>
+    <codeStyleSettings language="kotlin">
+      <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </codeStyleSettings>
   </code_scheme>
 </component>

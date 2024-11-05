@@ -5,9 +5,9 @@ import fr.alexpado.xodb4j.interfaces.IItem;
 import fr.alexpado.xodb4j.interfaces.IPack;
 import fr.alexpado.xodb4j.interfaces.IRarity;
 import net.dv8tion.jda.api.JDA;
+import xo.marketbot.configurations.interfaces.IEmojiConfiguration;
 import xo.marketbot.configurations.interfaces.IMarketConfiguration;
 import xo.marketbot.entities.discord.Watcher;
-import xo.marketbot.enums.PriceEmote;
 import xo.marketbot.services.i18n.TranslationContext;
 import xo.marketbot.tools.TimeConverter;
 import xo.marketbot.tools.Utilities;
@@ -22,7 +22,7 @@ public class EntityDisplay extends DisplayTemplate {
 
     public EntityDisplay(TranslationContext context, IMarketConfiguration configuration, JDA jda, IItem item) {
 
-        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), item.getName(), XoDBUtils.getWebLink(item), configuration.getReportChannelUrl()));
+        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), item.getName(), XoDBUtils.getWebLink(item), configuration.getSupportServer()));
         this.appendDescription(item.getDescription());
         this.setThumbnail(XoDBUtils.getImage(item));
 
@@ -54,7 +54,7 @@ public class EntityDisplay extends DisplayTemplate {
 
     public EntityDisplay(TranslationContext context, IMarketConfiguration configuration, JDA jda, IPack pack) {
 
-        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), pack.getName(), XoDBUtils.getWebLink(pack), configuration.getReportChannelUrl()));
+        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_FULL), pack.getName(), XoDBUtils.getWebLink(pack), configuration.getSupportServer()));
 
         String simplePriceFormat = context.getTranslation(TR_MARKET__SIMPLE_PRICE);
         String currency          = context.getTranslation(TR_MARKET__CURRENCY);
@@ -87,9 +87,9 @@ public class EntityDisplay extends DisplayTemplate {
         this.setImage(XoDBUtils.getImage(pack));
     }
 
-    public EntityDisplay(TranslationContext context, IMarketConfiguration configuration, JDA jda, Watcher watcher, IItem item) {
+    public EntityDisplay(TranslationContext context, IMarketConfiguration configuration, IEmojiConfiguration emoji, JDA jda, Watcher watcher, IItem item) {
 
-        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_SIMPLE), watcher.getName(), configuration.getReportChannelUrl()));
+        super(context, jda, String.format(context.getTranslation(TR_EMBED__HEADER_SIMPLE), watcher.getName(), configuration.getSupportServer()));
         this.setThumbnail(XoDBUtils.getImage(item));
 
         String simplePriceFormat = context.getTranslation(TR_MARKET__SIMPLE_PRICE);
@@ -113,10 +113,10 @@ public class EntityDisplay extends DisplayTemplate {
 
         String priceFormat = "%s\n%s %s";
 
-        String sellEmote  = PriceEmote.with(item.getMarketSell(), watcher.getMarketSell(), false).getEmote(jda);
-        String buyEmote   = PriceEmote.with(item.getMarketBuy(), watcher.getMarketBuy(), true).getEmote(jda);
-        String offerEmote = PriceEmote.with(item.getSellOffers(), watcher.getSellOffers(), false).getEmote(jda);
-        String orderEmote = PriceEmote.with(item.getBuyOrders(), watcher.getBuyOrders(), true).getEmote(jda);
+        String sellEmote  = emoji.with(item.getMarketSell(), watcher.getMarketSell(), false);
+        String buyEmote   = emoji.with(item.getMarketBuy(), watcher.getMarketBuy(), true);
+        String offerEmote = emoji.with(item.getSellOffers(), watcher.getSellOffers(), false);
+        String orderEmote = emoji.with(item.getBuyOrders(), watcher.getBuyOrders(), true);
 
         this.addField(context.getTranslation(TR_MARKET__SELL), String.format(priceFormat, newMarketSell, sellEmote, marketSellDiff), true);
         this.addField(context.getTranslation(TR_MARKET__BUY), String.format(priceFormat, newMarketBuy, buyEmote, marketBuyDiff), true);

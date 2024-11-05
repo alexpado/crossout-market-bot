@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import xo.marketbot.configurations.interfaces.IEmojiConfiguration;
 import xo.marketbot.configurations.interfaces.IMarketConfiguration;
 import xo.marketbot.entities.discord.Language;
 import xo.marketbot.entities.discord.Watcher;
@@ -33,15 +34,17 @@ public class WatcherTask {
     private final XoHealthCheckTask    healthCheckTask;
     private final TranslationService   translationService;
     private final IMarketConfiguration configuration;
+    private final IEmojiConfiguration  emoji;
     private final JdaStore             store;
     private final WatcherRepository    watcherRepository;
     private final XoDB                 xoDB;
 
-    public WatcherTask(XoHealthCheckTask healthCheckTask, TranslationService translationService, IMarketConfiguration configuration, JdaStore store, WatcherRepository watcherRepository, XoDB xoDB) {
+    public WatcherTask(XoHealthCheckTask healthCheckTask, TranslationService translationService, IMarketConfiguration configuration, IEmojiConfiguration emoji, JdaStore store, WatcherRepository watcherRepository, XoDB xoDB) {
 
         this.healthCheckTask    = healthCheckTask;
         this.translationService = translationService;
         this.configuration      = configuration;
+        this.emoji              = emoji;
         this.store              = store;
         this.watcherRepository  = watcherRepository;
         this.xoDB               = xoDB;
@@ -98,7 +101,14 @@ public class WatcherTask {
                 TranslationContext context  = this.translationService.getContext(language);
 
                 if (maySend) {
-                    EmbedBuilder builder = new EntityDisplay(context, configuration, jda.get(), watcher, item);
+                    EmbedBuilder builder = new EntityDisplay(
+                            context,
+                            this.configuration,
+                            this.emoji,
+                            jda.get(),
+                            watcher,
+                            item
+                    );
                     try {
                         LOGGER.info("Sending watcher {} message...", watcher.getId());
                         channel.sendMessageEmbeds(builder.build()).complete();

@@ -13,8 +13,8 @@ public class MarketConfiguration implements IMarketConfiguration {
     @Value("${xomarket.chart}")
     private String chartApi;
 
-    @Value("${xomarket.reportUrl}")
-    private String reportChannelUrl;
+    @Value("${xomarket.support-server}")
+    private String supportServer;
 
     @Override
     public String getApi() {
@@ -29,9 +29,9 @@ public class MarketConfiguration implements IMarketConfiguration {
     }
 
     @Override
-    public String getReportChannelUrl() {
+    public String getSupportServer() {
 
-        return this.reportChannelUrl;
+        return this.supportServer;
     }
 
 }

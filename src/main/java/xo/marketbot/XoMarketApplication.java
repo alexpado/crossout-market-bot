@@ -20,10 +20,8 @@ import javax.security.auth.login.LoginException;
 @EnableScheduling
 public class XoMarketApplication extends ListenerAdapter {
 
-    public static final long BOT_OFFICIAL_SERVER_ID = 508012982287073280L;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(XoMarketApplication.class);
-    private final InteractionWrapper wrapper;
+    private static final Logger             LOGGER = LoggerFactory.getLogger(XoMarketApplication.class);
+    private final        InteractionWrapper wrapper;
 
     public XoMarketApplication(IDiscordConfiguration configuration, JdaStore store, InteractionWrapper wrapper, EntityUpdater entityUpdater) throws LoginException {
 

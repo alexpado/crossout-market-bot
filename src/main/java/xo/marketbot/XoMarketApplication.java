@@ -1,7 +1,6 @@
 package xo.marketbot;
 
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -16,19 +15,15 @@ import xo.marketbot.services.JdaStore;
 import xo.marketbot.services.interactions.InteractionWrapper;
 
 import javax.security.auth.login.LoginException;
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
 public class XoMarketApplication extends ListenerAdapter {
 
-    public static final long BOT_ADMIN_ID           = 149279150648066048L;
     public static final long BOT_OFFICIAL_SERVER_ID = 508012982287073280L;
 
-    private static final Logger             LOGGER = LoggerFactory.getLogger(XoMarketApplication.class);
-    private static       List<String>       APP_ARGS;
-    private final        InteractionWrapper wrapper;
+    private static final Logger LOGGER = LoggerFactory.getLogger(XoMarketApplication.class);
+    private final InteractionWrapper wrapper;
 
     public XoMarketApplication(IDiscordConfiguration configuration, JdaStore store, InteractionWrapper wrapper, EntityUpdater entityUpdater) throws LoginException {
 
@@ -46,7 +41,6 @@ public class XoMarketApplication extends ListenerAdapter {
 
     public static void main(String[] args) {
 
-        APP_ARGS = Arrays.asList(args);
         SpringApplication.run(XoMarketApplication.class, args);
     }
 
@@ -57,20 +51,8 @@ public class XoMarketApplication extends ListenerAdapter {
         LOGGER.debug("     Account ID: {}", event.getJDA().getSelfUser().getIdLong());
         LOGGER.debug("   Account Name: {}", event.getJDA().getSelfUser().getName());
 
-        if (APP_ARGS.contains("--dev-mode")) {
-            LOGGER.warn("Running in developer mode: Only official server will benefit from SlashCommand updates.");
-            LOGGER.debug("Finding guild {}", BOT_OFFICIAL_SERVER_ID);
-
-            for (Guild guild : event.getJDA().getGuilds()) {
-                if (guild.getIdLong() == BOT_OFFICIAL_SERVER_ID) {
-                    LOGGER.debug("Guild found ! Updating commands...");
-                    this.wrapper.hook(guild);
-                }
-            }
-        } else {
-            LOGGER.debug("Updating commands...");
-            this.wrapper.hook(event.getJDA());
-        }
+        LOGGER.debug("Updating commands...");
+        this.wrapper.hook(event.getJDA());
     }
 
 }

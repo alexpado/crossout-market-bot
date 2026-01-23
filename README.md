@@ -1,3 +1,5 @@
+crossoutdb.com service was terminated on **January 23, 2026** without any alternative available, thus, support for this project will be stopped.
+
 # Crossout Market Bot
 
 Crossout Market Bot is a Discord bot designed to bring the power of CrossoutDB directly into your Discord server. It
